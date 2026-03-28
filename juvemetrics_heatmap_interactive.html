@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JuveMetrics — Form Heatmap G30</title>
+<meta property="og:title" content="JuveMetrics — Form Heatmap G30">
+<meta property="og:description" content="Esplora il rendimento Impact/90 degli ultimi 10/5/3 match. Filtra, ordina, analizza. Data-driven. Zero opinions.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@JuMetrics">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=Barlow+Condensed:wght@400;600;700;800&display=swap');
+
+  :root {
+    --black: #111111;
+    --grey-light: #f5f5f5;
+    --grey-mid: #e0e0e0;
+    --grey-text: #999;
+    --green: #059669;
+    --red: #E63329;
+    --amber: #F59E0B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    color: var(--black);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .top-bar {
+    background: var(--black);
+    color: #fff;
+    padding: 18px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .top-bar-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  .top-bar-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #888;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  .handle {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  /* ── Controls ── */
+  .controls {
+    padding: 16px 28px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    align-items: center;
+    border-bottom: 1px solid var(--grey-mid);
+    padding-bottom: 14px;
+    margin-top: 14px;
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .control-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--grey-text);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 4px;
+  }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border: 1px solid var(--grey-mid);
+    background: #fff;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.12s;
+    white-space: nowrap;
+    border-radius: 2px;
+  }
+
+  .btn:hover { border-color: var(--black); }
+  .btn.active { background: var(--black); color: #fff; border-color: var(--black); }
+  .btn.danger { color: var(--red); border-color: #fca5a5; }
+  .btn.danger:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
+  /* ── Main layout ── */
+  .main {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0;
+    min-height: calc(100vh - 140px);
+  }
+
+  /* ── Player picker ── */
+  .player-panel {
+    border-right: 1px solid var(--grey-mid);
+    padding: 16px 16px;
+    overflow-y: auto;
+  }
+
+  .panel-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--grey-text);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .player-group-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: #ccc;
+    text-transform: uppercase;
+    margin: 10px 0 4px;
+  }
+
+  .player-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    margin-bottom: 2px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.1s;
+    border: 1px solid transparent;
+    user-select: none;
+  }
+
+  .player-chip:hover { background: var(--grey-light); }
+  .player-chip.selected { background: var(--black); border-color: var(--black); }
+  .player-chip.selected .chip-name { color: #fff; }
+  .player-chip.selected .chip-pos { color: #888; }
+
+  .chip-check {
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--grey-mid);
+    border-radius: 2px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: transparent;
+    transition: all 0.1s;
+  }
+
+  .player-chip.selected .chip-check {
+    background: #fff;
+    border-color: #fff;
+    color: var(--black);
+    font-weight: 700;
+  }
+
+  .chip-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--black);
+    flex: 1;
+  }
+
+  .chip-pos {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--grey-text);
+  }
+
+  /* ── Heatmap area ── */
+  .heatmap-area {
+    padding: 20px 28px;
+    overflow-x: auto;
+  }
+
+  .sort-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #ccc;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+  }
+
+  table.heatmap {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 400px;
+  }
+
+  table.heatmap th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--grey-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0 6px 10px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  th.sortable {
+    cursor: pointer;
+    transition: color 0.12s;
+  }
+
+  th.sortable:hover { color: var(--black); }
+  th.sortable.sorted { color: var(--black); }
+
+  th.col-name {
+    text-align: left;
+    padding-left: 0;
+    min-width: 100px;
+  }
+
+  th.col-pos {
+    min-width: 36px;
+  }
+
+  table.heatmap td {
+    padding: 2px 4px;
+    vertical-align: middle;
+  }
+
+  td.name-cell {
+    font-size: 15px;
+    font-weight: 700;
+    padding-right: 8px;
+    white-space: nowrap;
+    padding-left: 0;
+  }
+
+  td.pos-cell {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: #bbb;
+    text-align: center;
+    padding-right: 6px;
+    white-space: nowrap;
+  }
+
+  .heat-cell {
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    height: 30px;
+    min-width: 72px;
+    transition: transform 0.1s, opacity 0.15s;
+    cursor: default;
+  }
+
+  .heat-cell:hover { transform: scale(1.04); }
+
+  td.trend-cell {
+    text-align: center;
+    padding-left: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .section-row td {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #ccc;
+    text-transform: uppercase;
+    padding: 10px 0 3px;
+  }
+
+  .divider-row td {
+    padding: 4px 0;
+  }
+
+  .divider-line {
+    height: 1px;
+    background: var(--grey-light);
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #ccc;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  /* ── Legend + Footer ── */
+  .bottom-bar {
+    border-top: 1px solid var(--grey-mid);
+    padding: 12px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .legend {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--grey-text);
+  }
+
+  .legend-bar {
+    display: flex;
+    height: 8px;
+    width: 100px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #ccc;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .main { grid-template-columns: 1fr; }
+    .player-panel { border-right: none; border-bottom: 1px solid var(--grey-mid); }
+    .top-bar { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <div class="top-bar-title">Form Heatmap — Impact/90</div>
+    <div class="top-bar-sub">NPxG90 + xA90 · Ultime 10 / 5 / 3 partite · Serie A G21–G30 · Fonte: Understat</div>
+  </div>
+  <div class="handle">@JuMetrics</div>
+</div>
+
+<div class="controls">
+  <div class="control-group">
+    <span class="control-label">Gruppo</span>
+    <div class="btn-group">
+      <button class="btn active" data-filter="all">Tutti</button>
+      <button class="btn" data-filter="att">Att</button>
+      <button class="btn" data-filter="mid">Mid</button>
+      <button class="btn" data-filter="def">Def</button>
+    </div>
+  </div>
+  <div class="control-group">
+    <span class="control-label">Selezione</span>
+    <div class="btn-group">
+      <button class="btn" id="btnSelectAll">Seleziona tutti</button>
+      <button class="btn danger" id="btnClear">Reset</button>
+    </div>
+  </div>
+  <div class="control-group" style="margin-left:auto">
+    <span class="control-label" id="selCount" style="color:#111;font-size:11px"></span>
+  </div>
+</div>
+
+<div class="main">
+  <div class="player-panel" id="playerPanel"></div>
+  <div class="heatmap-area">
+    <div class="sort-hint">↕ Clicca sulle colonne per ordinare</div>
+    <div id="heatmapContainer"></div>
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <div class="legend">
+    <span>0.0</span>
+    <div class="legend-bar" id="legendBar"></div>
+    <span>1.2+</span>
+    <span style="margin-left:6px">Intensità = Impact/90</span>
+  </div>
+  <div class="footer-text">Soglie: ≥180' (last10) · ≥90' (last5) · ≥60' (last3) · Data-driven. Zero opinions.</div>
+</div>
+
+<script>
+const ALL_PLAYERS = [
+  { name:'Yildiz',    pos:'F M', data:[0.61,0.79,1.18], group:'att' },
+  { name:'David',     pos:'F',   data:[0.90,0.51,0.49], group:'att' },
+  { name:'Conceição', pos:'F M', data:[0.58,0.54,0.55], group:'att' },
+  { name:'McKennie',  pos:'D M', data:[0.36,0.19,0.14], group:'mid' },
+  { name:'Thuram',    pos:'M',   data:[0.25,0.24,0.38], group:'mid' },
+  { name:'Locatelli', pos:'M',   data:[0.23,0.24,0.38], group:'mid' },
+  { name:'Cambiaso',  pos:'D',   data:[0.32,0.28,0.46], group:'def' },
+  { name:'Kalulu',    pos:'D',   data:[0.35,0.25,0.11], group:'def' },
+  { name:'Bremer',    pos:'D',   data:[0.21,0.05,0.06], group:'def' },
+  { name:'Kelly',     pos:'D',   data:[0.09,0.17,0.19], group:'def' },
+];
+
+const GROUP_LABELS = { att:'Attaccanti', mid:'Centrocampisti', def:'Difensori' };
+const COL_LABELS   = ['Ult. 10', 'Ult. 5', 'Ult. 3'];
+
+let selected = new Set(ALL_PLAYERS.map(p => p.name));
+let sortCol  = null; // null | 0 | 1 | 2
+let sortDir  = -1;   // -1 desc, 1 asc
+let activeFilter = 'all';
+
+// ── Color scale ──────────────────────────────────────────
+function heatColor(v) {
+  if (v == null) return { bg:'#f7f7f7', text:'#ccc' };
+  const t = Math.min(v / 1.2, 1);
+  let r, g, b;
+  if (t < 0.35) {
+    const s = t / 0.35;
+    r = Math.round(245 + (254-245)*s);
+    g = Math.round(245 + (215-245)*s);
+    b = Math.round(245 + (170-245)*s);
+  } else if (t < 0.65) {
+    const s = (t-0.35)/0.30;
+    r = Math.round(254 + (220-254)*s);
+    g = Math.round(215 + (80 -215)*s);
+    b = Math.round(170 + (40 -170)*s);
+  } else {
+    const s = (t-0.65)/0.35;
+    r = Math.round(220 + (120-220)*s);
+    g = Math.round(80  + (20 -80 )*s);
+    b = Math.round(40  + (30 -40 )*s);
+  }
+  const lum = 0.299*r + 0.587*g + 0.114*b;
+  return { bg:`rgb(${r},${g},${b})`, text: lum > 155 ? '#555' : '#fff' };
+}
+
+function trendInfo(data) {
+  const d = data[2] - data[0];
+  if (d >  0.08) return { arrow:'↑', color:'#059669' };
+  if (d < -0.08) return { arrow:'↓', color:'#E63329' };
+  return { arrow:'→', color:'#ccc' };
+}
+
+// ── Player panel ─────────────────────────────────────────
+function renderPanel() {
+  const panel = document.getElementById('playerPanel');
+  panel.innerHTML = '';
+
+  const groups = ['att','mid','def'];
+  groups.forEach(g => {
+    const filtered = ALL_PLAYERS.filter(p => p.group === g);
+    if (!filtered.length) return;
+
+    const lbl = document.createElement('div');
+    lbl.className = 'player-group-label';
+    lbl.textContent = GROUP_LABELS[g];
+    panel.appendChild(lbl);
+
+    filtered.forEach(p => {
+      const chip = document.createElement('div');
+      chip.className = 'player-chip' + (selected.has(p.name) ? ' selected' : '');
+      chip.innerHTML = `
+        <div class="chip-check">${selected.has(p.name) ? '✓' : ''}</div>
+        <span class="chip-name">${p.name}</span>
+        <span class="chip-pos">${p.pos}</span>
+      `;
+      chip.addEventListener('click', () => {
+        if (selected.has(p.name)) selected.delete(p.name);
+        else selected.add(p.name);
+        renderAll();
+      });
+      panel.appendChild(chip);
+    });
+  });
+}
+
+// ── Heatmap ───────────────────────────────────────────────
+function renderHeatmap() {
+  const container = document.getElementById('heatmapContainer');
+
+  // Filter by group + selection
+  let players = ALL_PLAYERS.filter(p =>
+    selected.has(p.name) &&
+    (activeFilter === 'all' || p.group === activeFilter)
+  );
+
+  if (!players.length) {
+    container.innerHTML = '<div class="empty-state">Nessun giocatore selezionato.<br>Usa il pannello a sinistra per aggiungerne.</div>';
+    return;
+  }
+
+  // Sort
+  if (sortCol !== null) {
+    players = [...players].sort((a, b) => sortDir * (b.data[sortCol] - a.data[sortCol]));
+  }
+
+  const table = document.createElement('table');
+  table.className = 'heatmap';
+
+  // Header
+  const thead = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  headerRow.innerHTML = `
+    <th class="col-name">Giocatore</th>
+    <th class="col-pos">Pos</th>
+  `;
+  COL_LABELS.forEach((lbl, i) => {
+    const th = document.createElement('th');
+    th.className = 'sortable' + (sortCol === i ? ' sorted' : '');
+    const dirIcon = sortCol === i ? (sortDir === -1 ? ' ↓' : ' ↑') : ' ↕';
+    th.textContent = lbl + dirIcon;
+    th.addEventListener('click', () => {
+      if (sortCol === i) sortDir *= -1;
+      else { sortCol = i; sortDir = -1; }
+      renderHeatmap();
+    });
+    headerRow.appendChild(th);
+  });
+  headerRow.innerHTML += `<th style="padding-left:12px;min-width:50px">Trend</th>`;
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  // Body — group by role if no sort active and filter = all
+  const tbody = document.createElement('tbody');
+  const useGroups = sortCol === null && activeFilter === 'all';
+
+  let lastGroup = null;
+  players.forEach(p => {
+    if (useGroups && p.group !== lastGroup) {
+      if (lastGroup !== null) {
+        const divRow = document.createElement('tr');
+        divRow.className = 'divider-row';
+        divRow.innerHTML = `<td colspan="6"><div class="divider-line"></div></td>`;
+        tbody.appendChild(divRow);
+      }
+      const sRow = document.createElement('tr');
+      sRow.className = 'section-row';
+      sRow.innerHTML = `<td colspan="6">${GROUP_LABELS[p.group]}</td>`;
+      tbody.appendChild(sRow);
+      lastGroup = p.group;
+    }
+
+    const tr = document.createElement('tr');
+    const { arrow, color: tc } = trendInfo(p.data);
+
+    let cellsHTML = p.data.map(v => {
+      const { bg, text } = heatColor(v);
+      return `<td><div class="heat-cell" style="background:${bg};color:${text}">${v.toFixed(2)}</div></td>`;
+    }).join('');
+
+    tr.innerHTML = `
+      <td class="name-cell">${p.name}</td>
+      <td class="pos-cell">${p.pos}</td>
+      ${cellsHTML}
+      <td class="trend-cell" style="color:${tc}">${arrow}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  container.innerHTML = '';
+  container.appendChild(table);
+}
+
+// ── Counter ───────────────────────────────────────────────
+function updateCounter() {
+  const n = selected.size;
+  document.getElementById('selCount').textContent =
+    n === 0 ? 'Nessun giocatore' :
+    n === 1 ? '1 giocatore selezionato' :
+    `${n} giocatori selezionati`;
+}
+
+// ── Legend ────────────────────────────────────────────────
+function buildLegend() {
+  const bar = document.getElementById('legendBar');
+  for (let i = 0; i < 20; i++) {
+    const { bg } = heatColor((i / 20) * 1.2);
+    const seg = document.createElement('div');
+    seg.style.cssText = `flex:1;background:${bg}`;
+    bar.appendChild(seg);
+  }
+}
+
+// ── Wire controls ─────────────────────────────────────────
+document.querySelectorAll('[data-filter]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    renderAll();
+  });
+});
+
+document.getElementById('btnSelectAll').addEventListener('click', () => {
+  ALL_PLAYERS
+    .filter(p => activeFilter === 'all' || p.group === activeFilter)
+    .forEach(p => selected.add(p.name));
+  renderAll();
+});
+
+document.getElementById('btnClear').addEventListener('click', () => {
+  ALL_PLAYERS
+    .filter(p => activeFilter === 'all' || p.group === activeFilter)
+    .forEach(p => selected.delete(p.name));
+  sortCol = null;
+  renderAll();
+});
+
+function renderAll() {
+  renderPanel();
+  renderHeatmap();
+  updateCounter();
+}
+
+buildLegend();
+renderAll();
+</script>
+</body>
+</html>
