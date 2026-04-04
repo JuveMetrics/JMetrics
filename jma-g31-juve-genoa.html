@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JuveMetrics · JMA G31 · Juventus vs Genoa</title>
+
+<!-- OG / X Card -->
+<meta property="og:type"        content="website">
+<meta property="og:title"       content="JuveMetrics · JMA G31 · Juventus vs Genoa">
+<meta property="og:description" content="Pre-match report. Open Play xG: Juve 1.80 vs Genoa 0.86. Threat Map, Duel Card, Predizioni Sezione A. Data-driven. Zero opinions.">
+<meta property="og:url"         content="https://juvemetrics.github.io/JMetrics/jma-g31-juve-genoa.html">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:site"        content="@JuMetrics">
+<meta name="twitter:title"       content="JuveMetrics · JMA G31 · Juventus vs Genoa">
+<meta name="twitter:description" content="Pre-match report. Open Play xG: Juve 1.80 vs Genoa 0.86. Threat Map, Duel Card Norton-Cuffy vs Cambiaso. Sezione A.">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --black: #111;
+  --white: #fff;
+  --bg:    #f0f0eb;
+  --red:   #dc2626;
+  --amber: #d97706;
+  --green: #16a34a;
+  --border: #e0e0d8;
+  --mid:   #555;
+}
+
+body {
+  font-family: 'Courier New', monospace;
+  background: var(--bg);
+  color: var(--black);
+  min-height: 100vh;
+  font-size: 13px;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--black);
+  padding: 20px 24px 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  gap: 12px;
+}
+.brand {
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: #555;
+  text-transform: uppercase;
+  cursor: default;
+  user-select: none;
+  margin-bottom: 10px;
+  transition: color 0.15s;
+}
+.match-title {
+  font-size: clamp(22px, 6vw, 32px);
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: var(--white);
+}
+.match-title .sep   { color: #444; margin: 0 10px; font-weight: 300; }
+.match-title .genoa { color: var(--red); }
+.header-sub {
+  font-size: 10px;
+  color: #666;
+  letter-spacing: 2px;
+  margin-top: 7px;
+}
+.tagline { text-align: right; flex-shrink: 0; }
+.tagline div { font-size: 9px; color: #555; letter-spacing: 2px; line-height: 1.9; }
+
+/* ── TABS ── */
+.tabs { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tab-btn {
+  background: none; border: none; cursor: pointer;
+  padding: 12px 20px; font-size: 9px; letter-spacing: 3px;
+  color: #555; border-bottom: 2px solid transparent;
+  text-transform: uppercase; font-family: 'Courier New', monospace;
+  transition: all 0.2s; margin-bottom: -2px; white-space: nowrap;
+  flex-shrink: 0;
+}
+.tab-btn.active { color: var(--white); border-bottom-color: var(--white); }
+.tab-btn.secret-tab { color: #16a34a; }
+.tab-btn.secret-tab.active { color: #4ade80; border-bottom-color: #4ade80; }
+
+/* ── LAYOUT ── */
+.content { padding: 24px 20px 56px; max-width: 640px; margin: 0 auto; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+.section-meta  { font-size: 9px; letter-spacing: 3px; color: var(--mid); margin-bottom: 6px; text-transform: uppercase; }
+.section-title { font-size: clamp(16px, 4vw, 20px); font-weight: 900; color: var(--black); margin-bottom: 20px; }
+
+/* ── CARD ── */
+.card {
+  background: var(--white);
+  border: 2px solid var(--black);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.card-head {
+  background: var(--black);
+  padding: 10px 16px;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #888;
+  text-transform: uppercase;
+}
+.card-body { padding: 16px; }
+
+/* ── KPI ROW ── */
+.kpi-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.kpi {
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--black);
+}
+.kpi.red   { border-left-color: var(--red); }
+.kpi.amber { border-left-color: var(--amber); }
+.kpi.green { border-left-color: var(--green); }
+.kpi-lbl { font-size: 8px; letter-spacing: 2px; color: var(--mid); text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
+.kpi-val { font-size: 24px; font-weight: 900; color: var(--black); line-height: 1; }
+.kpi-val.red   { color: var(--red); }
+.kpi-val.amber { color: var(--amber); }
+.kpi-val.green { color: var(--green); }
+.kpi-note { font-size: 9px; color: var(--mid); margin-top: 4px; font-weight: 700; }
+
+/* ── XPTS ── */
+.xpts {
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--amber);
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.xpts-lbl { font-size: 8px; letter-spacing: 2px; color: var(--mid); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+.xpts-val { font-size: 22px; font-weight: 900; line-height: 1; }
+
+/* ── NARRATIVE ── */
+.narrative {
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 14px 16px;
+  border-left: 3px solid var(--black);
+  margin-bottom: 10px;
+}
+.narrative.green { border-left-color: var(--green); }
+.narrative.amber { border-left-color: var(--amber); }
+.narrative.red   { border-left-color: var(--red); }
+.narrative-title { font-size: 11px; font-weight: 900; color: var(--black); margin-bottom: 6px; }
+.narrative-title.green { color: var(--green); }
+.narrative-title.amber { color: var(--amber); }
+.narrative-title.red   { color: var(--red); }
+.narrative-body { font-size: 11px; color: var(--black); line-height: 1.75; }
+
+/* ── THREAT MAP ── */
+.threat {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.threat:last-child { border-bottom: none; }
+.threat.on { opacity: 1; transform: translateX(0); }
+
+.threat-rank {
+  min-width: 24px; height: 24px;
+  background: var(--bg); border: 2px solid var(--black);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 900; flex-shrink: 0;
+}
+.threat-info { flex: 1; min-width: 0; }
+.threat-name { font-size: 14px; font-weight: 900; line-height: 1; }
+.threat-sub  { font-size: 9px; color: var(--mid); margin-top: 3px; font-weight: 700; }
+.threat-tag  {
+  display: inline-block;
+  font-size: 7px; letter-spacing: 1.5px; font-weight: 900;
+  padding: 2px 6px; border-radius: 3px;
+  border: 1px solid currentColor;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.threat-vals { text-align: right; flex-shrink: 0; }
+.tv-row { display: flex; gap: 14px; margin-bottom: 6px; justify-content: flex-end; }
+.tv { }
+.tv-lbl { font-size: 8px; color: var(--mid); letter-spacing: 1px; font-weight: 700; }
+.tv-num { font-size: 17px; font-weight: 900; line-height: 1; }
+.tbar { width: 100px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-left: auto; }
+.tbar-fill { height: 100%; border-radius: 3px; width: 0; transition: width 0.85s cubic-bezier(0.16,1,0.3,1); }
+
+/* ── DUEL ── */
+.duel-names {
+  display: grid;
+  grid-template-columns: 1fr 44px 1fr;
+  align-items: center;
+  padding: 14px 16px 12px;
+  border-bottom: 2px solid var(--black);
+  gap: 6px;
+}
+.dn-l { text-align: right; }
+.dn-r { text-align: left; }
+.dn-name { font-size: 16px; font-weight: 900; line-height: 1; white-space: nowrap; }
+.dn-role { font-size: 9px; font-weight: 700; color: var(--mid); margin-top: 3px; }
+.vs-box {
+  background: var(--black); color: var(--white);
+  text-align: center; font-size: 9px; font-weight: 900;
+  letter-spacing: 1px; padding: 7px 2px; border-radius: 5px;
+}
+.dstat {
+  display: grid;
+  grid-template-columns: 1fr 72px 1fr;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  gap: 6px;
+}
+.dstat:last-of-type { border-bottom: none; }
+.ds-num { font-size: 19px; font-weight: 900; line-height: 1; }
+.ds-num.l { text-align: right; }
+.ds-num.r { text-align: left; }
+.ds-bar { height: 5px; background: var(--border); border-radius: 3px; margin-top: 5px; overflow: hidden; }
+.ds-fill { height: 100%; border-radius: 3px; width: 0; transition: width 0.85s cubic-bezier(0.16,1,0.3,1); }
+.ds-fill.rev { float: right; }
+.ds-mid { text-align: center; }
+.ds-lbl { font-size: 8px; letter-spacing: 1.5px; color: var(--black); font-weight: 900; text-transform: uppercase; display: block; margin-bottom: 3px; }
+.ds-sep { width: 1px; height: 24px; background: var(--border); margin: 0 auto; }
+
+.verdict {
+  background: var(--bg);
+  border-top: 2px solid var(--black);
+  padding: 12px 16px;
+}
+.verdict-lbl  { font-size: 8px; font-weight: 900; letter-spacing: 3px; color: var(--black); text-transform: uppercase; margin-bottom: 5px; }
+.verdict-text { font-size: 10px; color: var(--black); line-height: 1.75; }
+
+/* ── PREDICTIONS ── */
+.pred {
+  background: var(--white);
+  border: 2px solid var(--black);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.pred-n {
+  min-width: 26px; height: 26px;
+  background: var(--black); color: var(--white);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 900; flex-shrink: 0;
+}
+.pred-text { font-size: 12px; color: var(--black); line-height: 1.6; margin-bottom: 6px; font-weight: 700; }
+.pred-conf { display: flex; align-items: center; gap: 6px; }
+.conf-dot  { width: 8px; height: 8px; border-radius: 50%; }
+.conf-lbl  { font-size: 9px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+
+.checklist {
+  background: var(--black);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 4px;
+}
+.cl-title { font-size: 9px; letter-spacing: 3px; color: var(--amber); font-weight: 900; text-transform: uppercase; margin-bottom: 12px; }
+.cl-item  { font-size: 11px; color: #ccc; line-height: 2.2; font-weight: 700; }
+
+/* ── TERMINAL (easter egg) ── */
+.terminal {
+  background: #0a0a0a; border: 2px solid #1a3a1a;
+  border-radius: 8px; padding: 24px 20px; margin-top: 16px;
+  position: relative; overflow: hidden;
+}
+.scanlines {
+  position: absolute; top:0; left:0; right:0; bottom:0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,0,0.007) 2px, rgba(0,255,0,0.007) 4px);
+  pointer-events: none;
+}
+.term-hdr  { font-size: 9px; letter-spacing: 4px; color: #1a4a1a; margin-bottom: 20px; }
+.term-line { font-size: 13px; color: #4a7a4a; line-height: 2; opacity: 0; transition: opacity 0.1s; }
+.term-line.cmd       { color: #2d8a2d; font-size: 10px; letter-spacing: 1px; }
+.term-line.highlight { color: #4ade80; font-weight: 900; font-size: 15px; }
+.term-line.sign      { color: #4ade80; font-weight: 700; }
+@keyframes blink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--black);
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.f-brand { font-size: 10px; font-weight: 900; letter-spacing: 3px; color: var(--white); }
+.f-meta  { font-size: 8px; color: #555; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="brand" id="brand">JuveMetrics · G31 · Pre-Match</div>
+      <div class="match-title">
+        JUVENTUS<span class="sep">—</span><span class="genoa">GENOA</span>
+      </div>
+      <div class="header-sub">Serie A 2025/26 · Allianz Stadium</div>
+    </div>
+    <div class="tagline">
+      <div>DATA-DRIVEN</div>
+      <div>ZERO OPINIONS</div>
+      <div>@JuMetrics</div>
+    </div>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="tab-btn active" onclick="go('overview',this)">Overview</button>
+    <button class="tab-btn" onclick="go('threat',this)">Threat Map</button>
+    <button class="tab-btn" onclick="go('duel',this)">Duel Card</button>
+    <button class="tab-btn" onclick="go('pred',this)">Predizioni</button>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ── OVERVIEW ── -->
+  <div class="panel active" id="panel-overview">
+    <div class="section-meta">Panoramica · Dati stagionali comparati</div>
+    <div class="section-title">ANALISI PRE-MATCH</div>
+
+    <!-- JUVE -->
+    <div class="card">
+      <div class="card-head">⚪ Juventus — era Spalletti</div>
+      <div class="card-body">
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="kpi-lbl">Open Play xG/90</div>
+            <div class="kpi-val">1.80</div>
+            <div class="kpi-note">Predittore principale r=+0.487</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-lbl">Open Play xGA/90</div>
+            <div class="kpi-val">0.62</div>
+            <div class="kpi-note">Difesa élite Serie A</div>
+          </div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi amber">
+            <div class="kpi-lbl">Possesso</div>
+            <div class="kpi-val amber">55.5%</div>
+            <div class="kpi-note">Vince con 53.6% ⚠</div>
+          </div>
+          <div class="kpi red">
+            <div class="kpi-lbl">Att. posizionali/90</div>
+            <div class="kpi-val red">35.33</div>
+            <div class="kpi-note">1° Serie A 🔴</div>
+          </div>
+        </div>
+        <div class="xpts">
+          <div>
+            <div class="xpts-lbl">Punti reali</div>
+            <div class="xpts-val">54</div>
+          </div>
+          <div>
+            <div class="xpts-lbl">xPTS attesi</div>
+            <div class="xpts-val" style="color:var(--amber)">61.7</div>
+          </div>
+          <div>
+            <div class="xpts-lbl">Gap</div>
+            <div class="xpts-val" style="color:var(--red)">−7.7</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GENOA -->
+    <div class="card">
+      <div class="card-head">🔴 Genoa — era De Rossi · ultime 3 partite</div>
+      <div class="card-body">
+        <div class="kpi-row">
+          <div class="kpi red">
+            <div class="kpi-lbl">Open Play xG/90</div>
+            <div class="kpi-val red">0.86</div>
+            <div class="kpi-note">Gap vs Juve: −0.94</div>
+          </div>
+          <div class="kpi red">
+            <div class="kpi-lbl">Open Play xGA/90</div>
+            <div class="kpi-val red">1.04</div>
+            <div class="kpi-note">Difesa vulnerabile 🔴</div>
+          </div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="kpi-lbl">Possesso</div>
+            <div class="kpi-val">47.6%</div>
+            <div class="kpi-note">Blocco basso</div>
+          </div>
+          <div class="kpi green">
+            <div class="kpi-lbl">Set Piece NPxGD</div>
+            <div class="kpi-val green">+0.12</div>
+            <div class="kpi-note">Forza da fermo ⚠</div>
+          </div>
+        </div>
+        <div class="kpi red" style="margin-top:0">
+          <div class="kpi-lbl">Shots Conceded/90</div>
+          <div class="kpi-val red">20.7</div>
+          <div class="kpi-note">Alta esposizione ai tiri 🔴</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NARRATIVA -->
+    <div class="narrative green">
+      <div class="narrative-title green">Open Play xG — vantaggio strutturale</div>
+      <div class="narrative-body">Juve 1.80 vs Genoa 0.86. Gap +0.94 — correlazione più alta della stagione (r=+0.487). La partita si decide in campo aperto.</div>
+    </div>
+    <div class="narrative amber">
+      <div class="narrative-title amber">Trappola possesso da evitare</div>
+      <div class="narrative-body">Juve vince con 53.6% possesso, pareggia con 63.8%. Il blocco basso Genoa (PPDA 12.3) induce possesso sterile. Field Tilt alto senza Open Play xG = scenario peggiore.</div>
+    </div>
+    <div class="narrative red">
+      <div class="narrative-title red">Set piece — rischio reale</div>
+      <div class="narrative-body">Genoa NPxGD +0.12 da calci piazzati in era De Rossi. Nelle sconfitte Juve il Set Piece xG concesso sale a 0.32. Non è un dettaglio.</div>
+    </div>
+  </div>
+
+  <!-- ── THREAT MAP ── -->
+  <div class="panel" id="panel-threat">
+    <div class="section-meta">Threat Map · Ultime 3 partite · ≥60 min · Understat</div>
+    <div class="section-title">GENOA — MAPPA OFFENSIVA</div>
+
+    <div class="card">
+      <div class="card-head">Giocatori pericolosi — ordinati per Impact/90</div>
+      <div>
+
+        <div class="threat" id="t0" data-bar="84" data-color="#dc2626">
+          <div class="threat-rank">1</div>
+          <div class="threat-info">
+            <div>
+              <span class="threat-name" style="color:#dc2626">VITINHA</span>
+              <span class="threat-tag" style="color:#dc2626">PERICOLO #1</span>
+              <span style="font-size:11px;margin-left:4px">⚽ 2G</span>
+            </div>
+            <div class="threat-sub">M · 115' · BU% 36%</div>
+          </div>
+          <div class="threat-vals">
+            <div class="tv-row">
+              <div class="tv"><div class="tv-lbl">IMPACT/90</div><div class="tv-num" style="color:#dc2626">1.01</div></div>
+              <div class="tv"><div class="tv-lbl">xGC/90</div><div class="tv-num" style="color:#555">1.49</div></div>
+            </div>
+            <div class="tbar"><div class="tbar-fill" style="background:#dc2626"></div></div>
+          </div>
+        </div>
+
+        <div class="threat" id="t1" data-bar="59" data-color="#ea580c">
+          <div class="threat-rank">2</div>
+          <div class="threat-info">
+            <div>
+              <span class="threat-name" style="color:#ea580c">MASINI</span>
+              <span class="threat-tag" style="color:#ea580c">FINALIZ.</span>
+            </div>
+            <div class="threat-sub">M · 106' · BU% 12%</div>
+          </div>
+          <div class="threat-vals">
+            <div class="tv-row">
+              <div class="tv"><div class="tv-lbl">IMPACT/90</div><div class="tv-num" style="color:#ea580c">0.71</div></div>
+              <div class="tv"><div class="tv-lbl">xGC/90</div><div class="tv-num" style="color:#555">0.78</div></div>
+            </div>
+            <div class="tbar"><div class="tbar-fill" style="background:#ea580c"></div></div>
+          </div>
+        </div>
+
+        <div class="threat" id="t2" data-bar="57" data-color="#ea580c">
+          <div class="threat-rank">3</div>
+          <div class="threat-info">
+            <div>
+              <span class="threat-name" style="color:#ea580c">MALINOVSKIY</span>
+              <span class="threat-tag" style="color:#ea580c">VOLUME</span>
+            </div>
+            <div class="threat-sub">M · 187' · BU% 55%</div>
+          </div>
+          <div class="threat-vals">
+            <div class="tv-row">
+              <div class="tv"><div class="tv-lbl">IMPACT/90</div><div class="tv-num" style="color:#ea580c">0.69</div></div>
+              <div class="tv"><div class="tv-lbl">xGC/90</div><div class="tv-num" style="color:#555">0.85</div></div>
+            </div>
+            <div class="tbar"><div class="tbar-fill" style="background:#ea580c"></div></div>
+          </div>
+        </div>
+
+        <div class="threat" id="t3" data-bar="37" data-color="#ca8a04">
+          <div class="threat-rank">4</div>
+          <div class="threat-info">
+            <div>
+              <span class="threat-name" style="color:#ca8a04">COLOMBO</span>
+              <span class="threat-tag" style="color:#ca8a04">LINK-UP</span>
+            </div>
+            <div class="threat-sub">F · 178' · BU% 79%</div>
+          </div>
+          <div class="threat-vals">
+            <div class="tv-row">
+              <div class="tv"><div class="tv-lbl">IMPACT/90</div><div class="tv-num" style="color:#ca8a04">0.45</div></div>
+              <div class="tv"><div class="tv-lbl">xGC/90</div><div class="tv-num" style="color:#555">1.01</div></div>
+            </div>
+            <div class="tbar"><div class="tbar-fill" style="background:#ca8a04"></div></div>
+          </div>
+        </div>
+
+        <div class="threat" id="t4" data-bar="24" data-color="#65a30d">
+          <div class="threat-rank">5</div>
+          <div class="threat-info">
+            <div>
+              <span class="threat-name" style="color:#65a30d">NORTON-CUFFY</span>
+              <span class="threat-tag" style="color:#65a30d">TRANSIT.</span>
+              <span style="font-size:11px;margin-left:4px">⚽ 1G · JTR 70</span>
+            </div>
+            <div class="threat-sub">D · 193' · BU% 17%</div>
+          </div>
+          <div class="threat-vals">
+            <div class="tv-row">
+              <div class="tv"><div class="tv-lbl">IMPACT/90</div><div class="tv-num" style="color:#65a30d">0.29</div></div>
+              <div class="tv"><div class="tv-lbl">xGC/90</div><div class="tv-num" style="color:#555">0.33</div></div>
+            </div>
+            <div class="tbar"><div class="tbar-fill" style="background:#65a30d"></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DUEL CARD ── -->
+  <div class="panel" id="panel-duel">
+    <div class="section-meta">Duel Card · Wing-back · La fascia che decide</div>
+    <div class="section-title">IL DUELLO DELLA FASCIA</div>
+
+    <div class="card">
+      <div class="duel-names">
+        <div class="dn-l">
+          <div class="dn-name" style="color:#dc2626">NORTON-CUFFY</div>
+          <div class="dn-role">GENOA · D dx</div>
+        </div>
+        <div class="vs-box">VS</div>
+        <div class="dn-r">
+          <div class="dn-name" style="color:#111">CAMBIASO</div>
+          <div class="dn-role">JUVE · D sx</div>
+        </div>
+      </div>
+
+      <div class="dstat">
+        <div>
+          <div class="ds-num l" style="color:#dc2626">0.29</div>
+          <div class="ds-bar"><div class="ds-fill rev dl" data-p="48" style="background:#dc2626"></div></div>
+        </div>
+        <div class="ds-mid"><span class="ds-lbl">Impact/90</span><div class="ds-sep"></div></div>
+        <div>
+          <div class="ds-num r" style="color:#111">0.30</div>
+          <div class="ds-bar"><div class="ds-fill dr" data-p="50" style="background:#111"></div></div>
+        </div>
+      </div>
+
+      <div class="dstat">
+        <div>
+          <div class="ds-num l" style="color:#dc2626">0.33</div>
+          <div class="ds-bar"><div class="ds-fill rev dl" data-p="41" style="background:#dc2626"></div></div>
+        </div>
+        <div class="ds-mid"><span class="ds-lbl">xGChain/90</span><div class="ds-sep"></div></div>
+        <div>
+          <div class="ds-num r" style="color:#111">0.50</div>
+          <div class="ds-bar"><div class="ds-fill dr" data-p="63" style="background:#111"></div></div>
+        </div>
+      </div>
+
+      <div class="dstat">
+        <div>
+          <div class="ds-num l" style="color:#dc2626">17%</div>
+          <div class="ds-bar"><div class="ds-fill rev dl" data-p="17" style="background:#dc2626"></div></div>
+        </div>
+        <div class="ds-mid"><span class="ds-lbl">BU%</span><div class="ds-sep"></div></div>
+        <div>
+          <div class="ds-num r" style="color:#111">61.6%</div>
+          <div class="ds-bar"><div class="ds-fill dr" data-p="62" style="background:#111"></div></div>
+        </div>
+      </div>
+
+      <div class="dstat">
+        <div>
+          <div class="ds-num l" style="color:#dc2626">1 ⚽</div>
+          <div class="ds-bar"><div class="ds-fill rev dl" data-p="33" style="background:#dc2626"></div></div>
+        </div>
+        <div class="ds-mid"><span class="ds-lbl">Goals</span><div class="ds-sep"></div></div>
+        <div>
+          <div class="ds-num r" style="color:#111">3 ⚽</div>
+          <div class="ds-bar"><div class="ds-fill dr" data-p="100" style="background:#111"></div></div>
+        </div>
+      </div>
+
+      <div class="verdict">
+        <div class="verdict-lbl">Lettura dati</div>
+        <div class="verdict-text">Impact/90 identico (0.29 vs 0.30). Differenza strutturale: Norton-Cuffy finalizzatore puro in transizione (BU% 17%), Cambiaso costruttore completo (BU% 61.6%). Mismatch by design.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PREDIZIONI ── -->
+  <div class="panel" id="panel-pred">
+    <div class="section-meta">Sezione A · Pubblicate prima del fischio</div>
+    <div class="section-title">PREDIZIONI PRE-MATCH</div>
+
+    <div class="pred"><div class="pred-n">1</div><div><div class="pred-text">📊 Juve produce &gt;1.5 xG in open play</div><div class="pred-conf"><div class="conf-dot" style="background:#16a34a"></div><span class="conf-lbl" style="color:#16a34a">Confidenza Alta</span></div></div></div>
+    <div class="pred"><div class="pred-n">2</div><div><div class="pred-text">🔒 Genoa pressa basso — Juve sotto 60% possesso effettivo</div><div class="pred-conf"><div class="conf-dot" style="background:#16a34a"></div><span class="conf-lbl" style="color:#16a34a">Confidenza Alta</span></div></div></div>
+    <div class="pred"><div class="pred-n">3</div><div><div class="pred-text">⚡ Vitinha X-Factor: se supera 0.8 xGChain la partita si apre</div><div class="pred-conf"><div class="conf-dot" style="background:#d97706"></div><span class="conf-lbl" style="color:#d97706">Confidenza Media</span></div></div></div>
+    <div class="pred"><div class="pred-n">4</div><div><div class="pred-text">🎯 Cross % Juve &lt;10% — costruzione centrale, non da ampiezza</div><div class="pred-conf"><div class="conf-dot" style="background:#16a34a"></div><span class="conf-lbl" style="color:#16a34a">Confidenza Alta</span></div></div></div>
+    <div class="pred"><div class="pred-n">5</div><div><div class="pred-text">⚠️ Set piece Genoa: almeno 1 situazione pericolosa</div><div class="pred-conf"><div class="conf-dot" style="background:#d97706"></div><span class="conf-lbl" style="color:#d97706">Confidenza Media</span></div></div></div>
+    <div class="pred"><div class="pred-n">6</div><div><div class="pred-text">⚡ Norton-Cuffy: almeno 1 transizione pericolosa lato dx</div><div class="pred-conf"><div class="conf-dot" style="background:#d97706"></div><span class="conf-lbl" style="color:#d97706">Confidenza Media</span></div></div></div>
+    <div class="pred"><div class="pred-n">7</div><div><div class="pred-text">🏆 Risultato atteso: Juve 2–0 / 2–1</div><div class="pred-conf"><div class="conf-dot" style="background:#d97706"></div><span class="conf-lbl" style="color:#d97706">Confidenza Media</span></div></div></div>
+
+    <div class="checklist">
+      <div class="cl-title">⬜ Checklist Sezione B — post-match</div>
+      <div class="cl-item">□ xG reale vs soglia 1.5</div>
+      <div class="cl-item">□ Vitinha xGChain finale vs 0.8</div>
+      <div class="cl-item">□ Cross % Juve dentro/fuori 10%</div>
+      <div class="cl-item">□ Set piece Genoa: gol o tiro?</div>
+      <div class="cl-item">□ Norton-Cuffy: transizione pericolosa?</div>
+      <div class="cl-item">□ Score accuracy ✅ / 🟡 / ❌</div>
+    </div>
+  </div>
+
+  <!-- ── EASTER EGG ── -->
+  <div class="panel" id="panel-secret">
+    <div class="section-meta" style="color:#16a34a">Sezione C · Accesso limitato</div>
+    <div class="section-title">⬛ SEZIONE C</div>
+    <div class="terminal">
+      <div class="scanlines"></div>
+      <div class="term-hdr">JUVEMETRICS · SEZIONE C · ACCESSO LIMITATO</div>
+      <div id="term-out"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="f-brand">@JuMetrics</div>
+  <div class="f-meta">Understat · Mclachapp · Datamb · G31 2025/26</div>
+</div>
+
+<script>
+// TABS
+function go(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'threat') animateThreat();
+  if (id === 'duel')   animateDuel();
+  if (id === 'secret') runTerminal();
+}
+
+// THREAT
+function animateThreat() {
+  document.querySelectorAll('.threat').forEach((el, i) => {
+    setTimeout(() => {
+      el.classList.add('on');
+      const fill = el.querySelector('.tbar-fill');
+      setTimeout(() => { fill.style.width = el.getAttribute('data-bar') + '%'; }, 60);
+    }, i * 120);
+  });
+}
+
+// DUEL
+function animateDuel() {
+  setTimeout(() => {
+    document.querySelectorAll('.dl, .dr').forEach((b, i) => {
+      setTimeout(() => {
+        b.style.transition = 'width 0.85s cubic-bezier(0.16,1,0.3,1)';
+        b.style.width = b.getAttribute('data-p') + '%';
+      }, i * 100);
+    });
+  }, 100);
+}
+
+// TERMINAL
+const LINES = [
+  {t:'> accesso_sezione_C.exe', c:'cmd'},
+  {t:'> caricamento dati nascosti...', c:'cmd'},
+  {t:'> [████████████████] 100%', c:'cmd'},
+  {t:'> SEZIONE C — CLASSIFICATA', c:'cmd'},
+  {t:'', c:''},
+  {t:'Hai trovato la Sezione C.', c:'highlight'},
+  {t:'', c:''},
+  {t:'> CONTEST ATTIVO', c:'cmd'},
+  {t:'', c:''},
+  {t:'🏆 Premio: maglia Juve ufficiale', c:'highlight'},
+  {t:'   del MVP di Juve–Genoa', c:'highlight'},
+  {t:'', c:''},
+  {t:'> Come partecipare:', c:'cmd'},
+  {t:'Twitta il codice qui sotto', c:''},
+  {t:'con #JuveMetrics', c:''},
+  {t:"entro il fischio d'inizio.", c:''},
+  {t:'', c:''},
+  {t:'> CODICE: SEZIONE-C-G31', c:'highlight'},
+  {t:'', c:''},
+  {t:"> Scadenza: fischio d'inizio", c:'cmd'},
+  {t:'> Vincitore: annunciato post-match', c:'cmd'},
+  {t:'> Opinioni trovate: 0', c:'cmd'},
+  {t:'', c:''},
+  {t:'Zero opinions. Sempre.', c:'sign'},
+  {t:'— @JuMetrics', c:'sign'},
+];
+let termDone = false;
+function runTerminal() {
+  if (termDone) return; termDone = true;
+  const out = document.getElementById('term-out');
+  let delay = 0;
+  LINES.forEach(l => {
+    delay += l.c === 'cmd' ? 55 : l.t === '' ? 130 : 80;
+    const d = delay;
+    setTimeout(() => {
+      const div = document.createElement('div');
+      div.className = 'term-line ' + l.c;
+      div.textContent = l.t || '\u00a0';
+      out.appendChild(div);
+      setTimeout(() => { div.style.opacity = '1'; }, 20);
+    }, d);
+  });
+}
+
+// EASTER EGG — 3 click sul brand
+let clicks = 0, ct = null, unlocked = false;
+document.getElementById('brand').addEventListener('click', () => {
+  clicks++;
+  clearTimeout(ct);
+  ct = setTimeout(() => { clicks = 0; }, 1200);
+  const b = document.getElementById('brand');
+  b.style.color = `rgba(74,222,128,${Math.min(clicks * 0.38, 1)})`;
+  if (clicks >= 3 && !unlocked) {
+    unlocked = true; clicks = 0;
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn secret-tab';
+    btn.textContent = '⬛ SEZIONE C';
+    btn.onclick = function() { go('secret', this); };
+    document.getElementById('tabs').appendChild(btn);
+    setTimeout(() => btn.click(), 250);
+  }
+});
+
+// INIT
+window.addEventListener('load', () => setTimeout(animateThreat, 400));
+</script>
+</body>
+</html>
