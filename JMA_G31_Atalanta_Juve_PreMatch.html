@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JMA G31 — Atalanta vs Juventus</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap');
+  :root{--bg:#fff;--sf:#F5F5F5;--bd:#CCCCCC;--bdd:#1A1A1A;--atab:#1C4F9C;--juvk:#0D0D0D;--acc:#A07820;--grn:#1A7A35;--red:#B81C28;--ora:#C05A1A;--tp:#0D0D0D;--ts:#444;--td:#999;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--tp);font-family:'DM Sans',sans-serif;max-width:680px;margin:0 auto;}
+
+  /* HEADER */
+  .hdr{padding:24px 20px 18px;border-bottom:3px solid var(--bdd);}
+  .hdr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  .brand{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:5px;color:var(--acc);}
+  .jtag{font-family:'Space Mono',monospace;font-size:9px;color:var(--ts);border:1px solid var(--bdd);padding:3px 8px;}
+  .matchup{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:nowrap;}
+  .tn{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,7vw,52px);line-height:.95;white-space:nowrap;}
+  .tn.a{color:var(--atab);} .tn.j{color:var(--juvk);}
+  .vs{font-family:'Space Mono',monospace;font-size:11px;color:var(--td);flex-shrink:0;}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 18px;}
+  .mi{font-family:'Space Mono',monospace;font-size:9px;color:var(--ts);}
+  .mi span{color:var(--acc);font-weight:700;}
+
+  /* SECTION LABEL */
+  .sl{display:flex;align-items:center;gap:8px;padding:8px 20px;background:var(--bdd);font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:4px;color:#fff;}
+
+  /* CONTENT */
+  .ct{padding:14px 20px;border-bottom:1px solid var(--bd);}
+
+  /* ALERT */
+  .alrt{background:#FFFBF0;border:1px solid #D4A800;border-left:4px solid var(--acc);padding:9px 12px;margin-bottom:12px;font-family:'Space Mono',monospace;font-size:9px;color:#5A3A00;line-height:1.5;}
+  .alrt strong{color:var(--red);}
+
+  /* TACTIC NOTE */
+  .tn-box{background:#F0F4FF;border:1px solid #B0C0E0;border-left:4px solid var(--atab);padding:9px 12px;margin-top:10px;font-size:11px;color:var(--ts);line-height:1.5;}
+  .tn-box strong{color:var(--tp);}
+
+  /* AVAILABILITY */
+  .av-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .av-blk{background:var(--sf);border:1px solid var(--bd);padding:10px;}
+  .av-team{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:3px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--bd);}
+  .av-team.a{color:var(--atab);} .av-team.j{color:var(--juvk);}
+  .ptag{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-family:'Space Mono',monospace;padding:2px 6px;margin:2px 2px 2px 0;border:1px solid;border-radius:1px;}
+  .t-out{border-color:var(--red);color:var(--red);background:#FFF0F0;}
+  .t-dbt{border-color:var(--ora);color:var(--ora);background:#FFF6EE;}
+  .t-sup{border-color:#888;color:#555;background:#F5F5F5;}
+  .dot{width:5px;height:5px;border-radius:50%;}
+  .dr{background:var(--red);} .do{background:var(--ora);} .dg{background:#888;}
+  .av-note{margin-top:7px;font-size:9px;color:var(--ts);line-height:1.4;}
+
+  /* FORMATIONS */
+  .fm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .fm-blk{background:var(--sf);border:1px solid var(--bd);padding:10px;}
+  .fm-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid var(--bd);}
+  .fm-team{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;}
+  .fm-bdg{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--acc);}
+  .li{display:grid;grid-template-columns:18px 26px 1fr 26px;align-items:center;padding:3px 0;border-bottom:1px solid #EBEBEB;font-size:10px;}
+  .li:last-child{border-bottom:none;}
+  .lnum,.lrol,.lpct{font-family:'Space Mono',monospace;font-size:8px;color:var(--td);}
+  .lpct{text-align:right;}
+  .lnam{font-weight:600;color:var(--tp);}
+
+  /* KPI TABLE */
+  .kpi-hdr{display:grid;grid-template-columns:1fr 1fr 1fr;padding:5px 0 7px;border-bottom:2px solid var(--bdd);margin-bottom:2px;}
+  .kth{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;}
+  .kth.a{color:var(--atab);text-align:right;} .kth.j{color:var(--juvk);} .kth.m{text-align:center;font-size:8px;letter-spacing:1px;color:var(--td);}
+  .krow{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;padding:6px 0;border-bottom:1px solid #EBEBEB;}
+  .krow:last-child{border-bottom:none;}
+  .kva{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;text-align:right;padding-right:8px;}
+  .kvj{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;padding-left:8px;}
+  .klb{font-size:9px;text-align:center;color:var(--ts);font-family:'Space Mono',monospace;line-height:1.3;}
+  .ca{color:var(--atab);} .cj{color:var(--juvk);font-weight:900;} .cr{color:var(--red);font-weight:900;} .cn{color:var(--td);}
+
+  /* RADAR */
+  .radar-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .radar-svg{width:100%;max-width:320px;height:auto;}
+  .rleg{display:flex;gap:20px;justify-content:center;}
+  .rleg-item{display:flex;align-items:center;gap:5px;font-family:'Space Mono',monospace;font-size:9px;color:var(--ts);}
+  .rleg-dot{width:10px;height:10px;border-radius:2px;}
+
+  /* THREAT MAP */
+  .th-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .th-blk{background:var(--sf);border:1px solid var(--bd);padding:10px;}
+  .th-title{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:3px;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--bd);}
+  .th-player{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #EBEBEB;}
+  .th-player:last-child{border-bottom:none;}
+  .th-rank{font-family:'Space Mono',monospace;font-size:8px;color:var(--td);width:14px;flex-shrink:0;}
+  .th-info{flex:1;min-width:0;}
+  .th-name{font-size:11px;font-weight:700;color:var(--tp);}
+  .th-metric{font-family:'Space Mono',monospace;font-size:8px;color:var(--ts);}
+  .th-val{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0;}
+  .vr{color:var(--red);} .va{color:var(--acc);} .vg{color:var(--grn);} .vb{color:var(--atab);}
+
+  /* DUEL CARD */
+  .duel{background:var(--sf);border:1px solid var(--bd);border-top:3px solid var(--bdd);padding:12px;margin-bottom:10px;}
+  .duel:last-child{margin-bottom:0;}
+  .duel-lbl{font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:3px;color:var(--td);margin-bottom:8px;}
+  .duel-mu{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-bottom:8px;}
+  .dp-name{font-family:'Bebas Neue',sans-serif;font-size:17px;line-height:1;}
+  .dp-name.a{color:var(--atab);} .dp-name.j{color:var(--juvk);}
+  .dp-right{text-align:right;}
+  .dp-stats{font-family:'Space Mono',monospace;font-size:8px;color:var(--ts);margin-top:2px;}
+  .duel-x{font-size:14px;color:var(--td);text-align:center;}
+  .duel-note{font-size:11px;color:var(--ts);line-height:1.5;padding-top:8px;border-top:1px solid var(--bd);}
+
+  /* PREDICTION */
+  .pred{background:#FFFDF5;border:2px solid var(--acc);padding:18px;}
+  .pred-lbl{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--acc);margin-bottom:8px;}
+  .pred-res{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,8vw,50px);color:var(--tp);letter-spacing:2px;line-height:1;}
+  .pred-score{font-family:'Space Mono',monospace;font-size:11px;color:var(--acc);margin:3px 0 12px;}
+  .pred-rat{font-size:11px;color:var(--ts);line-height:1.6;margin-bottom:14px;}
+  .pred-rat strong{color:var(--tp);}
+  .prob-bars{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-top:12px;border-top:1px solid #E0D9C0;}
+  .prob-item{text-align:center;}
+  .prob-lbl{font-family:'Space Mono',monospace;font-size:8px;color:var(--td);margin-bottom:3px;}
+  .prob-val{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;}
+  .pva{color:var(--atab);} .pvx{color:var(--ora);} .pvj{color:var(--juvk);}
+  .pbar-o{height:4px;background:#DDD;border-radius:2px;margin-top:4px;overflow:hidden;}
+  .pbar-i{height:100%;border-radius:2px;}
+
+  /* WATCHLIST */
+  .w-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .w-item{background:var(--sf);border:1px solid var(--bd);border-top:3px solid var(--bdd);padding:10px;}
+  .w-metric{font-family:'Space Mono',monospace;font-size:8px;color:var(--td);margin-bottom:2px;}
+  .w-thr{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--acc);line-height:1;}
+  .w-desc{font-size:9px;color:var(--ts);margin-top:3px;line-height:1.4;}
+
+  /* FOOTER */
+  .ftr{padding:14px 20px;border-top:2px solid var(--bdd);background:var(--sf);}
+  .ftr-txt{font-family:'Space Mono',monospace;font-size:8px;color:var(--td);line-height:2;}
+  .ftr-brand{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:5px;color:var(--acc);display:block;margin-top:5px;}
+
+  /* GITHUB GUIDE */
+  .gh{padding:20px;background:#F4F8FF;border-top:1px solid var(--bd);}
+  .gh-title{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:3px;color:var(--atab);margin-bottom:4px;}
+  .gh-sub{font-size:10px;color:var(--ts);margin-bottom:14px;line-height:1.5;}
+  .gh-step{display:grid;grid-template-columns:26px 1fr;gap:8px;margin-bottom:12px;align-items:start;}
+  .gh-num{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:#fff;background:var(--atab);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  .gh-text{font-size:11px;color:var(--tp);line-height:1.5;}
+  .gh-text strong{color:var(--atab);}
+  .gh-text code{background:#E5EEFF;border:1px solid #B8C8E8;padding:1px 5px;font-family:'Space Mono',monospace;font-size:9px;border-radius:2px;}
+  .gh-note{background:#E5EEFF;border:1px solid #B8C8E8;border-left:3px solid var(--atab);padding:7px 10px;font-size:10px;color:var(--ts);margin-top:4px;line-height:1.6;}
+  .gh-tip{margin-top:10px;padding:9px 12px;background:#E8F4FF;border:1px solid #A0C4E8;font-size:10px;color:var(--ts);line-height:1.5;}
+  .gh-tip strong{color:var(--atab);}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="brand">JUVEMETRICS</div>
+    <div class="jtag">JMA — SEZIONE A — G31</div>
+  </div>
+  <div class="matchup">
+    <div class="tn a">ATALANTA</div>
+    <div class="vs">vs</div>
+    <div class="tn j">JUVENTUS</div>
+  </div>
+  <div class="meta">
+    <div class="mi">DATA <span>11/04/2026</span></div>
+    <div class="mi">ORE <span>20:45</span></div>
+    <div class="mi">SEDE <span>Gewiss Stadium, Bergamo</span></div>
+    <div class="mi">COMP. <span>Serie A 2025/26</span></div>
+  </div>
+</div>
+
+
+<!-- 01 — DISPONIBILITÀ -->
+<div class="sl">01 — DISPONIBILITÀ GIOCATORI</div>
+<div class="ct">
+
+  <div class="av-grid">
+    <div class="av-blk">
+      <div class="av-team a">ATALANTA</div>
+      <span class="ptag t-out"><span class="dot dr"></span>Scamacca</span>
+      <span class="ptag t-dbt"><span class="dot do"></span>Hien</span>
+      <p class="av-note">Krstovic favorito su Scamacca (out). Palladino conferma 3-4-2-1.</p>
+    </div>
+    <div class="av-blk">
+      <div class="av-team j">JUVENTUS</div>
+      <span class="ptag t-sup"><span class="dot dg"></span>McKennie ⛔</span>
+      <span class="ptag t-out"><span class="dot dr"></span>Vlahovic</span>
+      <span class="ptag t-out"><span class="dot dr"></span>Perin</span>
+      <span class="ptag t-dbt"><span class="dot do"></span>Bremer ⚠ diff.</span>
+      <span class="ptag t-dbt"><span class="dot do"></span>Kelly L. ⚠ diff.</span>
+      <p class="av-note">McKennie squalificato → Thuram/Miretti. Bremer e Kelly disponibili ma diffidati — un giallo = squalifica G32. Spalletti verso 4-2-3-1.</p>
+    </div>
+  </div>
+  <div class="tn-box">
+    <strong>⚙️ Impatto formativo:</strong> In 4-2-3-1, il xGBuildup si redistribuisce sui wing-back (Cambiaso). Locatelli rimane regista basso ma con meno copertura. David prima punta — <strong style="color:var(--red)">pattern big match critico: JPI 4.2/10 🔴</strong>. Bremer e Kelly disponibili ma diffidati — gestione falli da monitorare.
+  </div>
+</div>
+
+
+<!-- 02 — FORMAZIONI -->
+<div class="sl">02 — PROBABILI FORMAZIONI</div>
+<div class="ct">
+  <div class="fm-grid">
+    <div class="fm-blk">
+      <div class="fm-hdr">
+        <div class="fm-team" style="color:var(--atab)">ATALANTA</div>
+        <div class="fm-bdg">3-4-2-1</div>
+      </div>
+      <div class="li"><span class="lnum">1</span><span class="lrol">GK</span><span class="lnam">Carnesecchi</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">13</span><span class="lrol">DC</span><span class="lnam">Scalvini</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">4</span><span class="lrol">DC</span><span class="lnam">Djimsiti</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">5</span><span class="lrol">DC</span><span class="lnam">Kolasinac</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">2</span><span class="lrol">WB</span><span class="lnam">Zappacosta</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">15</span><span class="lrol">MC</span><span class="lnam">de Roon</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">25</span><span class="lrol">MC</span><span class="lnam">Ederson D.S.</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">17</span><span class="lrol">WB</span><span class="lnam">Bernasconi</span><span class="lpct">60%</span></div>
+      <div class="li"><span class="lnum">24</span><span class="lrol">TR</span><span class="lnam">De Ketelaere</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">19</span><span class="lrol">TR</span><span class="lnam">Zalewski</span><span class="lpct">80%</span></div>
+      <div class="li"><span class="lnum">9</span><span class="lrol">F</span><span class="lnam">Krstovic</span><span class="lpct">60%</span></div>
+    </div>
+    <div class="fm-blk">
+      <div class="fm-hdr">
+        <div class="fm-team" style="color:var(--juvk)">JUVENTUS</div>
+        <div class="fm-bdg">4-2-3-1</div>
+      </div>
+      <div class="li"><span class="lnum">29</span><span class="lrol">GK</span><span class="lnam">Di Gregorio</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">2</span><span class="lrol">TD</span><span class="lnam">Kalulu</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">3</span><span class="lrol">DC</span><span class="lnam">Bremer</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">14</span><span class="lrol">DC</span><span class="lnam">Kelly L.</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">11</span><span class="lrol">TS</span><span class="lnam">Cambiaso</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">5</span><span class="lrol">MC</span><span class="lnam">Locatelli</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">8</span><span class="lrol">MC</span><span class="lnam">Thuram K.</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">20</span><span class="lrol">ALA</span><span class="lnam">Conceição</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">7</span><span class="lrol">TR</span><span class="lnam">Koopmeiners</span><span class="lpct">60%</span></div>
+      <div class="li"><span class="lnum">10</span><span class="lrol">ALA</span><span class="lnam">Yildiz</span><span class="lpct">90%</span></div>
+      <div class="li"><span class="lnum">9</span><span class="lrol">F</span><span class="lnam">David</span><span class="lpct">55%</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 03 — KPI -->
+<div class="sl">03 — KPI STAGIONALI COMPARATI — Mclachapp — percentili Serie A</div>
+<div class="ct">
+  <div class="kpi-hdr">
+    <div class="kth a">ATALANTA</div>
+    <div class="kth m">METRICA</div>
+    <div class="kth j">JUVENTUS</div>
+  </div>
+  <div class="krow"><div class="kva ca">90°</div><div class="klb">xPts<br>Performance</div><div class="kvj cj">100°</div></div>
+  <div class="krow"><div class="kva">88°</div><div class="klb">Open Play xG/90<br>Attack</div><div class="kvj">88°</div></div>
+  <div class="krow"><div class="kva">90°</div><div class="klb">Open Play xGA/90<br>Defense</div><div class="kvj cj">96°</div></div>
+  <div class="krow"><div class="kva ca">91°</div><div class="klb">PPDA<br>Pressing</div><div class="kvj">80°</div></div>
+  <div class="krow"><div class="kva cr">76°</div><div class="klb">% Tiri da Counter<br>Counter</div><div class="kvj cn">~21°</div></div>
+  <div class="krow"><div class="kva ca">69°</div><div class="klb">Duels Won/90<br>Duels</div><div class="kvj cn">41°</div></div>
+  <div class="krow"><div class="kva cr">91°</div><div class="klb">Set Piece xGD/90<br>Set Pieces</div><div class="kvj">66°</div></div>
+  <div class="krow"><div class="kva">86°</div><div class="klb">% Tempo possesso<br>Possession</div><div class="kvj">83°</div></div>
+  <div class="krow"><div class="kva">50°</div><div class="klb">(GD−xGD)/90<br>Box Efficiency</div><div class="kvj">52°</div></div>
+
+  <div class="tn-box">
+    <strong>📊 Lettura:</strong> Atalanta superiore su Counter (+55 pct), Pressing (+11), Set Pieces (+25), Duels (+28). Juventus più solida difensivamente (96° vs 90°). Attacco pari (88°=88°). Il duello difensivo è l'ago della bilancia.
+  </div>
+</div>
+
+
+<!-- 04 — RADAR -->
+<div class="sl">04 — RADAR MCLACHAPP — 9 assi — percentili Serie A</div>
+<div class="ct">
+  <div class="radar-wrap">
+    <svg class="radar-svg" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+      <rect width="360" height="360" fill="#FAFAFA" rx="2"/>
+      <!-- Grid -->
+      <circle cx="180" cy="180" r="130" fill="none" stroke="#E0E0E0" stroke-width="1"/>
+      <circle cx="180" cy="180" r="97.5" fill="none" stroke="#E0E0E0" stroke-width="1"/>
+      <circle cx="180" cy="180" r="65"  fill="none" stroke="#E0E0E0" stroke-width="1"/>
+      <circle cx="180" cy="180" r="32.5" fill="none" stroke="#EEEEEE" stroke-width="1"/>
+      <!-- Pct labels -->
+      <text x="185" y="52"  fill="#BBBBBB" font-family="monospace" font-size="7">100</text>
+      <text x="185" y="84"  fill="#BBBBBB" font-family="monospace" font-size="7">75</text>
+      <text x="185" y="117" fill="#BBBBBB" font-family="monospace" font-size="7">50</text>
+      <text x="185" y="149" fill="#BBBBBB" font-family="monospace" font-size="7">25</text>
+      <!-- 9 axes at 40° intervals, starting from top (270° / -90°) -->
+      <!-- 0: top=Performance  → (180,50) -->
+      <!-- 1: 40°=Attack       → (180+130*sin40, 180-130*cos40) = (264,81) -->
+      <!-- 2: 80°=Defense      → (180+130*sin80, 180-130*cos80) = (308,157) -->
+      <!-- 3: 120°=Duels       → (180+130*sin120,180-130*cos120)=(293,245) -->
+      <!-- 4: 160°=Pressing    → (180+130*sin160,180-130*cos160)=(224,302) -->
+      <!-- 5: 200°=SetPieces   → (180+130*sin200,180-130*cos200)=(136,302) -->
+      <!-- 6: 240°=BoxEff      → (180+130*sin240,180-130*cos240)=(67,245) -->
+      <!-- 7: 280°=Counter     → (180+130*sin280,180-130*cos280)=(52,157) -->
+      <!-- 8: 320°=Possession  → (180+130*sin320,180-130*cos320)=(96,81) -->
+      <line x1="180" y1="180" x2="180" y2="50"  stroke="#CCCCCC" stroke-width="1"/>
+      <line x1="180" y1="180" x2="264" y2="81"  stroke="#CCCCCC" stroke-width="1"/>
+      <line x1="180" y1="180" x2="308" y2="157" stroke="#CCCCCC" stroke-width="1"/>
+      <line x1="180" y1="180" x2="293" y2="245" stroke="#CCCCCC" stroke-width="1"/>
+      <line x1="180" y1="180" x2="224" y2="302" stroke="#CCCCCC" stroke-width="1"/>
+      <line x1="180" y1="180" x2="136" y2="302" stroke="#CCCCCC" stroke-width="1"/>
+      <line x1="180" y1="180" x2="67"  y2="245" stroke="#CCCCCC" stroke-width="1"/>
+      <line x1="180" y1="180" x2="52"  y2="157" stroke="#CCCCCC" stroke-width="1"/>
+      <line x1="180" y1="180" x2="96"  y2="81"  stroke="#CCCCCC" stroke-width="1"/>
+
+      <!-- Axis labels -->
+      <text x="180" y="44"  text-anchor="middle" fill="#666" font-family="monospace" font-size="7">PERFORMANCE</text>
+      <text x="268" y="78"  text-anchor="start"  fill="#666" font-family="monospace" font-size="7">ATTACK</text>
+      <text x="312" y="160" text-anchor="start"  fill="#666" font-family="monospace" font-size="7">DEFENSE</text>
+      <text x="297" y="250" text-anchor="start"  fill="#666" font-family="monospace" font-size="7">DUELS</text>
+      <text x="228" y="314" text-anchor="start"  fill="#666" font-family="monospace" font-size="7">PRESSING</text>
+      <text x="132" y="314" text-anchor="end"    fill="#666" font-family="monospace" font-size="7">SET PIECES</text>
+      <text x="62"  y="250" text-anchor="end"    fill="#666" font-family="monospace" font-size="7">BOX EFF</text>
+      <text x="48"  y="160" text-anchor="end"    fill="#1C4F9C" font-family="monospace" font-size="7" font-weight="bold">COUNTER ⚠</text>
+      <text x="92"  y="78"  text-anchor="end"    fill="#666" font-family="monospace" font-size="7">POSSESSION</text>
+
+      <!--
+        ATALANTA pct: Perf=90, Att=88, Def=90, Duel=69, Press=91, SP=91, BoxEff=50, Counter=76, Poss=86
+        r = pct/100 * 130
+        0 Perf 90 → r=117 → (180, 180-117)=(180,63)
+        1 Att  88 → r=114.4 → (180+114.4*sin40°, 180-114.4*cos40°)=(180+73.5,180-87.6)=(253.5,92.4)
+        2 Def  90 → r=117 → (180+117*sin80°, 180-117*cos80°)=(180+115.2,180-20.3)=(295.2,159.7)
+        3 Duel 69 → r=89.7 → (180+89.7*sin120°,180-89.7*cos120°)=(180+77.7,180+44.9)=(257.7,224.9)
+        4 Press91 → r=118.3 → (180+118.3*sin160°,180-118.3*cos160°)=(180+40.5,180+111.2)=(220.5,291.2)
+        5 SP   91 → r=118.3 → (180+118.3*sin200°,180-118.3*cos200°)=(180-40.5,180+111.2)=(139.5,291.2)
+        6 BEff 50 → r=65 → (180+65*sin240°,180-65*cos240°)=(180-56.3,180+32.5)=(123.7,212.5)
+        7 Ctr  76 → r=98.8 → (180+98.8*sin280°,180-98.8*cos280°)=(180-97.3,180-17.2)=(82.7,162.8)
+        8 Poss 86 → r=111.8 → (180+111.8*sin320°,180-111.8*cos320°)=(180-71.8,180-85.6)=(108.2,94.4)
+      -->
+      <polygon
+        points="180,63 253,92 295,160 258,225 220,291 140,291 124,212 83,163 108,94"
+        fill="rgba(28,79,156,0.18)"
+        stroke="#1C4F9C"
+        stroke-width="2"
+        stroke-linejoin="round"
+      />
+
+      <!--
+        JUVENTUS pct: Perf=100,Att=88,Def=96,Duel=41,Press=80,SP=66,BoxEff=52,Counter=21,Poss=83
+        0 Perf100 → r=130 → (180,50)
+        1 Att  88 → r=114.4 → (253,92) same as Ata
+        2 Def  96 → r=124.8 → (180+122.9,180-21.7)=(302.9,158.3)
+        3 Duel 41 → r=53.3 → (180+46.2,180+26.7)=(226.2,206.7)
+        4 Press80 → r=104 → (180+35.6,180+97.7)=(215.6,277.7)
+        5 SP   66 → r=85.8 → (180-29.3,180+80.6)=(150.7,260.6)
+        6 BEff 52 → r=67.6 → (180-58.5,180+33.8)=(121.5,213.8)
+        7 Ctr  21 → r=27.3 → (180-26.9,180-4.7)=(153.1,175.3)
+        8 Poss 83 → r=107.9 → (180-69.3,180-82.6)=(110.7,97.4)
+      -->
+      <polygon
+        points="180,50 253,92 303,158 226,207 216,278 151,261 122,214 153,175 111,97"
+        fill="rgba(13,13,13,0.06)"
+        stroke="#0D0D0D"
+        stroke-width="1.5"
+        stroke-dasharray="5,3"
+        stroke-linejoin="round"
+      />
+
+      <!-- Key divergence dots -->
+      <circle cx="83"  cy="163" r="5" fill="#1C4F9C" stroke="#fff" stroke-width="1.5"/>
+      <circle cx="153" cy="175" r="5" fill="#0D0D0D"  stroke="#fff" stroke-width="1.5"/>
+      <circle cx="140" cy="291" r="5" fill="#1C4F9C" stroke="#fff" stroke-width="1.5"/>
+      <circle cx="151" cy="261" r="5" fill="#0D0D0D"  stroke="#fff" stroke-width="1.5"/>
+    </svg>
+
+    <div class="rleg">
+      <div class="rleg-item"><div class="rleg-dot" style="background:#1C4F9C;"></div>Atalanta</div>
+      <div class="rleg-item"><div class="rleg-dot" style="background:#0D0D0D;border:1px solid #ccc;"></div>Juventus</div>
+    </div>
+    <div style="font-family:'Space Mono',monospace;font-size:7px;color:var(--td);text-align:center;">
+      Fonte: Mclachapp (fetch manuale) — FBref — Serie A 2025/26 · Punti evidenziati: Counter, Set Pieces
+    </div>
+  </div>
+</div>
+
+
+<!-- 05 — THREAT MAP -->
+<div class="sl">05 — THREAT MAP — Understat — ultimi 5 match</div>
+<div class="ct">
+  <div class="th-grid">
+    <div class="th-blk">
+      <div class="th-title" style="color:var(--atab)">🔵 MINACCE ATALANTA</div>
+      <div class="th-player"><span class="th-rank">01</span><div class="th-info"><div class="th-name">Krstovic</div><div class="th-metric">NPxG90</div></div><span class="th-val vr">1.25</span></div>
+      <div class="th-player"><span class="th-rank">02</span><div class="th-info"><div class="th-name">De Ketelaere</div><div class="th-metric">xA90</div></div><span class="th-val vr">1.06</span></div>
+      <div class="th-player"><span class="th-rank">03</span><div class="th-info"><div class="th-name">Éderson</div><div class="th-metric">xGChain90</div></div><span class="th-val va">1.12</span></div>
+      <div class="th-player"><span class="th-rank">04</span><div class="th-info"><div class="th-name">Raspadori</div><div class="th-metric">Impact90</div></div><span class="th-val va">0.87</span></div>
+      <div class="th-player"><span class="th-rank">05</span><div class="th-info"><div class="th-name">Zappacosta</div><div class="th-metric">xA90</div></div><span class="th-val va">0.48</span></div>
+    </div>
+    <div class="th-blk">
+      <div class="th-title" style="color:var(--juvk)">⚪ CHIAVI JUVENTUS</div>
+      <div class="th-player"><span class="th-rank">01</span><div class="th-info"><div class="th-name">Locatelli</div><div class="th-metric">xGBU90</div></div><span class="th-val vg">0.55</span></div>
+      <div class="th-player"><span class="th-rank">02</span><div class="th-info"><div class="th-name">Yildiz</div><div class="th-metric">Impact90</div></div><span class="th-val vg">0.55</span></div>
+      <div class="th-player"><span class="th-rank">03</span><div class="th-info"><div class="th-name">Conceição</div><div class="th-metric">xGChain90</div></div><span class="th-val va">0.68</span></div>
+      <div class="th-player"><span class="th-rank">04</span><div class="th-info"><div class="th-name">Cambiaso</div><div class="th-metric">xGChain90</div></div><span class="th-val va">0.50</span></div>
+      <div class="th-player"><span class="th-rank">05</span><div class="th-info"><div class="th-name">David ⚠️</div><div class="th-metric" style="color:var(--red)">JPI big match</div></div><span class="th-val vr">4.2</span></div>
+    </div>
+  </div>
+  <div class="tn-box">
+    <strong>🎯 Duello chiave:</strong> De Ketelaere (xA90: 1.06) è il trigger creativo Palladino. Il pressing da trequartista mette in crisi il buildup basso. <strong>Locatelli (xGBU90: 0.55)</strong> è il contraltare — se neutralizzato, Juve perde ~30% costruzione efficace.
+  </div>
+</div>
+
+
+<!-- 06 — DUEL CARD -->
+<div class="sl">06 — DUEL CARD</div>
+<div class="ct">
+  <div class="duel">
+    <div class="duel-lbl">DUELLO 01 — COSTRUZIONE BASSA</div>
+    <div class="duel-mu">
+      <div><div class="dp-name a">Éderson</div><div class="dp-stats">xGChain90: 1.12 · xGBU90: 0.71</div></div>
+      <div class="duel-x">⚡</div>
+      <div class="dp-right"><div class="dp-name j">Locatelli</div><div class="dp-stats">xGBU90: 0.55 · BU%: 84%</div></div>
+    </div>
+    <div class="duel-note">Éderson domina la costruzione Atalanta (xGBU90: 0.71, top del centrocampo). Con McKennie squalificato, Locatelli ha meno copertura. Chi controlla la zona di costruzione orienta la partita.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-lbl">DUELLO 02 — FINALIZZAZIONE</div>
+    <div class="duel-mu">
+      <div><div class="dp-name a">Krstovic</div><div class="dp-stats">NPxG90: 1.25 · shots/90: 7.58</div></div>
+      <div class="duel-x">⚡</div>
+      <div class="dp-right"><div class="dp-name j">Bremer / Kelly</div><div class="dp-stats">Entrambi disponibili · diffidati ⚠</div></div>
+    </div>
+    <div class="duel-note">Krstovic prima scelta con Scamacca out. NPxG90: 1.25 — il valore più alto nel campione Atalanta. Bremer e Kelly disponibili ma diffidati: un giallo li esclude da G32. Spalletti dovrà bilanciare aggressività difensiva e gestione ammonizioni. Rischio set pieces rimane elevato (Ata 91°).</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-lbl">DUELLO 03 — TRANSIZIONE OFFENSIVA</div>
+    <div class="duel-mu">
+      <div><div class="dp-name a">De Ketelaere</div><div class="dp-stats">xA90: 1.06 · xGChain90: 1.51</div></div>
+      <div class="duel-x">⚡</div>
+      <div class="dp-right"><div class="dp-name j">Thuram K.</div><div class="dp-stats">BU%: 71.9% · Impact90: 0.19</div></div>
+    </div>
+    <div class="duel-note">CDK è il più pericoloso in transizione (3 assist ultimi 5 match). Thuram in sostituzione di McKennie ha profilo difensivo (BU% 71.9%) ma limitata capacità di contenimento in ampiezza. Area di vulnerabilità sistemica Juve.</div>
+  </div>
+</div>
+
+
+<!-- 07 — PREVISIONE -->
+<div class="sl">07 — PREVISIONE PRE-MATCH</div>
+<div class="ct">
+  <div class="pred">
+    <div class="pred-lbl">⚑ PREVISIONE PUBBLICA — PUBBLICATA PRIMA DEL FISCHIO</div>
+    <div class="pred-res">PAREGGIO</div>
+    <div class="pred-score">Risultato più probabile: 1 — 1</div>
+    <div class="pred-rat">
+      L'Atalanta di Palladino ha vantaggi strutturali su <strong>Counter (76° vs ~21°)</strong>, <strong>Pressing (91°)</strong>, <strong>Set Pieces (91°)</strong>, <strong>Duels (69° vs 41°)</strong>. Gioca in casa con pressing aggressivo.<br><br>
+      La Juventus è difensivamente più solida (<strong>xGA 96°</strong>) con attacco pari in open play (88°=88°). Il pattern big match penalizza David (<strong>JPI 4.2/10 🔴</strong>). McKennie squalificato riduce la copertura in transizione.<br><br>
+      Il <strong>paradosso possesso</strong> (Juve vince con 53.6%, perde con 55.6%) suggerisce che alta possesso favorisce l'Atalanta. Rischio principale: gol da set piece (Ata 91°). Bremer e Kelly disponibili ma diffidati — gestione falli diventa variabile tattica.
+    </div>
+    <div class="prob-bars">
+      <div class="prob-item">
+        <div class="prob-lbl">ATA WIN</div>
+        <div class="prob-val pva">38%</div>
+        <div class="pbar-o"><div class="pbar-i" style="width:38%;background:var(--atab);"></div></div>
+      </div>
+      <div class="prob-item">
+        <div class="prob-lbl">PAREGGIO</div>
+        <div class="prob-val pvx">35%</div>
+        <div class="pbar-o"><div class="pbar-i" style="width:35%;background:var(--ora);"></div></div>
+      </div>
+      <div class="prob-item">
+        <div class="prob-lbl">JUV WIN</div>
+        <div class="prob-val pvj">27%</div>
+        <div class="pbar-o"><div class="pbar-i" style="width:27%;background:var(--juvk);"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 08 — WATCHLIST -->
+<div class="sl">08 — KPI DA MONITORARE LIVE</div>
+<div class="ct">
+  <div class="w-grid">
+    <div class="w-item">
+      <div class="w-metric">OPEN PLAY XG JUVE</div>
+      <div class="w-thr">&gt; 1.80</div>
+      <div class="w-desc">Soglia vittoria storica. Sotto → deficit offensivo sistemico.</div>
+    </div>
+    <div class="w-item">
+      <div class="w-metric">CROSSES JUVE</div>
+      <div class="w-thr">&lt; 18</div>
+      <div class="w-desc">r=−0.385. Volume alto → costruzione inefficace → pareggio/sconfitta.</div>
+    </div>
+    <div class="w-item">
+      <div class="w-metric">HIGH RECOVERIES</div>
+      <div class="w-thr">≥ 6</div>
+      <div class="w-desc">Trigger vittoria: 6.4 nelle vittorie vs 4.0 nelle sconfitte.</div>
+    </div>
+    <div class="w-item">
+      <div class="w-metric">FIELD TILT</div>
+      <div class="w-thr">&lt; 75%</div>
+      <div class="w-desc">FT &gt;75% = trappola possesso. Senza open play xG non produce punti.</div>
+    </div>
+    <div class="w-item">
+      <div class="w-metric">SET PIECES CONCESSE</div>
+      <div class="w-thr">MINIMO</div>
+      <div class="w-desc">Atalanta 91° Set Piece xGD. Ogni corner/punizione è pericoloso.</div>
+    </div>
+    <div class="w-item">
+      <div class="w-metric">DAVID — JPI</div>
+      <div class="w-thr">≥ 6.5</div>
+      <div class="w-desc">Sotto 6.5 = conferma pattern big match. Pressing, duelli, shots.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<div class="ftr">
+  <div class="ftr-txt">
+    JUVEMETRICS — JMA SEZIONE A — G31 · Atalanta vs Juventus — 11/04/2026<br>
+    Fonte: Understat JSON · Mclachapp (manuale) · Datamb · Transfermarkt<br>
+    Previsione dichiarata prima del fischio · accuracy verificata in Sezione B · Data-driven. Zero opinions.
+    <span class="ftr-brand">@JuMetrics</span>
+  </div>
+</div>
+
+
+
+
+</body>
+</html>
