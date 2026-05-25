@@ -1,0 +1,2334 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JuveMetrics — Il Simulatore Estivo 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --black: #0a0a0a;
+    --gold: #C8A800;
+    --gold-dim: #a88c00;
+    --white: #f0efe9;
+    --red: #dc2626;
+    --green: #16a34a;
+    --grey: #6b7280;
+    --card-bg: #141414;
+    --border: #2a2a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    background: #111;
+    border-bottom: 3px solid var(--gold);
+    padding: 0 20px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-box {
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    padding: 2px 6px;
+    letter-spacing: 0.5px;
+  }
+  .logo-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+  .logo-text span { color: var(--gold); }
+  .top-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--grey);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* SCREEN SYSTEM */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* INTRO SCREEN */
+  .intro-wrap {
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  .intro-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--gold);
+    max-width: 420px;
+    width: 100%;
+    padding: 32px 28px;
+  }
+  .intro-card h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .intro-card h1 span { color: var(--gold); }
+  .intro-subtitle {
+    font-size: 13px;
+    color: var(--grey);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+  .intro-card p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #bbb;
+    margin-bottom: 28px;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+  .field-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .field-input {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid var(--border);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .field-input:focus { border-color: var(--gold); }
+  .field-input::placeholder { color: #444; }
+
+  .budget-display {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 36px;
+    color: var(--gold);
+    text-align: center;
+    margin: 8px 0 4px;
+    letter-spacing: 1px;
+  }
+  .budget-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--grey);
+    margin-bottom: 20px;
+  }
+  .scenario-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .scenario-btn {
+    background: #1a1a1a;
+    border: 1px solid var(--border);
+    color: var(--grey);
+    padding: 10px 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .scenario-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(200,168,0,0.08);
+  }
+
+  input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    outline: none;
+    margin-bottom: 4px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--gold);
+    cursor: pointer;
+    border-radius: 50%;
+  }
+
+  .btn-primary {
+    width: 100%;
+    background: var(--gold);
+    color: var(--black);
+    border: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-dim); }
+  .btn-primary:disabled {
+    background: #333;
+    color: #666;
+    cursor: not-allowed;
+  }
+
+  /* DASHBOARD SCREEN */
+  .dashboard-header {
+    background: #111;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+  }
+  .dashboard-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+  }
+  .dashboard-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--grey);
+    margin-top: 2px;
+  }
+
+  .status-bar {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    background: #0d0d0d;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .status-pill {
+    background: #1a1a1a;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-pill.done { border-color: var(--green); color: var(--green); }
+  .status-pill.warn { border-color: var(--gold); color: var(--gold); }
+  .status-pill em { font-style: normal; color: var(--white); font-weight: 500; }
+
+  .tasks-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px;
+  }
+  .task-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 20px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .task-card:hover:not(.locked) { border-color: var(--gold); }
+  .task-card.done { border-color: var(--green); opacity: 0.7; cursor: default; }
+  .task-card.locked { opacity: 0.4; cursor: not-allowed; }
+  .task-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--grey);
+    margin-bottom: 12px;
+  }
+  .task-icon { font-size: 28px; margin-bottom: 10px; }
+  .task-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .task-desc {
+    font-size: 11px;
+    color: var(--grey);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .task-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-pending { background: rgba(200,168,0,0.1); color: var(--gold); border: 1px solid rgba(200,168,0,0.3); }
+  .badge-done { background: rgba(22,163,74,0.1); color: var(--green); border: 1px solid rgba(22,163,74,0.3); }
+
+  /* MODAL / STEP SCREENS */
+  .step-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--black);
+    z-index: 200;
+    overflow-y: auto;
+    display: none;
+  }
+  .step-screen.open { display: block; }
+
+  .step-header {
+    background: #111;
+    border-bottom: 3px solid var(--gold);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .back-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--white);
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s;
+  }
+  .back-btn:hover { border-color: var(--gold); }
+  .step-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+  }
+  .step-icon { font-size: 22px; }
+
+  .step-body { padding: 20px 16px; }
+
+  .info-box {
+    background: rgba(200,168,0,0.06);
+    border: 1px solid rgba(200,168,0,0.25);
+    border-left: 3px solid var(--gold);
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #ccc;
+  }
+  .info-box strong { color: var(--gold); }
+
+  .attempts-bar {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .attempts-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--grey); }
+  .attempts-dots { display: flex; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gold); }
+  .dot.used { background: var(--border); }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .option-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 16px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .option-card:hover { border-color: var(--gold); }
+  .option-card.selected { border-color: var(--gold); background: rgba(200,168,0,0.08); }
+  .option-card.disabled { opacity: 0.4; cursor: not-allowed; }
+  .option-icon { font-size: 26px; margin-bottom: 8px; }
+  .option-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .option-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .option-sub { font-size: 10px; color: var(--grey); margin-bottom: 8px; }
+  .option-prob {
+    display: inline-block;
+    padding: 2px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .prob-high { background: rgba(22,163,74,0.15); color: #4ade80; border: 1px solid rgba(22,163,74,0.3); }
+  .prob-mid { background: rgba(200,168,0,0.15); color: var(--gold); border: 1px solid rgba(200,168,0,0.3); }
+  .prob-low { background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.3); }
+
+  /* JTR badge */
+  .jtr-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .jtr-green { background: rgba(22,163,74,0.15); color: #4ade80; border: 1px solid rgba(22,163,74,0.3); }
+  .jtr-yellow { background: rgba(200,168,0,0.15); color: var(--gold); border: 1px solid rgba(200,168,0,0.3); }
+  .jtr-orange { background: rgba(234,88,12,0.15); color: #fb923c; border: 1px solid rgba(234,88,12,0.3); }
+
+  .result-box {
+    padding: 20px;
+    text-align: center;
+    margin: 16px 0;
+    border: 2px solid;
+  }
+  .result-box.success { border-color: var(--green); background: rgba(22,163,74,0.08); }
+  .result-box.failure { border-color: var(--red); background: rgba(220,38,38,0.08); }
+  .result-emoji { font-size: 36px; margin-bottom: 8px; }
+  .result-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .result-desc { font-size: 13px; color: #bbb; line-height: 1.5; }
+
+  .btn-secondary {
+    width: 100%;
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .btn-secondary:hover { background: rgba(200,168,0,0.1); }
+
+  /* PITCH SVG */
+  .pitch-wrap {
+    background: #0d1f0d;
+    border: 1px solid #1a3a1a;
+    padding: 12px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .pitch-wrap svg { display: block; width: 100%; height: auto; }
+
+  .slot-player {
+    cursor: pointer;
+  }
+  .slot-circle {
+    transition: all 0.2s;
+  }
+  .slot-player:hover .slot-circle { stroke: var(--gold) !important; }
+
+  /* PLAYER POOL */
+  .player-pool {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+    max-height: 340px;
+    overflow-y: auto;
+  }
+  .player-pill {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .player-pill:hover:not(.placed) { border-color: var(--gold); }
+  .player-pill.placed { border-color: var(--green); opacity: 0.6; cursor: default; }
+  .player-pill-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+  .player-pill-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--grey);
+  }
+
+  /* SUMMARY */
+  .summary-section {
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .summary-header {
+    background: #111;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .summary-row {
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row .label { color: var(--grey); font-family: 'DM Mono', monospace; font-size: 11px; }
+  .summary-row .value { font-family: 'DM Mono', monospace; font-weight: 500; }
+  .value.pos { color: var(--green); }
+  .value.neg { color: var(--red); }
+  .value.gold { color: var(--gold); }
+
+  .final-score-box {
+    background: var(--card-bg);
+    border: 2px solid var(--gold);
+    padding: 28px 20px;
+    text-align: center;
+    margin: 20px 0;
+  }
+  .final-score-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .final-score-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 64px;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .final-score-verdict {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+  .final-score-sub {
+    font-size: 12px;
+    color: var(--grey);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* BOTTOM BAR */
+  .bottom-bar {
+    background: #111;
+    border-top: 3px solid var(--gold);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    z-index: 50;
+  }
+  .bottom-handle {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+  }
+  .bottom-tagline {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--grey);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #111; }
+  ::-webkit-scrollbar-thumb { background: var(--gold); }
+
+  .toast {
+    position: fixed;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--card-bg);
+    border: 1px solid var(--gold);
+    color: var(--white);
+    padding: 10px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; }
+
+  .sold-tag {
+    display: inline-block;
+    background: rgba(22,163,74,0.15);
+    color: #4ade80;
+    border: 1px solid rgba(22,163,74,0.3);
+    padding: 2px 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    margin-left: 6px;
+  }
+
+  .warn-tag {
+    display: inline-block;
+    background: rgba(220,38,38,0.15);
+    color: #f87171;
+    border: 1px solid rgba(220,38,38,0.3);
+    padding: 2px 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+  }
+
+  .budget-tracker {
+    background: #111;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    position: sticky;
+    top: 67px;
+    z-index: 9;
+  }
+  .budget-tracker .label { color: var(--grey); }
+  .budget-tracker .value { color: var(--gold); font-weight: 500; font-size: 13px; }
+
+  .mb-2 { margin-bottom: 8px; }
+  .mb-3 { margin-bottom: 12px; }
+  .mt-2 { margin-top: 8px; }
+
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .check-toggle {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+  .check-toggle.checked { background: var(--green); border-color: var(--green); }
+  .check-content { flex: 1; }
+  .check-name { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+  .check-meta { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--grey); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="logo">
+    <div class="logo-box">JM</div>
+    <div class="logo-text">Juve<span>Metrics</span></div>
+  </div>
+  <div class="top-label">Simulatore Estivo 2026</div>
+</div>
+
+<!-- ========== SCREEN: INTRO ========== -->
+<div id="screen-intro" class="screen active">
+  <div class="intro-wrap">
+    <div class="intro-card">
+      <div class="intro-subtitle">@JuMetrics · Estate 2026</div>
+      <h1>Il <span>Simulatore</span><br>di Mercato</h1>
+      <p>
+        Sei il nuovo Direttore Sportivo della Juventus FC. Hai una finestra di mercato per trovare sponsor, cedere gli esuberi, rinforzare la rosa e schierare la formazione per il 2026/27.<br><br>
+        Ogni decisione impatta il budget FER. Dati reali. Zero opinioni.
+      </p>
+
+      <div class="field-label">Il tuo nome</div>
+      <input class="field-input" id="ds-name" type="text" placeholder="es. Matteo Tognozzi" maxlength="30">
+
+      <div class="field-label">Scenario competitivo</div>
+      <div style="background:#1a1a1a;border:1px solid #C8A800;padding:14px;margin-bottom:20px;text-align:center;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;letter-spacing:1px;color:#C8A800;">SERIE A · UEL · COPPA ITALIA</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:#888;margin-top:4px;">3 competizioni · budget FER compresso · rotazioni ampie</div>
+      </div>
+
+      <div class="field-label">Budget trasferimenti</div>
+      <input type="range" id="budget-slider" min="40" max="180" value="100" oninput="updateBudget(this.value)">
+      <div class="budget-display" id="budget-display">€100M</div>
+      <div class="budget-labels"><span>€40M</span><span>€180M</span></div>
+
+      <button class="btn-primary" onclick="startGame()">Inizia come DS →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SCREEN: DASHBOARD ========== -->
+<div id="screen-dashboard" class="screen">
+  <div class="dashboard-header">
+    <div class="dashboard-title" id="dash-title">DS — Stagione 2026/27</div>
+    <div class="dashboard-sub" id="dash-sub">Juventus FC · Serie A · UEL · Coppa Italia</div>
+  </div>
+  <div class="status-bar" id="status-bar">
+    <div class="status-pill warn">💰 Budget: <em id="pill-budget">€120M</em></div>
+    <div class="status-pill" id="pill-sponsor">🏷️ Sponsor: <em>Nessuno</em></div>
+    <div class="status-pill" id="pill-sold">💸 Ceduti: <em>0</em></div>
+    <div class="status-pill" id="pill-loaned">🤝 Prestiti: <em>0</em></div>
+    <div class="status-pill" id="pill-signed">✍️ Acquisti: <em>0</em></div>
+    <div class="status-pill" id="pill-formation">⚽ Formazione: <em>Non impostata</em></div>
+  </div>
+  <div class="tasks-grid" id="tasks-grid">
+    <!-- Generated by JS -->
+  </div>
+</div>
+
+<!-- ========== STEP: SPONSOR ========== -->
+<div id="screen-sponsor" class="step-screen">
+  <div class="step-header">
+    <button class="back-btn" onclick="closeStep('sponsor')">←</button>
+    <div class="step-icon">🏷️</div>
+    <div class="step-title">Scegli lo Sponsor</div>
+  </div>
+  <div class="step-body">
+    <div class="info-box">
+      Seleziona uno sponsor e clicca <strong>Presenta l'Offerta</strong>. Se rifiutano, perdi un tentativo. Il valore viene aggiunto al budget trasferimenti.
+    </div>
+    <div class="attempts-bar">
+      <div class="attempts-label">Tentativi rimanenti: <span id="sponsor-attempts-num">3</span></div>
+      <div class="attempts-dots" id="sponsor-dots"></div>
+    </div>
+    <div id="sponsor-result-box"></div>
+    <div class="options-grid" id="sponsor-options"></div>
+    <button class="btn-primary" id="btn-pitch-sponsor" onclick="pitchSponsor()" disabled>Presenta l'Offerta →</button>
+    <button class="btn-secondary" onclick="closeStep('sponsor')" style="margin-top:8px">← Torna alla Dashboard</button>
+  </div>
+</div>
+
+<!-- ========== STEP: CESSIONI ========== -->
+<div id="screen-sell" class="step-screen">
+  <div class="step-header">
+    <button class="back-btn" onclick="closeStep('sell')">←</button>
+    <div class="step-icon">💸</div>
+    <div class="step-title">Cessioni</div>
+  </div>
+  <div class="budget-tracker">
+    <div class="label">Budget corrente</div>
+    <div class="value" id="sell-budget-display">€120M</div>
+  </div>
+  <div class="step-body">
+    <div class="info-box">
+      Seleziona i giocatori da cedere. Ogni cessione aggiunge liquidità al budget e migliora il FER. <strong>🔴 priorità FER assoluta:</strong> Douglas Luiz, Arthur, Vlahovic, Kostic (contratti 2026).
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;" id="sell-filters">
+      <button class="scenario-btn active" onclick="setSellFilter('ALL',this)">Tutti</button>
+      <button class="scenario-btn" onclick="setSellFilter('Prestito di rientro',this)">↩️ Rientri</button>
+      <button class="scenario-btn" onclick="setSellFilter('Portieri',this)">🧤 GK</button>
+      <button class="scenario-btn" onclick="setSellFilter('Difensori',this)">🛡️ DIF</button>
+      <button class="scenario-btn" onclick="setSellFilter('Esterni',this)">↔️ WB</button>
+      <button class="scenario-btn" onclick="setSellFilter('Centrocampisti',this)">⚙️ MC</button>
+      <button class="scenario-btn" onclick="setSellFilter('Attacco',this)">⚽ ATT</button>
+    </div>
+    <div id="sell-list"></div>
+    <button class="btn-primary" onclick="confirmSell()" style="margin-top:12px">Conferma Cessioni →</button>
+    <button class="btn-secondary" onclick="closeStep('sell')">← Torna alla Dashboard</button>
+  </div>
+</div>
+
+<!-- ========== STEP: PRESTITI ========== -->
+<div id="screen-loan" class="step-screen">
+  <div class="step-header">
+    <button class="back-btn" onclick="closeStep('loan')">←</button>
+    <div class="step-icon">🤝</div>
+    <div class="step-title">Prestiti in Uscita</div>
+  </div>
+  <div class="step-body">
+    <div class="info-box">
+      Per ogni giocatore NextGen scegli: <strong>🟢 Prestito</strong> (cresce in altri club) oppure <strong>🟡 Promozione</strong> (entra in prima squadra e diventa selezionabile in formazione). Lascia vuoto per "resta in NextGen senza decisione".
+    </div>
+    <div id="loan-list"></div>
+    <button class="btn-primary" onclick="confirmLoan()" style="margin-top:12px">Conferma Decisioni →</button>
+    <button class="btn-secondary" onclick="closeStep('loan')">← Torna alla Dashboard</button>
+  </div>
+</div>
+
+<!-- ========== STEP: ACQUISTI ========== -->
+<div id="screen-sign" class="step-screen">
+  <div class="step-header">
+    <button class="back-btn" onclick="closeStep('sign')">←</button>
+    <div class="step-icon">✍️</div>
+    <div class="step-title">Acquista Giocatori</div>
+  </div>
+  <div class="budget-tracker">
+    <div class="label">Budget disponibile</div>
+    <div class="value" id="sign-budget-display">€120M</div>
+  </div>
+  <div class="step-body">
+    <div class="info-box">
+      Target reali con score <strong>JTR</strong> (Juventus Transfer Radar). Puoi acquistare più giocatori nei limiti del budget. I target UCL sono disponibili solo in scenario Champions.
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;" id="sign-filters">
+      <button class="scenario-btn active" onclick="setSignFilter('ALL',this)">Tutti</button>
+      <button class="scenario-btn" onclick="setSignFilter('GK',this)">🧤 GK</button>
+      <button class="scenario-btn" onclick="setSignFilter('DC',this)">🛡️ DC</button>
+      <button class="scenario-btn" onclick="setSignFilter('WB',this)">↔️ WB</button>
+      <button class="scenario-btn" onclick="setSignFilter('MC',this)">⚙️ MC</button>
+      <button class="scenario-btn" onclick="setSignFilter('AMC',this)">🎯 AMC</button>
+      <button class="scenario-btn" onclick="setSignFilter('ST',this)">⚽ ST</button>
+    </div>
+    <div class="options-grid" id="sign-options"></div>
+    <button class="btn-primary" onclick="confirmSign()">Conferma Acquisti →</button>
+    <button class="btn-secondary" onclick="closeStep('sign')">← Torna alla Dashboard</button>
+  </div>
+</div>
+
+<!-- ========== STEP: FORMAZIONE ========== -->
+<div id="screen-formation" class="step-screen">
+  <div class="step-header">
+    <button class="back-btn" onclick="closeStep('formation')">←</button>
+    <div class="step-icon">⚽</div>
+    <div class="step-title">Schiera la Formazione</div>
+  </div>
+  <div class="step-body">
+    <div class="info-box">
+      Scegli il modulo. Tocca una posizione sul campo per assegnare un giocatore dal pool rosa. Cambiare modulo resetta la formazione.
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <div class="field-label" style="margin-bottom:8px;">Modulo tattico</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;" id="module-selector">
+        <button class="scenario-btn active" onclick="setModule('3-4-2-1', this)">3-4-2-1</button>
+        <button class="scenario-btn" onclick="setModule('4-3-3', this)">4-3-3</button>
+        <button class="scenario-btn" onclick="setModule('4-2-3-1', this)">4-2-3-1</button>
+        <button class="scenario-btn" onclick="setModule('3-5-2', this)">3-5-2</button>
+      </div>
+    </div>
+
+    <div class="pitch-wrap" id="pitch-wrap"></div>
+
+    <div id="formation-player-pool" class="player-pool"></div>
+    <div id="formation-result"></div>
+    <button class="btn-primary" onclick="confirmFormation()" id="btn-confirm-formation" disabled>Conferma Formazione →</button>
+    <button class="btn-secondary" onclick="closeStep('formation')" style="margin-top:8px">← Torna alla Dashboard</button>
+  </div>
+</div>
+
+<!-- ========== SCREEN: SUMMARY ========== -->
+<div id="screen-summary" class="screen">
+  <div class="dashboard-header">
+    <div class="dashboard-title">Rapporto Finale</div>
+    <div class="dashboard-sub">JuveMetrics · Valutazione DS 2026/27</div>
+  </div>
+  <div style="padding:16px; padding-bottom:80px;" id="summary-body"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <div class="bottom-handle">@JuMetrics</div>
+  <div class="bottom-tagline">Data-driven. Zero opinions. · 2026</div>
+</div>
+
+<!-- PLAYER SELECTOR MODAL -->
+<div id="player-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;padding:40px 16px;overflow-y:auto;">
+  <div style="background:#141414;border:1px solid #333;border-top:3px solid #C8A800;max-width:400px;margin:0 auto;">
+    <div style="padding:16px;border-bottom:1px solid #2a2a2a;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;">Seleziona Giocatore</div>
+      <button onclick="closePlayerModal()" style="background:none;border:1px solid #333;color:#f0efe9;width:32px;height:32px;cursor:pointer;font-size:18px;">×</button>
+    </div>
+    <div id="modal-player-list" style="padding:12px;max-height:400px;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<script>
+// ============ STATE ============
+const STATE = {
+  dsName: '',
+  scenario: 'UEL',
+  budget: 100,
+  budgetBase: 100,
+  sponsorDone: false,
+  sponsorName: '',
+  sponsorValue: 0,
+  soldPlayers: [],
+  loanedPlayers: [],
+  promotedPlayers: [],
+  signedPlayers: [],
+  formation: Array(11).fill(null),
+  formationModule: '3-4-2-1',
+  formationDone: false,
+  sponsorAttempts: 3,
+  selectedSponsor: null,
+  selectedPosition: null,
+  seasonSimulated: false,
+  seasonResult: null,
+};
+
+// ============ DATA ============
+const SPONSORS = [
+  { id: 'ea', name: 'EA Sports', icon: '🎮', value: 70, sub: 'Official Gaming Partner', prob: 0.72, probLabel: '72%', probClass: 'prob-high' },
+  { id: 'aramco', name: 'Aramco', icon: '🛢️', value: 85, sub: 'Principal Sponsor', prob: 0.45, probLabel: '45%', probClass: 'prob-mid' },
+  { id: 'crypto', name: 'Crypto.com', icon: '₿', value: 55, sub: 'Crypto & Web3 Partner', prob: 0.81, probLabel: '81%', probClass: 'prob-high' },
+  { id: 'mbs', name: 'Visit Saudi', icon: '🇸🇦', value: 95, sub: 'Main Global Sponsor', prob: 0.38, probLabel: '38%', probClass: 'prob-low' },
+  { id: 'hublot', name: 'Hublot', icon: '⌚', value: 42, sub: 'Official Watch Partner', prob: 0.88, probLabel: '88%', probClass: 'prob-high' },
+  { id: 'tim', name: 'TIM / Sparkle', icon: '📡', value: 38, sub: 'Telco Partner', prob: 0.90, probLabel: '90%', probClass: 'prob-high' },
+];
+
+const SELL_PLAYERS = [
+  // ── PRESTITI DI RIENTRO — gestione prioritaria ──
+  { id: 'dl',         name: 'Douglas Luiz',   pos: 'MC',   age: 27, value: 28, fee: '~€28M', wage: 5.5, urgency: true,  category: 'Prestito di rientro', note: '🔴 VR residuo €25.7M — URGENTE FER. Aston Villa non riscatta' },
+  { id: 'arthur',     name: 'Arthur',         pos: 'MC',   age: 29, value: 6,  fee: '~€6M',  wage: 4.5, urgency: true,  category: 'Prestito di rientro', note: '🔴 Rientro Girona · contratto 2026 · valore minimo · pesa su ingaggi' },
+  { id: 'nicog',      name: 'N. González',    pos: 'ALA',  age: 27, value: 18, fee: '~€18M', wage: 3.5, urgency: false, category: 'Prestito di rientro', note: 'Rientro Atletico · 14 min stagionali · profilo non centrale Spalletti' },
+  { id: 'rugani',     name: 'Rugani',         pos: 'DC',   age: 30, value: 4,  fee: '~€4M',  wage: 3.0, urgency: false, category: 'Prestito di rientro', note: 'Rientro Ajax · riserva pura · 250 min stagionali · fine ciclo' },
+
+  // ── PORTIERI ──
+  { id: 'dg',         name: 'Di Gregorio',    pos: 'GK',   age: 27, value: 22, fee: '~€22M', wage: 2.5, urgency: false, category: 'Portieri', note: 'Cedibile se Alisson confermato · GSAx positivo · interesse PL' },
+  { id: 'perin',      name: 'Perin',          pos: 'GK',   age: 33, value: 0,  fee: 'Liberazione', wage: 1.8, urgency: false, category: 'Portieri', note: 'Contratto in scadenza · vice affidabile · libera ingaggio €1.8M/yr' },
+
+  // ── DIFENSORI ──
+  { id: 'bremer',     name: 'Bremer',         pos: 'DC',   age: 28, value: 55, fee: '~€55M', wage: 5.0, urgency: false, category: 'Difensori', note: '⚠️ Pilastro · cessione solo per offerta top (>€55M) · PL interessata' },
+  { id: 'kalulu',     name: 'Kalulu',         pos: 'DC',   age: 26, value: 35, fee: '~€35M', wage: 3.0, urgency: false, category: 'Difensori', note: '2381 min stagionali · xA90 elevato per DC · cessione solo big-fee' },
+  { id: 'kelly',      name: 'Lloyd Kelly',    pos: 'DC',   age: 27, value: 18, fee: '~€18M', wage: 3.2, urgency: false, category: 'Difensori', note: 'Impact minimo · profilo difensivo puro · rivendibile in PL' },
+  { id: 'gatti',      name: 'Gatti',          pos: 'DC',   age: 26, value: 22, fee: '~€22M', wage: 2.0, urgency: false, category: 'Difensori', note: 'Richieste PL · specialista set pieces · profilo da valorizzare' },
+  { id: 'cabal',      name: 'Cabal',          pos: 'DC/WB',age: 25, value: 15, fee: '~€15M', wage: 1.8, urgency: false, category: 'Difensori', note: 'Polivalente · Impact90 sorprendente · può fruttare plusvalenza' },
+  { id: 'joao',       name: 'João Mário',     pos: 'WB-R', age: 27, value: 8,  fee: '~€8M',  wage: 1.5, urgency: false, category: 'Difensori', note: 'Rotazione bassa · 242 min · cessione consigliata' },
+
+  // ── TERZINI / WB ──
+  { id: 'cambiaso',   name: 'Cambiaso',       pos: 'WB',   age: 25, value: 55, fee: '~€55M', wage: 3.5, urgency: false, category: 'Esterni', note: '⚠️ Pilastro · 3G/3A stagionali · cessione solo per offerta >€55M (PL)' },
+  { id: 'kostic',     name: 'Kostic',         pos: 'WB-L', age: 32, value: 0,  fee: 'Liberazione', wage: 3.5, urgency: true,  category: 'Esterni', note: '🔴 Contratto in scadenza · cessione = solo liberazione ingaggio (€3.5M/yr)' },
+
+  // ── CENTROCAMPISTI ──
+  { id: 'locatelli',  name: 'Locatelli',      pos: 'MC',   age: 28, value: 35, fee: '~€35M', wage: 4.5, urgency: false, category: 'Centrocampisti', note: '⚠️ xGBU 0.55 · regista insostituibile · cedere solo per offerta clamorosa' },
+  { id: 'thuram',     name: 'K. Thuram',      pos: 'MC',   age: 24, value: 40, fee: '~€40M', wage: 2.8, urgency: false, category: 'Centrocampisti', note: 'Mediana difensiva · BU% 71.9% · valore in crescita · plusvalenza possibile' },
+  { id: 'mckennie',   name: 'McKennie',       pos: 'MC/WB',age: 28, value: 22, fee: '~€22M', wage: 3.0, urgency: false, category: 'Centrocampisti', note: '4G/4A stagionali · box-to-box · richieste PL · contratto 2026' },
+  { id: 'koop',       name: 'Koopmeiners',    pos: 'MC/AM',age: 28, value: 25, fee: '~€25M', wage: 4.8, urgency: false, category: 'Centrocampisti', note: '🔴 0G/0A · BU% 88.5% · acquisto fallito (€60M) · accettare minusvalenza' },
+  { id: 'miretti',    name: 'Miretti',        pos: 'MC',   age: 22, value: 12, fee: '~€12M', wage: 1.2, urgency: false, category: 'Centrocampisti', note: '495 min · talento giovane · valutare prestito o cessione' },
+  { id: 'adzic',      name: 'Adzic',          pos: 'MC',   age: 20, value: 8,  fee: '~€8M',  wage: 0.8, urgency: false, category: 'Centrocampisti', note: 'Giovane prospetto · 142 min · solitamente meglio prestito che cessione' },
+
+  // ── ATTACCO ──
+  { id: 'yildiz',     name: 'Yildiz',         pos: 'AM',   age: 21, value: 75, fee: '~€75M', wage: 3.0, urgency: false, category: 'Attacco', note: '⚠️ Top scorer (9G/5A) · valore strategico · cessione solo per offerta clamorosa' },
+  { id: 'conceicao',  name: 'Conceição',      pos: 'AM/WB',age: 23, value: 35, fee: '~€35M', wage: 3.2, urgency: false, category: 'Attacco', note: '3G/2A · game changer · obbligo riscatto Porto da valutare' },
+  { id: 'david',      name: 'J. David',       pos: 'ST',   age: 26, value: 28, fee: '~€28M', wage: 6.0, urgency: false, category: 'Attacco', note: '🔴 JPI big match 4.0/10 · pattern confermato 4x · da sostituire' },
+  { id: 'vlahovic',   name: 'Vlahovic',       pos: 'ST',   age: 26, value: 0,  fee: 'Liberazione', wage: 12,  urgency: true,  category: 'Attacco', note: '🔴 Contratto in scadenza · cessione = solo liberazione ingaggio (€12M/yr) — pesante' },
+  { id: 'openda',     name: 'Openda',         pos: 'ST',   age: 26, value: 25, fee: '~€25M', wage: 3.5, urgency: false, category: 'Attacco', note: '1G/0A · 629 min · NPxG/90 0.52 ma minutaggio basso da titolare' },
+  { id: 'boga',       name: 'Boga',           pos: 'AM/ALA',age: 29,value: 18, fee: '~€18M', wage: 2.8, urgency: false, category: 'Attacco', note: 'Impact90 1.12 top rosa · profilo da sub · valore in salita' },
+  { id: 'zhegrova',   name: 'Zhegrova',       pos: 'ALA',  age: 26, value: 15, fee: '~€15M', wage: 2.2, urgency: false, category: 'Attacco', note: 'xA90 0.36 da sub · 260 min · profilo da rivalutare o cedere' },
+];
+
+const LOAN_PLAYERS = [
+  // ── Prima squadra ──
+  { id: 'adzic',          name: 'Adzic',              pos: 'MC',  age: 20, clubs: 'Serie A / Bundesliga', posGroup: [5,6,8,9], note: 'Talento prima squadra · serve minutaggio per crescita' },
+
+  // ── NextGen — prestiti per sviluppo ──
+  { id: 'mangiapoco',     name: 'Mangiapoco',         pos: 'GK',  age: 21, clubs: 'Serie B / Serie C',    posGroup: [0],     note: 'NextGen · Portiere · valore €300K · prestito formativo' },
+  { id: 'gunduz',         name: 'Gündüz',             pos: 'AMC', age: 21, clubs: 'Serie B / 2.Bundes',   posGroup: [8,9],   note: 'NextGen 🇩🇪 · Trequartista · valore €125K · alto potenziale' },
+  { id: 'scaglia',        name: 'Scaglia',            pos: 'GK',  age: 21, clubs: 'Serie C / Serie B',    posGroup: [0],     note: 'NextGen 🇮🇹 · Portiere · prestito sviluppo' },
+  { id: 'falicanti',      name: 'Falicanti',          pos: 'MC',  age: 21, clubs: 'Serie B',              posGroup: [5,6],   note: 'NextGen 🇮🇹 · Mediano · valore €1.20M · profilo da titolare B' },
+  { id: 'turco',          name: 'Stefano Turco',      pos: 'AM',  age: 20, clubs: 'Serie B',              posGroup: [7,8,9], note: 'NextGen 🇮🇹 · Esterno destro · valore €400K · in crescita' },
+  { id: 'puczka',         name: 'Puczka',             pos: 'WB-L',age: 20, clubs: 'Serie C / 2.Liga',     posGroup: [4],     note: 'NextGen 🇭🇺 · Terzino sinistro · valore €500K' },
+  { id: 'owusu',          name: 'Owusu',              pos: 'MC',  age: 20, clubs: 'Serie B / Bundesliga', posGroup: [5,6],   note: 'NextGen 🇬🇭 · Centrocampista · valore €700K · profilo fisico' },
+  { id: 'deme',           name: 'Serigne Deme',       pos: 'ST',  age: 20, clubs: 'Serie C / Serie B',    posGroup: [10],    note: 'NextGen 🇸🇳 · Seconda punta · valore €250K' },
+  { id: 'fuscaldo',       name: 'Fuscaldo',           pos: 'GK',  age: 20, clubs: 'Serie C / Serie D',    posGroup: [0],     note: 'NextGen 🇮🇹 · Portiere terzo · prestito formativo' },
+  { id: 'anghele',        name: 'Anghelé',            pos: 'ST',  age: 20, clubs: 'Serie B / Serie C',    posGroup: [10],    note: 'NextGen 🇮🇹 · Seconda punta · valore €700K · prospetto interessante' },
+  { id: 'savio',          name: 'Federico Savio',     pos: 'WB-R',age: 20, clubs: 'Serie C',              posGroup: [7],     note: 'NextGen 🇮🇹 · Terzino destro · valore €150K' },
+  { id: 'amaradio',       name: 'Amaradio',           pos: 'ALA', age: 19, clubs: 'Serie C',              posGroup: [8,9],   note: 'NextGen 🇮🇹 · Ala destra · valore €200K' },
+  { id: 'brugarello',     name: 'Brugarello',         pos: 'DC',  age: 19, clubs: 'Serie C',              posGroup: [1,2,3], note: 'NextGen 🇮🇹 · Difensore centrale · valore €150K' },
+  { id: 'pagnucco',       name: 'Pagnucco',           pos: 'WB-L',age: 19, clubs: 'Serie C / Serie B',    posGroup: [4],     note: 'NextGen 🇮🇹 · Esterno sinistro · valore €800K' },
+  { id: 'javiergil',      name: 'Javier Gil',         pos: 'DC',  age: 19, clubs: 'Serie B / Liga 2',     posGroup: [1,2,3], note: 'NextGen 🇪🇸 · Difensore centrale · valore €1.00M' },
+  { id: 'vanaarle',       name: 'Van Aarle',          pos: 'DC',  age: 19, clubs: 'Eredivisie / Serie B', posGroup: [1,2,3], note: 'NextGen 🇳🇱 · DC · valore €300K' },
+  { id: 'brunomartinez',  name: 'Bruno Martínez',     pos: 'DC',  age: 19, clubs: 'Liga 2 / Serie C',     posGroup: [1,2,3], note: 'NextGen 🇪🇸 · DC · valore €250K' },
+  { id: 'pugno',          name: 'Diego Pugno',        pos: 'ST',  age: 19, clubs: 'Serie B',              posGroup: [10],    note: 'NextGen 🇮🇹 · Punta centrale · valore €300K' },
+  { id: 'oboavwoduo',     name: 'Justin Oboavwoduo',  pos: 'ST',  age: 19, clubs: 'Serie C / Inghilterra',posGroup: [10],    note: 'NextGen 🇬🇧 · Punta centrale · prospetto' },
+  { id: 'licina',         name: 'Adin Licina',        pos: 'AMC', age: 18, clubs: 'Serie B / Bundesliga', posGroup: [8,9],   note: 'NextGen 🇩🇪 · Trequartista · valore €700K · top prospetto' },
+  { id: 'mazur',          name: 'Patryk Mazur',       pos: 'MC',  age: 18, clubs: 'Serie C / Ekstraklasa',posGroup: [5,6],   note: 'NextGen 🇵🇱 · Centrocampista · valore €350K' },
+  { id: 'lucabruno',      name: 'Luca Bruno',         pos: 'GK',  age: 18, clubs: 'Serie C / Serie D',    posGroup: [0],     note: 'NextGen 🇮🇹 · Portiere · prospetto giovane' },
+  { id: 'makiobo',        name: 'Grady Makiobo',      pos: 'MC',  age: 18, clubs: 'Serie C / Belgium',    posGroup: [5,6],   note: 'NextGen 🇧🇪 · Mediano · valore €200K' },
+];
+
+const SIGN_PLAYERS = [
+  // ══════════════ PORTIERI ══════════════
+  { id: 'alisson',    name: 'Alisson',        pos: 'GK', role: 'GK', age: 32, cost: 18,  jtr: 62, jtrClass: 'jtr-yellow', flag: '🤝 Accordo vicino',  ucl: false, note: 'Liverpool · Ex Spalletti Roma 2016/17 · GSAx affidabile' },
+  { id: 'carnesecchi',name: 'Carnesecchi',    pos: 'GK', role: 'GK', age: 25, cost: 38,  jtr: 76, jtrClass: 'jtr-green',  flag: '🇮🇹 #1 Serie A',     ucl: false, note: 'Atalanta · #1 Shot-Stopping Distributor Serie A (100.0) · profilo top' },
+  { id: 'butez',      name: 'Butez',          pos: 'GK', role: 'GK', age: 30, cost: 8,   jtr: 70, jtrClass: 'jtr-yellow', flag: '🇮🇹 #2 Serie A',     ucl: false, note: 'Como · #2 SSD Serie A (96.3) · budget-friendly · profilo affidabile' },
+  { id: 'maignan',    name: 'Maignan',        pos: 'GK', role: 'GK', age: 30, cost: 25,  jtr: 73, jtrClass: 'jtr-green',  flag: '⚠️ Rivale Milan',    ucl: false, note: 'Milan · #3 SSD Serie A (96.0) · ⚠️ politicamente complesso' },
+  { id: 'meret',      name: 'Meret',          pos: 'GK', role: 'GK', age: 28, cost: 12,  jtr: 64, jtrClass: 'jtr-yellow', flag: '🇮🇹 Esperienza',     ucl: false, note: 'Napoli · Esperienza Spalletti · costo basso' },
+  { id: 'jorgemota',  name: 'Diogo Costa',    pos: 'GK', role: 'GK', age: 26, cost: 38,  jtr: 69, jtrClass: 'jtr-yellow', flag: '🇵🇹 Liga NOS',       ucl: false, note: 'Porto · Distribuzione moderna · sweeper-keeper' },
+  { id: 'chevalier',  name: 'Chevalier',      pos: 'GK', role: 'GK', age: 24, cost: 42,  jtr: 74, jtrClass: 'jtr-green',  flag: '🇫🇷 PSG #1 SSD',     ucl: false, note: 'PSG · #1 Shot-Stopping Distributor Ligue 1 (100.0)' },
+  { id: 'koffi',      name: 'Koffi',          pos: 'GK', role: 'GK', age: 29, cost: 15,  jtr: 68, jtrClass: 'jtr-yellow', flag: '🇫🇷 Ligue 1',        ucl: false, note: 'Angers · #2 SSD Ligue 1 · prezzo onesto · profilo Sweeper' },
+  { id: 'martinez',   name: 'E. Martínez',    pos: 'GK', role: 'GK', age: 33, cost: 22,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇬🇧 PL',             ucl: false, note: 'Aston Villa · Esperienza top + Mondiale · leadership area' },
+  { id: 'sanchez',    name: 'Robert Sánchez', pos: 'GK', role: 'GK', age: 28, cost: 28,  jtr: 68, jtrClass: 'jtr-yellow', flag: '🇬🇧 PL',             ucl: false, note: 'Chelsea · #3 SSD Premier League · distribuzione moderna' },
+  { id: 'rui_silva',  name: 'Rui Silva',      pos: 'GK', role: 'GK', age: 32, cost: 8,   jtr: 66, jtrClass: 'jtr-yellow', flag: '🇵🇹 Liga NOS',       ucl: false, note: 'Sporting · #1 SSD Liga NOS · esperienza affidabile' },
+  { id: 'trubin',     name: 'Trubin',         pos: 'GK', role: 'GK', age: 24, cost: 28,  jtr: 71, jtrClass: 'jtr-yellow', flag: '🇵🇹 Liga NOS',       ucl: false, note: 'Benfica · Profilo moderno · margine sviluppo · Ucraino' },
+  { id: 'paes',       name: 'Paes',           pos: 'GK', role: 'GK', age: 28, cost: 18,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇳🇱 Eredivisie',     ucl: false, note: 'Ajax · #1 SSD Eredivisie · stile aggressivo · uscita palla' },
+  { id: 'miras',      name: 'Nacho Miras',    pos: 'GK', role: 'GK', age: 28, cost: 8,   jtr: 66, jtrClass: 'jtr-yellow', flag: '🇧🇪 Pro League',     ucl: false, note: 'Mechelen · #1 SSD Belgio · budget option · profilo distribuzione' },
+  { id: 'vicario',    name: 'Vicario',        pos: 'GK', role: 'GK', age: 28, cost: 30,  jtr: 60, jtrClass: 'jtr-yellow', flag: '❌ Non upgrade',     ucl: false, note: 'Tottenham · JTR 60 — non upgrade su Di Gregorio (già scartato)' },
+
+  // ══════════════ DIFENSORI CENTRALI — BUILDER (Wide CB) ══════════════
+  { id: 'gila',       name: 'Mario Gila',     pos: 'DC', role: 'DC', age: 25, cost: 42,  jtr: 82, jtrClass: 'jtr-green',  flag: '🔝 #1 Serie A',      ucl: false, note: 'Lazio · #1 Wide CB Serie A (100.0) · fit Spalletti 0.823' },
+  { id: 'akanji',     name: 'Akanji',         pos: 'DC', role: 'DC', age: 30, cost: 35,  jtr: 76, jtrClass: 'jtr-green',  flag: '⚠️ Rivale Inter',    ucl: false, note: 'Inter · #2 Wide CB Serie A (93.1) · ⚠️ politicamente complesso' },
+  { id: 'lucumi',     name: 'Lucumí',         pos: 'DC', role: 'DC', age: 27, cost: 28,  jtr: 74, jtrClass: 'jtr-green',  flag: '🇮🇹 Serie A',        ucl: false, note: 'Bologna · #3 Wide CB Serie A · ball-playing colombiano · prezzo onesto' },
+  { id: 'rrahmani',   name: 'Rrahmani',       pos: 'DC', role: 'DC', age: 31, cost: 20,  jtr: 72, jtrClass: 'jtr-yellow', flag: '🇮🇹 Esperienza',     ucl: false, note: 'Napoli · #4 Wide CB Serie A · esperienza Spalletti' },
+  { id: 'pieper',     name: 'A. Pieper',      pos: 'DC', role: 'DC', age: 26, cost: 28,  jtr: 75, jtrClass: 'jtr-green',  flag: '🔝 Fit max',         ucl: false, note: 'Werder Brema · fit composito 0.844 — top shortlist' },
+  { id: 'rouault',    name: 'A. Rouault',     pos: 'DC', role: 'DC', age: 23, cost: 22,  jtr: 74, jtrClass: 'jtr-green',  flag: '🇫🇷 Ligue 1',        ucl: false, note: 'Tolosa · Mancino · ball-playing CB emergente' },
+  { id: 'faye',       name: 'A. Faye',        pos: 'DC', role: 'DC', age: 22, cost: 20,  jtr: 73, jtrClass: 'jtr-green',  flag: '🇩🇪 Bundes',         ucl: false, note: 'Stoccarda · Senegalese · fisico + uscita palla' },
+  { id: 'beraldo',    name: 'L. Beraldo',     pos: 'DC', role: 'DC', age: 21, cost: 30,  jtr: 77, jtrClass: 'jtr-green',  flag: '🇫🇷 PSG #5 Ligue1',  ucl: false, note: 'PSG · #5 Wide CB Ligue 1 · brasiliano mancino · alto potenziale' },
+  { id: 'huijsen',    name: 'Dean Huijsen',   pos: 'DC', role: 'DC', age: 21, cost: 38,  jtr: 76, jtrClass: 'jtr-green',  flag: '🟡 Ritorno',         ucl: false, note: 'Real Madrid · Ex Juve · #3 Wide CB Liga · ball-playing top' },
+  { id: 'gerardmartin',name:'Gerard Martín',  pos: 'DC', role: 'DC', age: 24, cost: 28,  jtr: 73, jtrClass: 'jtr-green',  flag: '🇪🇸 Liga',           ucl: false, note: 'Barcellona · #2 Wide CB Liga · mancino · profilo La Masia' },
+  { id: 'pacho',      name: 'Pacho',          pos: 'DC', role: 'DC', age: 24, cost: 55,  jtr: 79, jtrClass: 'jtr-green',  flag: '🇫🇷 PSG #4 + #2 DCB', ucl: false, note: 'PSG · #4 Wide CB + #2 Def CB Ligue 1 · ecuadoriano · top duels' },
+  { id: 'marquinhos', name: 'Marquinhos',     pos: 'DC', role: 'DC', age: 31, cost: 45,  jtr: 78, jtrClass: 'jtr-green',  flag: '🇫🇷 PSG #1 Wide',    ucl: false, note: 'PSG · #1 Wide + #4 Def CB Ligue 1 · capitano · esperienza top' },
+  { id: 'mandi',      name: 'A. Mandi',       pos: 'DC', role: 'DC', age: 34, cost: 18,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇫🇷 Ligue 1',        ucl: false, note: 'Lille · #2 Wide + #1 Def CB Ligue 1 · veterano affidabile' },
+  { id: 'scalvini',   name: 'Scalvini',       pos: 'DC', role: 'DC', age: 21, cost: 42,  jtr: 75, jtrClass: 'jtr-green',  flag: '🇮🇹 Made in Italy',  ucl: false, note: 'Atalanta · Builder + rocky · €35-45M · FER da verificare' },
+  { id: 'ordonez',    name: 'Ordoñez',        pos: 'DC', role: 'DC', age: 22, cost: 32,  jtr: 72, jtrClass: 'jtr-green',  flag: '🇧🇪 Pro League',     ucl: false, note: 'Club Brugge · Ecuadoriano · ⚠️ salto lega' },
+  { id: 'hato',       name: 'Jorrel Hato',    pos: 'DC', role: 'DC', age: 20, cost: 35,  jtr: 74, jtrClass: 'jtr-green',  flag: '🇳🇱 Eredivisie',     ucl: false, note: 'Ajax · Mancino · profilo Bastoni-style · capitano Olanda U21' },
+  { id: 'anton',      name: 'Waldemar Anton', pos: 'DC', role: 'DC', age: 29, cost: 25,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇩🇪 Bundes',         ucl: false, note: 'Borussia Dortmund · Esperto · leadership · prezzo onesto' },
+
+  // ══════════════ DIFENSORI CENTRALI — ROCKY (Defensive CB) ══════════════
+  { id: 'djimsiti',   name: 'Djimsiti',       pos: 'DC', role: 'DC', age: 33, cost: 12,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇮🇹 #1 DCB',         ucl: false, note: 'Atalanta · #1 Defensive CB Serie A (100.0) · veterano affidabile' },
+  { id: 'gabriel',    name: 'Tiago Gabriel',  pos: 'DC', role: 'DC', age: 21, cost: 18,  jtr: 71, jtrClass: 'jtr-yellow', flag: '🇮🇹 #2 DCB',         ucl: false, note: 'Lecce · #2 Def CB Serie A · prospetto portoghese · margine top' },
+  { id: 'maripan',    name: 'Maripán',        pos: 'DC', role: 'DC', age: 31, cost: 15,  jtr: 69, jtrClass: 'jtr-yellow', flag: '🇮🇹 #3 DCB',         ucl: false, note: 'Torino · #3 Def CB Serie A · cileno · prezzo basso' },
+  { id: 'circati',    name: 'Circati',        pos: 'DC', role: 'DC', age: 22, cost: 16,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇮🇹 #4 DCB',         ucl: false, note: 'Parma · #4 Def CB Serie A · italo-australiano · profilo in crescita' },
+  { id: 'kalulu',     name: 'Kalulu',         pos: 'DC', role: 'DC', age: 25, cost: 0,   jtr: 70, jtrClass: 'jtr-yellow', flag: '🟡 Già in rosa',     ucl: false, note: '#5 Wide CB Serie A · già acquistato 24/25 — non riacquistabile' },
+  { id: 'huijsenflag',name: 'Disasi',         pos: 'DC', role: 'DC', age: 28, cost: 18,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇬🇧 PL #1 DCB',      ucl: false, note: 'West Ham · #1 Def CB PL · fisico · prezzo crollato' },
+  { id: 'ekdal',      name: 'H. Ekdal',       pos: 'DC', role: 'DC', age: 35, cost: 4,   jtr: 60, jtrClass: 'jtr-yellow', flag: '🇬🇧 PL veterano',    ucl: false, note: 'Burnley · #2 Def CB PL · 35 anni · solo emergenza' },
+  { id: 'deligt',     name: 'De Ligt',        pos: 'DC', role: 'DC', age: 26, cost: 50,  jtr: 78, jtrClass: 'jtr-green',  flag: '🟡 Ritorno',         ucl: false, note: 'Man United · Ex Juve · #3 Def CB PL · ritorno top' },
+  { id: 'konsa',      name: 'Konsa',          pos: 'DC', role: 'DC', age: 28, cost: 38,  jtr: 73, jtrClass: 'jtr-green',  flag: '🇬🇧 PL',             ucl: false, note: 'Aston Villa · #5 Def CB PL · profilo rocky moderno' },
+  { id: 'amenda',     name: 'A. Amenda',      pos: 'DC', role: 'DC', age: 24, cost: 22,  jtr: 72, jtrClass: 'jtr-green',  flag: '💪 Rocky',           ucl: false, note: 'Nordsjaelland · Benchmark Kim Min-Jae · fisico dominante' },
+  { id: 'kehrer',     name: 'T. Kehrer',      pos: 'DC', role: 'DC', age: 27, cost: 12,  jtr: 71, jtrClass: 'jtr-green',  flag: '💪 Rocky',           ucl: false, note: 'West Ham · Tedesco · copertura aerea · budget-friendly' },
+  { id: 'lacroix',    name: 'M. Lacroix',     pos: 'DC', role: 'DC', age: 24, cost: 28,  jtr: 69, jtrClass: 'jtr-yellow', flag: '💪 Rocky',           ucl: false, note: 'Wolfsburg · Pressing trigger · duel win top 20%' },
+  { id: 'kayode',     name: 'Kayode',         pos: 'DC', role: 'DC', age: 22, cost: 16,  jtr: 68, jtrClass: 'jtr-yellow', flag: '🇧🇪 Pro League',     ucl: false, note: 'Club Brugge · #2 Def CB Belgio · prospetto fisico' },
+  { id: 'keramitsis', name: 'Keramitsis',     pos: 'DC', role: 'DC', age: 22, cost: 8,   jtr: 68, jtrClass: 'jtr-yellow', flag: '🔎 Radar pending',   ucl: false, note: 'Pogoń Szczecin · Tier 1 secondario · radar Footverse pending' },
+
+  // ══════════════ TERZINI / WING-BACK (Attacking LB/RB) ══════════════
+  { id: 'nunotavares',name: 'Nuno Tavares',   pos: 'WB-L', role: 'WB', age: 26, cost: 32, jtr: 75, jtrClass: 'jtr-green',  flag: '🇮🇹 #1 Att LB',      ucl: false, note: 'Lazio · #1 Attacking LB Serie A (100.0) · mancino esplosivo' },
+  { id: 'miranda',    name: 'Juan Miranda',   pos: 'WB-L', role: 'WB', age: 26, cost: 22, jtr: 71, jtrClass: 'jtr-yellow', flag: '🇮🇹 #2 Att LB',      ucl: false, note: 'Bologna · #2 Att LB Serie A · ex Real · 0.7 xA/90' },
+  { id: 'spinazzola', name: 'Spinazzola',     pos: 'WB-L', role: 'WB', age: 33, cost: 4,  jtr: 65, jtrClass: 'jtr-yellow', flag: '🇮🇹 Esperto',        ucl: false, note: 'Napoli · #3 Att LB Serie A · contratto scadenza · low-cost' },
+  { id: 'joaomariobol',name:'João Mário Bol', pos: 'WB-R', role: 'WB', age: 26, cost: 18, jtr: 72, jtrClass: 'jtr-yellow', flag: '🇮🇹 #1 Att RB',      ucl: false, note: 'Bologna · #1 Attacking RB Serie A (100.0) · prezzo onesto' },
+  { id: 'dodo',       name: 'Dodô',           pos: 'WB-R', role: 'WB', age: 27, cost: 30, jtr: 73, jtrClass: 'jtr-green',  flag: '🇮🇹 #2 Att RB',      ucl: false, note: 'Fiorentina · #2 Att RB Serie A · brasiliano · cross top' },
+  { id: 'lazzari',    name: 'Lazzari',        pos: 'WB-R', role: 'WB', age: 32, cost: 6,  jtr: 65, jtrClass: 'jtr-yellow', flag: '🇮🇹 Esperto',        ucl: false, note: 'Lazio · #3 Att RB Serie A · veterano · low-cost' },
+  { id: 'nortonc',    name: 'Norton-Cuffy',   pos: 'WB-R', role: 'WB', age: 21, cost: 18, jtr: 70, jtrClass: 'jtr-yellow', flag: '✅ Già sondato',     ucl: false, note: 'WBA · WB destro esplosivo · verifica Transfermarkt' },
+  { id: 'hancko',     name: 'David Hancko',   pos: 'WB-L', role: 'WB', age: 28, cost: 35, jtr: 73, jtrClass: 'jtr-green',  flag: '🇳🇱 Eredivisie',     ucl: false, note: 'Feyenoord · Mancino DC/WBL · esperto coppe europee' },
+  { id: 'parisi',     name: 'Parisi',         pos: 'WB-L', role: 'WB', age: 24, cost: 18, jtr: 67, jtrClass: 'jtr-yellow', flag: '🇮🇹 Made in Italy',  ucl: false, note: 'Fiorentina · WB sinistro propulsivo · alternativa low-cost' },
+  { id: 'aitnouri',   name: 'Aït-Nouri',      pos: 'WB-L', role: 'WB', age: 25, cost: 40, jtr: 74, jtrClass: 'jtr-green',  flag: '🔝 Top WBL',         ucl: false, note: 'Wolves · Cross + dribbling top PL · upgrade Cambiaso' },
+  { id: 'doku',       name: 'Doku',           pos: 'WB-R', role: 'WB', age: 24, cost: 50, jtr: 75, jtrClass: 'jtr-green',  flag: '🇬🇧 PL #1 Inside Fw',ucl: false, note: 'Man City · #1 Inside Forward PL · può fare WB-R o ala' },
+  { id: 'porro',      name: 'Pedro Porro',    pos: 'WB-R', role: 'WB', age: 26, cost: 38, jtr: 74, jtrClass: 'jtr-green',  flag: '🇬🇧 PL #1 Att RB',   ucl: false, note: 'Tottenham · #1 Att RB Premier League · profilo Cambiaso-style' },
+  { id: 'jimenez',    name: 'Álex Jiménez',   pos: 'WB-R', role: 'WB', age: 20, cost: 22, jtr: 72, jtrClass: 'jtr-yellow', flag: '🇬🇧 PL prospetto',   ucl: false, note: 'Bournemouth · #2 Att RB PL · 20 anni · alto potenziale' },
+  { id: 'robertson',  name: 'A. Robertson',   pos: 'WB-L', role: 'WB', age: 32, cost: 18, jtr: 74, jtrClass: 'jtr-green',  flag: '🇬🇧 PL #1 Att LB',   ucl: false, note: 'Liverpool · #1 Att LB PL · esperienza top · prezzo in calo' },
+  { id: 'spence',     name: 'D. Spence',      pos: 'WB-L', role: 'WB', age: 25, cost: 28, jtr: 72, jtrClass: 'jtr-yellow', flag: '🇬🇧 PL #2 Att LB',   ucl: false, note: 'Tottenham · #2 Att LB PL · valore in crescita' },
+  { id: 'cancelo',    name: 'Cancelo',        pos: 'WB-R', role: 'WB', age: 31, cost: 22, jtr: 74, jtrClass: 'jtr-green',  flag: '🇪🇸 #1 Att LB Liga', ucl: false, note: 'Barcellona · #1 Att LB Liga · versatile sx/dx · prezzo accessibile' },
+  { id: 'valverde',   name: 'F. Valverde',    pos: 'WB-R', role: 'WB', age: 27, cost: 70, jtr: 80, jtrClass: 'jtr-green',  flag: '🇪🇸 #1 Att RB Liga', ucl: false, note: 'Real Madrid · #1 Att RB Liga · può fare MC e WB · top profilo' },
+  { id: 'mendes',     name: 'Nuno Mendes',    pos: 'WB-L', role: 'WB', age: 23, cost: 55, jtr: 78, jtrClass: 'jtr-green',  flag: '🇫🇷 PSG #1 Att LB',  ucl: false, note: 'PSG · #1 Att LB Ligue 1 · top mancino europeo' },
+  { id: 'nagida',     name: 'Nagida',         pos: 'WB-R', role: 'WB', age: 20, cost: 18, jtr: 71, jtrClass: 'jtr-yellow', flag: '🇫🇷 Ligue 1',        ucl: false, note: 'Rennes · #1 Att RB Ligue 1 · 20 anni · alto upside' },
+  { id: 'tiagoaraujo',name: 'Tiago Araújo',   pos: 'WB-L', role: 'WB', age: 22, cost: 15, jtr: 70, jtrClass: 'jtr-yellow', flag: '🇧🇪 #1 Att LB',      ucl: false, note: 'Genk · #1 Att LB Belgio · prospetto portoghese' },
+  { id: 'siquet',     name: 'Siquet',         pos: 'WB-R', role: 'WB', age: 23, cost: 12, jtr: 68, jtrClass: 'jtr-yellow', flag: '🇧🇪 #1 Att RB',      ucl: false, note: 'Cercle Brugge · #1 Att RB Belgio · belga · low-cost' },
+  { id: 'dest',       name: 'Dest',           pos: 'WB-R', role: 'WB', age: 25, cost: 20, jtr: 70, jtrClass: 'jtr-yellow', flag: '🇳🇱 #1 Att RB',      ucl: false, note: 'PSV · #1 Att RB Eredivisie · USA · ex Barça' },
+
+  // ══════════════ CENTROCAMPISTI — NUMBER 6 / REGISTI ══════════════
+  { id: 'lobotka',    name: 'Lobotka',        pos: 'MC', role: 'MC', age: 31, cost: 35,  jtr: 78, jtrClass: 'jtr-green',  flag: '🇮🇹 #1 N6',          ucl: false, note: 'Napoli · #1 Number 6 Serie A (100.0) · ex Spalletti · profilo regista' },
+  { id: 'zielinski',  name: 'Zieliński',      pos: 'MC', role: 'MC', age: 32, cost: 25,  jtr: 73, jtrClass: 'jtr-green',  flag: '⚠️ Rivale Inter',    ucl: false, note: 'Inter · #2 N6 Serie A · ⚠️ politicamente complesso · ex Napoli' },
+  { id: 'dele',       name: 'Dele-Bashiru',   pos: 'MC', role: 'MC', age: 25, cost: 22,  jtr: 72, jtrClass: 'jtr-yellow', flag: '🇮🇹 #3 N6',          ucl: false, note: 'Lazio · #3 N6 Serie A · nigeriano · profilo box-to-box' },
+  { id: 'estevez',    name: 'Estévez',        pos: 'MC', role: 'MC', age: 30, cost: 18,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇮🇹 #1 Def Mid',     ucl: false, note: 'Parma · #1 Defensive Mid Serie A (100.0) · profilo mediano puro' },
+  { id: 'ilkhan',     name: 'Ilkhan',         pos: 'MC', role: 'MC', age: 21, cost: 15,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇮🇹 #2 Def Mid',     ucl: false, note: 'Torino · #2 Def Mid Serie A · turco · 21 anni · prospetto' },
+  { id: 'freuler',    name: 'R. Freuler',     pos: 'MC', role: 'MC', age: 34, cost: 6,   jtr: 64, jtrClass: 'jtr-yellow', flag: '🇮🇹 Esperto',        ucl: false, note: 'Bologna · #3 Def Mid Serie A · 34 anni · esperienza · low-cost' },
+  { id: 'deroon',     name: 'De Roon',        pos: 'MC', role: 'MC', age: 35, cost: 4,   jtr: 60, jtrClass: 'jtr-yellow', flag: '🇮🇹 Esperto',        ucl: false, note: 'Atalanta · #4 Def Mid Serie A · veterano · solo profondità rosa' },
+  { id: 'zaire',      name: 'Zaïre-Emery',    pos: 'MC', role: 'MC', age: 20, cost: 85,  jtr: 79, jtrClass: 'jtr-green',  flag: '🌟 Top target',      ucl: false, note: 'PSG · Gestifute · Il centrocampista del futuro' },
+  { id: 'vitinha',    name: 'Vitinha',        pos: 'MC', role: 'MC', age: 26, cost: 70,  jtr: 80, jtrClass: 'jtr-green',  flag: '🇫🇷 PSG #1 N6',      ucl: false, note: 'PSG · #1 N6 Ligue 1 (100.0) · regista d\'élite · costo top' },
+  { id: 'belkebla',   name: 'Belkebla',       pos: 'MC', role: 'MC', age: 32, cost: 8,   jtr: 65, jtrClass: 'jtr-yellow', flag: '🇫🇷 Ligue 1',        ucl: false, note: 'Angers · #2 N6 + #2 Def Mid Ligue 1 · veterano · prezzo basso' },
+  { id: 'sekou',      name: 'A. Seko',        pos: 'MC', role: 'MC', age: 25, cost: 18,  jtr: 69, jtrClass: 'jtr-yellow', flag: '🇫🇷 Ligue 1',        ucl: false, note: 'Le Havre · #1 Def Mid Ligue 1 · mediano fisico ivoriano' },
+  { id: 'goretzka',   name: 'Goretzka',       pos: 'MC', role: 'MC', age: 30, cost: 0,   jtr: 76, jtrClass: 'jtr-green',  flag: '🆓 Svincolo',        ucl: false, note: 'Bayern · Free agent · pressing trigger · fit perfetto' },
+  { id: 'muharemovic',name: 'Muharemovic',    pos: 'MC', role: 'MC', age: 20, cost: 15,  jtr: 76, jtrClass: 'jtr-green',  flag: '🔗 50% sell-on',     ucl: false, note: 'Juve tiene 50% sell-on · buy-back €15M · ritorno strategico' },
+  { id: 'ederson',    name: 'Éderson',        pos: 'MC', role: 'MC', age: 25, cost: 45,  jtr: 71, jtrClass: 'jtr-green',  flag: '🇮🇹 Made in Italy',  ucl: false, note: 'Atalanta · xGBU 0.71 · double-pivot fit · costoso' },
+  { id: 'palhinha',   name: 'Palhinha',       pos: 'MC', role: 'MC', age: 29, cost: 38,  jtr: 68, jtrClass: 'jtr-yellow', flag: '',                   ucl: false, note: 'Bayern · Mediano puro · pressing trigger · PPDA' },
+  { id: 'frattesi',   name: 'Frattesi',       pos: 'MC', role: 'MC', age: 26, cost: 40,  jtr: 72, jtrClass: 'jtr-green',  flag: '⚠️ Rivale Inter',    ucl: false, note: 'Inter · ⚠️ Politicamente complesso · mezzala goal-getter' },
+  { id: 'reijnders',  name: 'Reijnders',      pos: 'MC', role: 'MC', age: 27, cost: 65,  jtr: 76, jtrClass: 'jtr-green',  flag: '⚠️ Rivale Milan',    ucl: false, note: 'Milan · ⚠️ Politicamente complesso · profilo elite' },
+  { id: 'stiller',    name: 'Angelo Stiller', pos: 'MC', role: 'MC', age: 24, cost: 38,  jtr: 74, jtrClass: 'jtr-green',  flag: '🇩🇪 Bundes',         ucl: false, note: 'Stoccarda · Regista tecnico · profilo Locatelli-eredità' },
+  { id: 'baleba',     name: 'Carlos Baleba',  pos: 'MC', role: 'MC', age: 21, cost: 55,  jtr: 73, jtrClass: 'jtr-green',  flag: '⭐ Prospetto',       ucl: false, note: 'Brighton · Box-to-box esplosivo · margine enorme' },
+  { id: 'santosmc',   name: 'Andrey Santos',  pos: 'MC', role: 'MC', age: 22, cost: 35,  jtr: 75, jtrClass: 'jtr-green',  flag: '🇬🇧 PL #1 N6',       ucl: false, note: 'Chelsea · #1 N6 PL (100.0) + #1 Def Mid · profilo top' },
+  { id: 'dejong',     name: 'F. de Jong',     pos: 'MC', role: 'MC', age: 28, cost: 65,  jtr: 79, jtrClass: 'jtr-green',  flag: '🇪🇸 #1 N6 Liga',     ucl: false, note: 'Barcellona · #1 N6 Liga (100.0) · profilo elite' },
+  { id: 'altimira',   name: 'S. Altimira',    pos: 'MC', role: 'MC', age: 24, cost: 28,  jtr: 72, jtrClass: 'jtr-yellow', flag: '🇪🇸 Liga',           ucl: false, note: 'Real Betis · #3 N6 Liga · prezzo onesto · profilo regista' },
+  { id: 'ciss',       name: 'P. Ciss',        pos: 'MC', role: 'MC', age: 32, cost: 8,   jtr: 65, jtrClass: 'jtr-yellow', flag: '🇪🇸 #1 Def Mid Liga',ucl: false, note: 'Rayo Vallecano · #1 Def Mid Liga · esperto · low-cost' },
+  { id: 'beni',       name: 'Beni',           pos: 'MC', role: 'MC', age: 23, cost: 18,  jtr: 71, jtrClass: 'jtr-yellow', flag: '🇵🇹 #1 N6 NOS',      ucl: false, note: 'Vitória SC · #1 N6 Liga NOS · prospetto · prezzo basso' },
+  { id: 'hjulmand',   name: 'M. Hjulmand',    pos: 'MC', role: 'MC', age: 26, cost: 35,  jtr: 73, jtrClass: 'jtr-green',  flag: '🇵🇹 Liga NOS',       ucl: false, note: 'Sporting · #2 N6 NOS · danese · profilo mediano moderno' },
+  { id: 'steur',      name: 'S. Steur',       pos: 'MC', role: 'MC', age: 18, cost: 12,  jtr: 68, jtrClass: 'jtr-yellow', flag: '🇳🇱 Top prospetto',  ucl: false, note: 'Ajax · #1 N6 Eredivisie (18 anni) · prospetto generazionale' },
+  { id: 'hrosovsky',  name: 'Hrošovský',      pos: 'MC', role: 'MC', age: 34, cost: 4,   jtr: 60, jtrClass: 'jtr-yellow', flag: '🇧🇪 Esperto',        ucl: false, note: 'Genk · #1 N6 Belgio · 34 anni · solo backup' },
+  { id: 'gruda',      name: 'Gruda',          pos: 'MC', role: 'MC', age: 20, cost: 30,  jtr: 66, jtrClass: 'jtr-yellow', flag: '⭐ Prospetto',       ucl: false, note: 'Brighton · Alto potenziale · profilo da sviluppare' },
+
+  // ══════════════ TREQUARTISTI / AMC (Advanced Playmaker) ══════════════
+  { id: 'debruyne',   name: 'De Bruyne',      pos: 'AMC', role: 'AMC', age: 34, cost: 18, jtr: 70, jtrClass: 'jtr-yellow', flag: '🇮🇹 #1 AP',         ucl: false, note: 'Napoli · #1 Adv Playmaker Serie A (100.0) · 34 anni · ⚠️ età' },
+  { id: 'barella',    name: 'Barella',        pos: 'AMC', role: 'AMC', age: 29, cost: 55, jtr: 77, jtrClass: 'jtr-green',  flag: '⚠️ Rivale Inter',   ucl: false, note: 'Inter · #2 AP Serie A · ⚠️ politicamente complesso · top profilo' },
+  { id: 'deketelaere',name: 'De Ketelaere',   pos: 'AMC', role: 'AMC', age: 25, cost: 40, jtr: 74, jtrClass: 'jtr-green',  flag: '🇮🇹 #3 AP',         ucl: false, note: 'Atalanta · #3 AP Serie A · belga · profilo creativo top' },
+  { id: 'samardzic',  name: 'Samardžić',      pos: 'AMC', role: 'AMC', age: 24, cost: 30, jtr: 73, jtrClass: 'jtr-green',  flag: '🇮🇹 #5 AP',         ucl: false, note: 'Atalanta · #5 AP Serie A · serbo · trequartista box-to-box' },
+  { id: 'bsilva',     name: 'Bernardo Silva', pos: 'AMC', role: 'AMC', age: 31, cost: 40, jtr: 70, jtrClass: 'jtr-yellow', flag: '❌ Era UCL only',   ucl: false, note: 'Man City · ⚠️ in UEL difficilmente disponibile · accordo era UCL' },
+  { id: 'kimmich',    name: 'Kimmich',        pos: 'AMC', role: 'AMC', age: 30, cost: 0,  jtr: 72, jtrClass: 'jtr-green',  flag: '🆓 Svincolo',       ucl: false, note: 'Bayern · Free agent · versatile MC/AMC · leadership' },
+  { id: 'guler',      name: 'A. Güler',       pos: 'AMC', role: 'AMC', age: 21, cost: 50, jtr: 76, jtrClass: 'jtr-green',  flag: '🇪🇸 #1 AP Liga',    ucl: false, note: 'Real Madrid · #1 AP Liga (100.0) · turco · trequartista classico' },
+  { id: 'ouahi',      name: 'A. Ouahi',       pos: 'AMC', role: 'AMC', age: 26, cost: 25, jtr: 70, jtrClass: 'jtr-yellow', flag: '🇪🇸 Liga',          ucl: false, note: 'Girona · #2 AP Liga · profilo creativo · prezzo accessibile' },
+  { id: 'cherki',     name: 'R. Cherki',      pos: 'AMC', role: 'AMC', age: 22, cost: 38, jtr: 74, jtrClass: 'jtr-green',  flag: '🇬🇧 PL #2 AP',      ucl: false, note: 'Man United · #2 AP PL · talento creativo francese · in crescita' },
+  { id: 'odegaard',   name: 'Ødegaard',       pos: 'AMC', role: 'AMC', age: 27, cost: 65, jtr: 78, jtrClass: 'jtr-green',  flag: '🇬🇧 PL #3 AP',      ucl: false, note: 'Arsenal · #3 AP PL · capitano · profilo elite · costo top' },
+  { id: 'thauvin',    name: 'Thauvin',        pos: 'AMC', role: 'AMC', age: 33, cost: 8,  jtr: 65, jtrClass: 'jtr-yellow', flag: '🇫🇷 Esperto',       ucl: false, note: 'Lens · #1 AP Ligue 1 · 33 anni · low-cost · esperienza' },
+  { id: 'gittens',    name: 'Jamie Gittens',  pos: 'AMC', role: 'AMC', age: 21, cost: 45, jtr: 73, jtrClass: 'jtr-green',  flag: '🇩🇪 Bundes',         ucl: false, note: 'Borussia Dortmund · Esterno offensivo · dribbling + assists' },
+  { id: 'pavlidis',   name: 'Pavlidis',       pos: 'AMC', role: 'AMC', age: 27, cost: 30, jtr: 71, jtrClass: 'jtr-yellow', flag: '🇵🇹 Liga NOS',       ucl: false, note: 'Benfica · Falso 9 / AMC · 22G stagionali · valore in crescita' },
+  { id: 'trincao',    name: 'F. Trincão',     pos: 'AMC', role: 'AMC', age: 26, cost: 28, jtr: 73, jtrClass: 'jtr-green',  flag: '🇵🇹 #1 AP NOS',     ucl: false, note: 'Sporting · #1 AP Liga NOS (100.0) · ex Barça · profilo dribbling' },
+  { id: 'veerman',    name: 'J. Veerman',     pos: 'AMC', role: 'AMC', age: 27, cost: 30, jtr: 72, jtrClass: 'jtr-yellow', flag: '🇳🇱 #1 AP',         ucl: false, note: 'PSV · #1 AP Eredivisie (100.0) · regista trequartista · top in NL' },
+  { id: 'karetsas',   name: 'K. Karetsas',    pos: 'AMC', role: 'AMC', age: 18, cost: 18, jtr: 71, jtrClass: 'jtr-yellow', flag: '🇧🇪 Top prospetto',  ucl: false, note: 'Genk · #1 AP Belgio (18 anni) · greco · prospetto generazionale' },
+
+  // ══════════════ ESTERNI OFFENSIVI (Inverted Winger + Inside Forward) ══════════════
+  { id: 'orsolini',   name: 'Orsolini',       pos: 'AMC', role: 'AMC', age: 29, cost: 25, jtr: 74, jtrClass: 'jtr-green',  flag: '🇮🇹 #1 IW',         ucl: false, note: 'Bologna · #1 Inverted Winger Serie A (100.0) · profilo Yildiz-partner' },
+  { id: 'rowe',       name: 'J. Rowe',        pos: 'AMC', role: 'AMC', age: 23, cost: 30, jtr: 72, jtrClass: 'jtr-yellow', flag: '🇮🇹 #2 IW',         ucl: false, note: 'Bologna · #2 IW Serie A · prospetto inglese · 23 anni' },
+  { id: 'isaksen',    name: 'Isaksen',        pos: 'AMC', role: 'AMC', age: 25, cost: 28, jtr: 73, jtrClass: 'jtr-green',  flag: '🇮🇹 #3 IW + #1 IF', ucl: false, note: 'Lazio · #3 IW + #1 Inside Forward Serie A · profilo dual-role' },
+  { id: 'solomon',    name: 'Solomon',        pos: 'AMC', role: 'AMC', age: 27, cost: 18, jtr: 70, jtrClass: 'jtr-yellow', flag: '🇮🇹 #2 IF',         ucl: false, note: 'Fiorentina · #2 IF Serie A · israeliano · prezzo onesto' },
+  { id: 'baturina',   name: 'Baturina',       pos: 'AMC', role: 'AMC', age: 23, cost: 25, jtr: 71, jtrClass: 'jtr-yellow', flag: '🇮🇹 #5 IF',         ucl: false, note: 'Como · #5 IF Serie A · croato · talento creativo · in crescita' },
+  { id: 'saka',       name: 'Saka',           pos: 'AMC', role: 'AMC', age: 24, cost: 85, jtr: 80, jtrClass: 'jtr-green',  flag: '🇬🇧 PL #2 IF',      ucl: false, note: 'Arsenal · #2 Inside Forward PL · profilo elite · costo top' },
+  { id: 'estevao',    name: 'Estevão',        pos: 'AMC', role: 'AMC', age: 19, cost: 60, jtr: 75, jtrClass: 'jtr-green',  flag: '🇬🇧 Top prospetto', ucl: false, note: 'Chelsea · #3 IF + #4 IW PL · 19 anni · talento generazionale' },
+  { id: 'brooks',     name: 'D. Brooks',      pos: 'AMC', role: 'AMC', age: 28, cost: 22, jtr: 71, jtrClass: 'jtr-yellow', flag: '🇬🇧 PL #4 IF',      ucl: false, note: 'Bournemouth · #4 IF PL · gallese · profilo creativo' },
+  { id: 'semenyo',    name: 'Semenyo',        pos: 'AMC', role: 'AMC', age: 26, cost: 35, jtr: 73, jtrClass: 'jtr-green',  flag: '🇬🇧 PL #5 IF',      ucl: false, note: 'Bournemouth · #5 IF PL · ghanese · fisico + dribbling' },
+  { id: 'kvara',      name: 'Kvaratskhelia',  pos: 'AMC', role: 'AMC', age: 25, cost: 80, jtr: 81, jtrClass: 'jtr-green',  flag: '🇫🇷 PSG #1 IW',     ucl: false, note: 'PSG · #1 IW Ligue 1 (100.0) + #2 IF · ex Spalletti · profilo top' },
+  { id: 'doue',       name: 'Doué',           pos: 'AMC', role: 'AMC', age: 20, cost: 60, jtr: 78, jtrClass: 'jtr-green',  flag: '🇫🇷 PSG prospetto', ucl: false, note: 'PSG · #2 IW + #3 IF Ligue 1 · talento ventenne · profilo top fit' },
+  { id: 'barcola',    name: 'Barcola',        pos: 'AMC', role: 'AMC', age: 23, cost: 55, jtr: 77, jtrClass: 'jtr-green',  flag: '🇫🇷 PSG #1 IF',     ucl: false, note: 'PSG · #3 IW + #1 IF Ligue 1 · profilo Yildiz partner ideale' },
+  { id: 'godo',       name: 'D. Godo',        pos: 'AMC', role: 'AMC', age: 23, cost: 22, jtr: 71, jtrClass: 'jtr-yellow', flag: '🇫🇷 Ligue 1',       ucl: false, note: 'Strasburgo · #4 IF Ligue 1 · profilo emergente · prezzo onesto' },
+  { id: 'koopdesouza',name: 'Davi Souza',     pos: 'AMC', role: 'AMC', age: 19, cost: 12, jtr: 65, jtrClass: 'jtr-yellow', flag: '⭐ Prospetto',       ucl: false, note: 'Sporting B · Talento brasiliano · costo basso · prospetto puro' },
+  { id: 'schjelderup',name: 'Schjelderup',    pos: 'AMC', role: 'AMC', age: 21, cost: 28, jtr: 73, jtrClass: 'jtr-green',  flag: '🇵🇹 #1 IW + #1 IF', ucl: false, note: 'Benfica · #1 IW + #1 IF Liga NOS · norvegese · dual-role top' },
+  { id: 'goncalves',  name: 'P. Gonçalves',   pos: 'AMC', role: 'AMC', age: 27, cost: 35, jtr: 74, jtrClass: 'jtr-green',  flag: '🇵🇹 Liga NOS',       ucl: false, note: 'Sporting · #2 IW + #2 IF NOS · profilo top in NOS' },
+  { id: 'bounida',    name: 'Bounida',        pos: 'AMC', role: 'AMC', age: 20, cost: 22, jtr: 72, jtrClass: 'jtr-yellow', flag: '🇳🇱 #1 IW',         ucl: false, note: 'Ajax · #1 IW Eredivisie · marocchino · prospetto ventenne' },
+  { id: 'driouech',   name: 'C. Driouech',    pos: 'AMC', role: 'AMC', age: 24, cost: 25, jtr: 72, jtrClass: 'jtr-yellow', flag: '🇳🇱 #2 IW',         ucl: false, note: 'PSV · #2 IW + #2 IF Eredivisie · marocchino · dual-role' },
+  { id: 'godts',      name: 'M. Godts',       pos: 'AMC', role: 'AMC', age: 20, cost: 18, jtr: 70, jtrClass: 'jtr-yellow', flag: '🇳🇱 Top prospetto',  ucl: false, note: 'Ajax · #1 IF Eredivisie · belga · 20 anni · talento puro' },
+  { id: 'tzolis',     name: 'C. Tzolis',      pos: 'AMC', role: 'AMC', age: 24, cost: 28, jtr: 73, jtrClass: 'jtr-green',  flag: '🇧🇪 #1 IW + #1 IF', ucl: false, note: 'Club Brugge · #1 IW + #1 IF Belgio · greco · dual-role elite' },
+
+  // ══════════════ ATTACCANTI (Advanced Striker) ══════════════
+  { id: 'mthuram',    name: 'M. Thuram',      pos: 'ST', role: 'ST', age: 28, cost: 70,  jtr: 78, jtrClass: 'jtr-green',  flag: '⚠️ Rivale Inter',    ucl: false, note: 'Inter · #1 Adv Striker Serie A (100.0) · ⚠️ politicamente complesso' },
+  { id: 'malen',      name: 'D. Malen',       pos: 'ST', role: 'ST', age: 27, cost: 30,  jtr: 73, jtrClass: 'jtr-green',  flag: '🇮🇹 #2 AS',          ucl: false, note: 'Roma · #2 AS Serie A · olandese · profilo runs in behind' },
+  { id: 'lautaro',    name: 'L. Martínez',    pos: 'ST', role: 'ST', age: 28, cost: 80,  jtr: 78, jtrClass: 'jtr-green',  flag: '⚠️ Rivale Inter',    ucl: false, note: 'Inter · #3 AS Serie A · ⚠️ trasferimento impossibile politicamente' },
+  { id: 'krstovic',   name: 'Krstović',       pos: 'ST', role: 'ST', age: 25, cost: 28,  jtr: 73, jtrClass: 'jtr-green',  flag: '🇮🇹 #4 AS',          ucl: false, note: 'Atalanta · #4 AS Serie A · montenegrino · fisico + finalizzazione' },
+  { id: 'pulisic',    name: 'Pulisic',        pos: 'ST', role: 'ST', age: 27, cost: 45,  jtr: 73, jtrClass: 'jtr-green',  flag: '⚠️ Rivale Milan',    ucl: false, note: 'Milan · #5 AS Serie A · ⚠️ politicamente complesso · USA' },
+  { id: 'kolo',       name: 'Kolo Muani',     pos: 'ST', role: 'ST', age: 26, cost: 50,  jtr: 75, jtrClass: 'jtr-green',  flag: '🔴 Priorità 1',      ucl: false, note: 'PSG · NPxG/90 0.51 · runs in behind · autonomia da regista ✅' },
+  { id: 'gyokeres',   name: 'Gyökeres',       pos: 'ST', role: 'ST', age: 26, cost: 75,  jtr: 74, jtrClass: 'jtr-green',  flag: '💰 Top-budget',      ucl: false, note: 'Sporting · 43G stagionale · NPxG/90 elite · top-fee' },
+  { id: 'sesko',      name: 'Sesko',          pos: 'ST', role: 'ST', age: 21, cost: 70,  jtr: 73, jtrClass: 'jtr-green',  flag: '🇩🇪 Bundes',         ucl: false, note: 'RB Leipzig · Fisico + profondità · margine enorme' },
+  { id: 'osula',      name: 'W. Osula',       pos: 'ST', role: 'ST', age: 22, cost: 30,  jtr: 72, jtrClass: 'jtr-yellow', flag: '🇬🇧 PL #2 AS',       ucl: false, note: 'Newcastle · #2 AS PL · danese · fisico esplosivo · giovane' },
+  { id: 'ekitike',    name: 'H. Ekitiké',     pos: 'ST', role: 'ST', age: 23, cost: 55,  jtr: 75, jtrClass: 'jtr-green',  flag: '🇬🇧 PL #3 AS',       ucl: false, note: 'Liverpool · #3 AS PL · francese · profilo Kolo Muani-style' },
+  { id: 'watkins',    name: 'Watkins',        pos: 'ST', role: 'ST', age: 30, cost: 50,  jtr: 73, jtrClass: 'jtr-green',  flag: '🇬🇧 PL #4 AS',       ucl: false, note: 'Aston Villa · #4 AS PL · profilo runs in behind · esperienza' },
+  { id: 'okafor',     name: 'Okafor',         pos: 'ST', role: 'ST', age: 25, cost: 22,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇬🇧 PL #5 AS',       ucl: false, note: 'Leeds · #5 AS PL · svizzero · profilo seconda punta atipica' },
+  { id: 'dembele',    name: 'O. Dembélé',     pos: 'ST', role: 'ST', age: 28, cost: 50,  jtr: 76, jtrClass: 'jtr-green',  flag: '🇫🇷 PSG #1 AS',      ucl: false, note: 'PSG · #1 AS Ligue 1 (100.0) · profilo top · €50M target realistico' },
+  { id: 'aubameyang', name: 'Aubameyang',     pos: 'ST', role: 'ST', age: 36, cost: 8,   jtr: 64, jtrClass: 'jtr-yellow', flag: '🇫🇷 Esperto',        ucl: false, note: 'Marsiglia · #2 AS Ligue 1 · 36 anni · solo backup esperto' },
+  { id: 'edouard',    name: 'O. Édouard',     pos: 'ST', role: 'ST', age: 28, cost: 18,  jtr: 68, jtrClass: 'jtr-yellow', flag: '🇫🇷 Ligue 1',        ucl: false, note: 'Lens · #3 AS Ligue 1 · francese · profilo fisico + link-up' },
+  { id: 'balogun',    name: 'Balogun',        pos: 'ST', role: 'ST', age: 24, cost: 28,  jtr: 71, jtrClass: 'jtr-yellow', flag: '🇫🇷 Ligue 1',        ucl: false, note: 'Monaco · #4 AS Ligue 1 · USA · profilo finalizzatore moderno' },
+  { id: 'suarez',     name: 'L. Suárez',      pos: 'ST', role: 'ST', age: 28, cost: 35,  jtr: 73, jtrClass: 'jtr-green',  flag: '🇵🇹 #1 AS NOS',      ucl: false, note: 'Sporting · #1 AS Liga NOS (100.0) · colombiano · profilo elite' },
+  { id: 'ivanovic',   name: 'F. Ivanovic',    pos: 'ST', role: 'ST', age: 22, cost: 28,  jtr: 72, jtrClass: 'jtr-yellow', flag: '🇵🇹 Liga NOS',       ucl: false, note: 'Benfica · #2 AS NOS · montenegrino · 22 anni · prospetto' },
+  { id: 'pavlidisass',name: 'V. Pavlidis',    pos: 'ST', role: 'ST', age: 27, cost: 30,  jtr: 71, jtrClass: 'jtr-yellow', flag: '🇵🇹 Liga NOS',       ucl: false, note: 'Benfica · #4 AS NOS · greco · falso 9 versatile' },
+  { id: 'pdavid',     name: 'P. David',       pos: 'ST', role: 'ST', age: 24, cost: 30,  jtr: 73, jtrClass: 'jtr-green',  flag: '🇧🇪 #1 AS',          ucl: false, note: 'Union Saint-Gilloise · #1 AS Belgio (100.0) · profilo elite emergente' },
+  { id: 'tresoldi',   name: 'N. Tresoldi',    pos: 'ST', role: 'ST', age: 21, cost: 22,  jtr: 71, jtrClass: 'jtr-yellow', flag: '🇧🇪 Pro League',     ucl: false, note: 'Club Brugge · #2 AS Belgio · italo-tedesco · 21 anni · prospetto' },
+  { id: 'oh',         name: 'Oh Hyeon-Gyu',   pos: 'ST', role: 'ST', age: 25, cost: 18,  jtr: 68, jtrClass: 'jtr-yellow', flag: '🇧🇪 Pro League',     ucl: false, note: 'Genk · #4 AS Belgio · coreano · profilo fisico + profondità' },
+  { id: 'saibari',    name: 'Saibari',        pos: 'ST', role: 'ST', age: 25, cost: 32,  jtr: 72, jtrClass: 'jtr-yellow', flag: '🇳🇱 #1 AS',          ucl: false, note: 'PSV · #1 AS Eredivisie (100.0) · marocchino · profilo versatile' },
+  { id: 'pepi',       name: 'R. Pepi',        pos: 'ST', role: 'ST', age: 23, cost: 25,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇳🇱 Eredivisie',     ucl: false, note: 'PSV · #2 AS Eredivisie · USA · finalizzatore puro · 23 anni' },
+  { id: 'ueda',       name: 'A. Ueda',        pos: 'ST', role: 'ST', age: 27, cost: 22,  jtr: 70, jtrClass: 'jtr-yellow', flag: '🇳🇱 Eredivisie',     ucl: false, note: 'Feyenoord · #3 AS Eredivisie · giapponese · profilo classico' },
+  { id: 'fullkrug',   name: 'Füllkrug',       pos: 'ST', role: 'ST', age: 32, cost: 18,  jtr: 65, jtrClass: 'jtr-yellow', flag: '🇩🇪 Bundes',         ucl: false, note: 'West Ham · Finalizzatore puro · efficiente · budget-friendly' },
+  { id: 'lewand',     name: 'Lewandowski',    pos: 'ST', role: 'ST', age: 38, cost: 0,   jtr: 60, jtrClass: 'jtr-yellow', flag: '⚠️ Emergency 1yr',   ucl: false, note: 'Barça · Parametro 0 · emergency only · rischio fisico' },
+  { id: 'zirkzee',    name: 'Zirkzee',        pos: 'ST', role: 'ST', age: 24, cost: 45,  jtr: 68, jtrClass: 'jtr-yellow', flag: '🟡 Ritorno SerieA',  ucl: false, note: 'Man United · Profilo 9 atipico · link-up play · adatto Spalletti' },
+  { id: 'pellegrino', name: 'M. Pellegrino',  pos: 'ST', role: 'ST', age: 23, cost: 22,  jtr: 67, jtrClass: 'jtr-yellow', flag: '⭐ Serie A',         ucl: false, note: 'Parma · Argentino · profondità + fisico · costo accessibile' },
+  { id: 'rodriguez',  name: 'R. Rodrigues',   pos: 'ST', role: 'ST', age: 20, cost: 18,  jtr: 69, jtrClass: 'jtr-yellow', flag: '🇵🇹 Liga NOS',       ucl: false, note: 'Braga · Talento portoghese · NPxG/90 0.62 · plusvalenza potenziale' },
+];
+
+// Formation pool base (current squad) — IDs aligned with SELL_PLAYERS
+const BASE_SQUAD = [
+  // GK
+  { id: 'dg', name: 'Di Gregorio', pos: 'GK', posGroup: [0] },
+  { id: 'perin', name: 'Perin', pos: 'GK', posGroup: [0] },
+  // DC
+  { id: 'bremer', name: 'Bremer', pos: 'DC', posGroup: [1,2,3] },
+  { id: 'kalulu', name: 'Kalulu', pos: 'DC', posGroup: [1,2,3] },
+  { id: 'kelly', name: 'Kelly', pos: 'DC', posGroup: [1,2,3] },
+  { id: 'gatti', name: 'Gatti', pos: 'DC', posGroup: [1,2,3] },
+  { id: 'rugani', name: 'Rugani', pos: 'DC', posGroup: [1,2,3] },
+  { id: 'cabal', name: 'Cabal', pos: 'DC/WB', posGroup: [1,2,3,4,7] },
+  // WB
+  { id: 'cambiaso', name: 'Cambiaso', pos: 'WB', posGroup: [4,7] },
+  { id: 'kostic', name: 'Kostic', pos: 'WB-L', posGroup: [4] },
+  { id: 'joao', name: 'João Mário', pos: 'WB-R', posGroup: [7] },
+  // MC
+  { id: 'locatelli', name: 'Locatelli', pos: 'MC', posGroup: [5,6] },
+  { id: 'thuram', name: 'K. Thuram', pos: 'MC', posGroup: [5,6] },
+  { id: 'mckennie', name: 'McKennie', pos: 'MC/WB', posGroup: [5,6,7] },
+  { id: 'koop', name: 'Koopmeiners', pos: 'MC/AM', posGroup: [5,6,8,9] },
+  { id: 'miretti', name: 'Miretti', pos: 'MC', posGroup: [5,6] },
+  { id: 'adzic', name: 'Adzic', pos: 'MC', posGroup: [5,6] },
+  // Rientri prestito (selezionabili in rosa fino a cessione)
+  { id: 'dl', name: 'Douglas Luiz', pos: 'MC', posGroup: [5,6] },
+  { id: 'arthur', name: 'Arthur', pos: 'MC', posGroup: [5,6] },
+  // AM / Attacco
+  { id: 'yildiz', name: 'Yildiz', pos: 'AM', posGroup: [8,9] },
+  { id: 'conceicao', name: 'Conceição', pos: 'AM/WB', posGroup: [7,8,9] },
+  { id: 'boga', name: 'Boga', pos: 'AM/ALA', posGroup: [8,9,10] },
+  { id: 'zhegrova', name: 'Zhegrova', pos: 'ALA', posGroup: [8,9] },
+  { id: 'nicog', name: 'N. González', pos: 'ALA', posGroup: [8,9] },
+  // ST
+  { id: 'david', name: 'J. David', pos: 'ST', posGroup: [10] },
+  { id: 'vlahovic', name: 'Vlahovic', pos: 'ST', posGroup: [10] },
+  { id: 'openda', name: 'Openda', pos: 'ST', posGroup: [10] },
+];
+
+const SIGN_POS_MAP = {
+  // GK
+  'alisson': [0], 'carnesecchi': [0], 'butez': [0], 'maignan': [0], 'meret': [0],
+  'jorgemota': [0], 'chevalier': [0], 'koffi': [0], 'martinez': [0], 'sanchez': [0],
+  'rui_silva': [0], 'trubin': [0], 'paes': [0], 'miras': [0], 'vicario': [0],
+  // DC Builder
+  'gila': [1,2,3], 'akanji': [1,2,3], 'lucumi': [1,2,3], 'rrahmani': [1,2,3],
+  'pieper': [1,2,3], 'rouault': [1,2,3], 'faye': [1,2,3], 'beraldo': [1,2,3],
+  'huijsen': [1,2,3], 'gerardmartin': [1,2,3], 'pacho': [1,2,3], 'marquinhos': [1,2,3],
+  'mandi': [1,2,3], 'scalvini': [1,2,3], 'ordonez': [1,2,3], 'hato': [1,2,3], 'anton': [1,2,3],
+  // DC Rocky
+  'djimsiti': [1,2,3], 'gabriel': [1,2,3], 'maripan': [1,2,3], 'circati': [1,2,3],
+  'kalulu': [1,2,3], 'huijsenflag': [1,2,3], 'ekdal': [1,2,3], 'deligt': [1,2,3],
+  'konsa': [1,2,3], 'amenda': [1,2,3], 'kehrer': [1,2,3], 'lacroix': [1,2,3],
+  'kayode': [1,2,3], 'keramitsis': [1,2,3],
+  // WB
+  'nunotavares': [4], 'miranda': [4], 'spinazzola': [4], 'joaomariobol': [7],
+  'dodo': [7], 'lazzari': [7], 'nortonc': [7], 'hancko': [1,2,4],
+  'parisi': [4], 'aitnouri': [4], 'doku': [7,8,9], 'porro': [7],
+  'jimenez': [7], 'robertson': [4], 'spence': [4], 'cancelo': [4,7],
+  'valverde': [5,6,7], 'mendes': [4], 'nagida': [7], 'tiagoaraujo': [4],
+  'siquet': [7], 'dest': [7],
+  // MC (Number 6 + Def Mid + box-to-box)
+  'lobotka': [5,6], 'zielinski': [5,6,8,9], 'dele': [5,6], 'estevez': [5,6],
+  'ilkhan': [5,6], 'freuler': [5,6], 'deroon': [5,6], 'zaire': [5,6],
+  'vitinha': [5,6], 'belkebla': [5,6], 'sekou': [5,6], 'goretzka': [5,6],
+  'muharemovic': [5,6], 'ederson': [5,6], 'palhinha': [5,6], 'frattesi': [5,6],
+  'reijnders': [5,6], 'stiller': [5,6], 'baleba': [5,6], 'santosmc': [5,6],
+  'dejong': [5,6], 'altimira': [5,6], 'ciss': [5,6], 'beni': [5,6],
+  'hjulmand': [5,6], 'steur': [5,6], 'hrosovsky': [5,6], 'gruda': [5,6,8,9],
+  // AMC (Advanced Playmaker + IW + IF)
+  'debruyne': [8,9], 'barella': [5,6,8,9], 'deketelaere': [8,9], 'samardzic': [5,6,8,9],
+  'bsilva': [8,9], 'kimmich': [5,6,8,9], 'guler': [8,9], 'ouahi': [8,9],
+  'cherki': [8,9], 'odegaard': [8,9], 'thauvin': [8,9], 'gittens': [8,9],
+  'pavlidis': [8,9,10], 'trincao': [8,9], 'veerman': [8,9], 'karetsas': [8,9],
+  'orsolini': [8,9], 'rowe': [8,9], 'isaksen': [8,9], 'solomon': [8,9],
+  'baturina': [8,9], 'saka': [8,9], 'estevao': [8,9], 'brooks': [8,9],
+  'semenyo': [8,9], 'kvara': [8,9], 'doue': [8,9], 'barcola': [8,9],
+  'godo': [8,9], 'koopdesouza': [8,9], 'schjelderup': [8,9], 'goncalves': [8,9],
+  'bounida': [8,9], 'driouech': [8,9], 'godts': [8,9], 'tzolis': [8,9],
+  // ST
+  'mthuram': [10], 'malen': [10], 'lautaro': [10], 'krstovic': [10], 'pulisic': [10],
+  'kolo': [10], 'gyokeres': [10], 'sesko': [10], 'osula': [10], 'ekitike': [10],
+  'watkins': [10], 'okafor': [10], 'dembele': [10], 'aubameyang': [10],
+  'edouard': [10], 'balogun': [10], 'suarez': [10], 'ivanovic': [10],
+  'pavlidisass': [10], 'pdavid': [10], 'tresoldi': [10], 'oh': [10],
+  'saibari': [10], 'pepi': [10], 'ueda': [10], 'fullkrug': [10],
+  'lewand': [10], 'zirkzee': [10], 'pellegrino': [10], 'rodriguez': [10],
+};
+
+// ============ SETUP ============
+function updateBudget(val) {
+  const total = parseInt(val);
+  STATE.budgetBase = total;
+  STATE.budget = total;
+  document.getElementById('budget-display').textContent = `€${total}M`;
+}
+
+function startGame() {
+  const name = document.getElementById('ds-name').value.trim();
+  if (!name) { showToast('Inserisci il tuo nome'); return; }
+  STATE.dsName = name;
+  showScreen('dashboard');
+  renderDashboard();
+}
+
+// ============ SCREENS ============
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function openStep(id) {
+  document.getElementById('screen-' + id).classList.add('open');
+  window.scrollTo(0,0);
+  if (id === 'sponsor') renderSponsor();
+  if (id === 'sell') renderSell();
+  if (id === 'loan') renderLoan();
+  if (id === 'sign') renderSign();
+  if (id === 'formation') renderFormation();
+}
+
+function closeStep(id) {
+  document.getElementById('screen-' + id).classList.remove('open');
+  showScreen('dashboard');
+  renderDashboard();
+}
+
+// ============ DASHBOARD ============
+function renderDashboard() {
+  document.getElementById('dash-title').textContent = `DS ${STATE.dsName} — Stagione 2026/27`;
+  document.getElementById('dash-sub').textContent = `Juventus FC · Serie A · UEL · Coppa Italia`;
+  updatePills();
+
+  const tasks = [
+    { num: '01', icon: '🏷️', title: 'Sponsor Maglia', desc: 'Trova uno sponsor principale. Il valore aumenta il budget.', key: 'sponsor', lock: false },
+    { num: '02', icon: '💸', title: 'Cessioni', desc: 'Cedi gli esuberi. Douglas Luiz è urgente per il FER.', key: 'sell', lock: false },
+    { num: '03', icon: '🤝', title: 'Prestiti & Promozioni', desc: 'Manda in prestito o promuovi giovani in prima squadra.', key: 'loan', lock: false },
+    { num: '04', icon: '✍️', title: 'Acquista Giocatori', desc: 'Rinfòrza la rosa con i target JTR della shortlist.', key: 'sign', lock: false },
+    { num: '05', icon: '⚽', title: 'Schiera la Formazione', desc: 'Scegli modulo e undici titolare per il 2026/27.', key: 'formation', lock: false },
+  ];
+
+  const done = { sponsor: STATE.sponsorDone, sell: STATE.soldPlayers.length > 0, loan: STATE.loanedPlayers.length > 0 || STATE.promotedPlayers.length > 0, sign: STATE.signedPlayers.length > 0, formation: STATE.formationDone };
+
+  const allDone = Object.values(done).every(Boolean);
+  const simDone = STATE.seasonSimulated;
+
+  let html = tasks.map(t => `
+    <div class="task-card ${done[t.key] ? 'done' : ''}" onclick="${done[t.key] ? '' : `openStep('${t.key}')`}">
+      <div class="task-num">${t.num}</div>
+      <div class="task-icon">${t.icon}</div>
+      <div class="task-title">${t.title}</div>
+      <div class="task-desc">${t.desc}</div>
+      <span class="task-badge ${done[t.key] ? 'badge-done' : 'badge-pending'}">${done[t.key] ? '✓ Completato' : 'In sospeso'}</span>
+    </div>
+  `).join('');
+
+  // 6th task: Simula Stagione (locked until all 5 done)
+  html += `
+    <div class="task-card ${!allDone ? 'locked' : ''} ${simDone ? 'done' : ''}" style="grid-column:1/-1;${allDone && !simDone ? 'border-color:#C8A800;background:rgba(200,168,0,0.06);' : ''}" onclick="${allDone ? (simDone ? 'showSummary()' : 'simulateAndShowSummary()') : ''}">
+      <div class="task-num">06</div>
+      <div class="task-icon">🎲</div>
+      <div class="task-title">Simula Stagione 2026/27</div>
+      <div class="task-desc">${allDone ? (simDone ? 'Visualizza il rapporto finale e condividi.' : 'Completa la finestra di mercato e simula classifica, UEL e Coppa Italia.') : '🔒 Completa tutti gli step precedenti per sbloccare.'}</div>
+      <span class="task-badge ${simDone ? 'badge-done' : 'badge-pending'}">${simDone ? '✓ Simulato' : (allDone ? '▶ Pronto' : '🔒 Bloccato')}</span>
+    </div>`;
+
+  document.getElementById('tasks-grid').innerHTML = html;
+}
+
+function updatePills() {
+  document.getElementById('pill-budget').textContent = `€${STATE.budget}M`;
+  document.getElementById('pill-sponsor').innerHTML = STATE.sponsorDone ? `🏷️ Sponsor: <em>${STATE.sponsorName}</em>` : `🏷️ Sponsor: <em>Nessuno</em>`;
+  document.getElementById('pill-sold').innerHTML = `💸 Ceduti: <em>${STATE.soldPlayers.length}</em>`;
+  document.getElementById('pill-loaned').innerHTML = `🤝 Prestiti: <em>${STATE.loanedPlayers.length}</em>`;
+  document.getElementById('pill-signed').innerHTML = `✍️ Acquisti: <em>${STATE.signedPlayers.length}</em>`;
+  document.getElementById('pill-formation').innerHTML = STATE.formationDone ? `⚽ Formazione: <em>Impostata</em>` : `⚽ Formazione: <em>Non impostata</em>`;
+
+  if (STATE.sponsorDone) document.getElementById('pill-sponsor').classList.add('done');
+  if (STATE.soldPlayers.length) document.getElementById('pill-sold').classList.add('done');
+  if (STATE.loanedPlayers.length) document.getElementById('pill-loaned').classList.add('done');
+  if (STATE.signedPlayers.length) document.getElementById('pill-signed').classList.add('done');
+  if (STATE.formationDone) document.getElementById('pill-formation').classList.add('done');
+}
+
+// ============ SPONSOR ============
+function renderSponsor() {
+  STATE.selectedSponsor = null;
+  document.getElementById('btn-pitch-sponsor').disabled = true;
+  renderSponsorAttempts();
+  renderSponsorOptions();
+  document.getElementById('sponsor-result-box').innerHTML = '';
+}
+
+function renderSponsorAttempts() {
+  document.getElementById('sponsor-attempts-num').textContent = STATE.sponsorAttempts;
+  let dots = '';
+  for (let i = 0; i < 3; i++) {
+    dots += `<div class="dot ${i >= STATE.sponsorAttempts ? 'used' : ''}"></div>`;
+  }
+  document.getElementById('sponsor-dots').innerHTML = dots;
+}
+
+const SPONSORS_REJECTED = new Set();
+
+function renderSponsorOptions() {
+  const available = SPONSORS.filter(s => !SPONSORS_REJECTED.has(s.id));
+  document.getElementById('sponsor-options').innerHTML = available.map(s => `
+    <div class="option-card ${STATE.selectedSponsor === s.id ? 'selected' : ''}" onclick="selectSponsor('${s.id}')">
+      <div class="option-icon">${s.icon}</div>
+      <div class="option-name">${s.name}</div>
+      <div class="option-value">+€${s.value}M/yr</div>
+      <div class="option-sub">${s.sub}</div>
+      <span class="option-prob ${s.probClass}">${s.probLabel} likely</span>
+    </div>
+  `).join('');
+}
+
+function selectSponsor(id) {
+  if (STATE.sponsorAttempts === 0) return;
+  STATE.selectedSponsor = id;
+  renderSponsorOptions();
+  document.getElementById('btn-pitch-sponsor').disabled = false;
+}
+
+function pitchSponsor() {
+  if (!STATE.selectedSponsor || STATE.sponsorAttempts === 0) return;
+  const s = SPONSORS.find(x => x.id === STATE.selectedSponsor);
+  const roll = Math.random();
+  const box = document.getElementById('sponsor-result-box');
+
+  if (roll < s.prob) {
+    STATE.sponsorDone = true;
+    STATE.sponsorName = s.name;
+    STATE.sponsorValue = s.value;
+    STATE.budget += s.value;
+    box.innerHTML = `
+      <div class="result-box success">
+        <div class="result-emoji">🤝</div>
+        <div class="result-title" style="color:#4ade80">ACCORDO SIGLATO!</div>
+        <div class="result-desc">${s.name} firma come sponsor principale. <strong>+€${s.value}M</strong> aggiunto al budget.<br>Budget totale: <strong>€${STATE.budget}M</strong></div>
+      </div>
+      <button class="btn-primary" onclick="closeStep('sponsor')" style="margin-top:12px">← Torna alla Dashboard →</button>`;
+    document.getElementById('btn-pitch-sponsor').disabled = true;
+    document.getElementById('sponsor-options').innerHTML = '';
+  } else {
+    STATE.sponsorAttempts--;
+    SPONSORS_REJECTED.add(s.id);
+    STATE.selectedSponsor = null;
+
+    if (STATE.sponsorAttempts === 0) {
+      STATE.sponsorDone = true;
+      STATE.sponsorName = '';
+      STATE.sponsorValue = 0;
+      box.innerHTML = `
+        <div class="result-box failure">
+          <div class="result-emoji">🚫</div>
+          <div class="result-title" style="color:#f87171">NESSUNO SPONSOR</div>
+          <div class="result-desc">Hai esaurito tutti i tentativi. Stagione senza main sponsor.</div>
+        </div>
+        <button class="btn-primary" onclick="closeStep('sponsor')" style="margin-top:12px">← Torna alla Dashboard</button>`;
+      document.getElementById('btn-pitch-sponsor').disabled = true;
+      document.getElementById('sponsor-options').innerHTML = '';
+    } else {
+      box.innerHTML = `
+        <div class="result-box failure">
+          <div class="result-emoji">❌</div>
+          <div class="result-title" style="color:#f87171">OFFERTA RIFIUTATA</div>
+          <div class="result-desc">${s.name} declina l'accordo. Tentativi rimanenti: <strong>${STATE.sponsorAttempts}</strong></div>
+        </div>`;
+      renderSponsorAttempts();
+      renderSponsorOptions();
+      document.getElementById('btn-pitch-sponsor').disabled = true;
+    }
+  }
+}
+
+// ============ CESSIONI ============
+const selectedSells = new Set();
+let currentSellFilter = 'ALL';
+
+function setSellFilter(cat, btn) {
+  currentSellFilter = cat;
+  document.querySelectorAll('#sell-filters .scenario-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSellList();
+}
+
+function renderSell() {
+  selectedSells.clear();
+  currentSellFilter = 'ALL';
+  document.getElementById('sell-budget-display').textContent = `€${STATE.budget}M`;
+  document.querySelectorAll('#sell-filters .scenario-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  renderSellList();
+}
+
+function renderSellList() {
+  const filtered = currentSellFilter === 'ALL' ? SELL_PLAYERS : SELL_PLAYERS.filter(p => p.category === currentSellFilter);
+
+  // Group by category
+  const categoryOrder = ['Prestito di rientro', 'Portieri', 'Difensori', 'Esterni', 'Centrocampisti', 'Attacco'];
+  const grouped = {};
+  filtered.forEach(p => {
+    if (!grouped[p.category]) grouped[p.category] = [];
+    grouped[p.category].push(p);
+  });
+
+  let html = '';
+  categoryOrder.forEach(cat => {
+    if (!grouped[cat] || grouped[cat].length === 0) return;
+    if (currentSellFilter === 'ALL') {
+      html += `<div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#C8A800;margin:18px 0 8px 0;padding-bottom:4px;border-bottom:1px solid #2a2a2a;">${cat}</div>`;
+    }
+    grouped[cat].forEach(p => {
+      const isChecked = selectedSells.has(p.id);
+      html += `
+        <div class="checklist-item">
+          <div class="check-toggle ${isChecked ? 'checked' : ''}" id="sell-toggle-${p.id}" onclick="toggleSell('${p.id}', ${p.value})">${isChecked ? '✓' : ''}</div>
+          <div class="check-content">
+            <div class="check-name">${p.name} <span style="color:#aaa;font-size:11px">${p.pos} · ${p.age}a</span> ${p.urgency ? '<span class="warn-tag">URGENTE FER</span>' : ''}</div>
+            <div class="check-meta">Valore: <span style="color:#C8A800">${p.fee}</span> · Ingaggio: €${p.wage}M/yr</div>
+            <div class="check-meta" style="margin-top:2px;color:#888">${p.note}</div>
+          </div>
+        </div>`;
+    });
+  });
+
+  document.getElementById('sell-list').innerHTML = html || '<div style="padding:20px;text-align:center;color:#6b7280;font-family:DM Mono,monospace;font-size:11px;">Nessun giocatore in questa categoria</div>';
+}
+
+function toggleSell(id, val) {
+  const btn = document.getElementById('sell-toggle-' + id);
+  if (selectedSells.has(id)) {
+    selectedSells.delete(id);
+    btn.classList.remove('checked');
+    btn.textContent = '';
+  } else {
+    selectedSells.add(id);
+    btn.classList.add('checked');
+    btn.textContent = '✓';
+  }
+}
+
+function confirmSell() {
+  STATE.soldPlayers = [...selectedSells];
+  let gained = 0;
+  selectedSells.forEach(id => {
+    const p = SELL_PLAYERS.find(x => x.id === id);
+    if (p) gained += p.value;
+  });
+  STATE.budget += gained;
+  showToast(`Ceduti ${STATE.soldPlayers.length} giocatori · +€${gained}M al budget`);
+  closeStep('sell');
+}
+
+// ============ PRESTITI ============
+const selectedLoans = new Set();
+
+// ============ PRESTITI / PROMOZIONI ============
+const selectedLoans = new Set();
+const selectedPromotions = new Set();
+
+function renderLoan() {
+  selectedLoans.clear();
+  selectedPromotions.clear();
+  // Restore from STATE
+  STATE.loanedPlayers.forEach(id => selectedLoans.add(id));
+  STATE.promotedPlayers.forEach(id => selectedPromotions.add(id));
+
+  const firstTeam = LOAN_PLAYERS.filter(p => p.id === 'adzic');
+  const nextGen = LOAN_PLAYERS.filter(p => p.id !== 'adzic');
+
+  let html = '';
+  html += `<div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#C8A800;margin:6px 0 8px 0;padding-bottom:4px;border-bottom:1px solid #2a2a2a;">Prima Squadra</div>`;
+  html += firstTeam.map(p => loanItemHTML(p, false)).join('');
+  html += `<div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#C8A800;margin:18px 0 8px 0;padding-bottom:4px;border-bottom:1px solid #2a2a2a;">⚪⚫ NextGen — Prestito o Promozione</div>`;
+  html += nextGen.map(p => loanItemHTML(p, true)).join('');
+
+  document.getElementById('loan-list').innerHTML = html;
+}
+
+function loanItemHTML(p, allowPromotion) {
+  const isLoaned = selectedLoans.has(p.id);
+  const isPromoted = selectedPromotions.has(p.id);
+  return `
+    <div class="checklist-item" style="display:block;padding:14px 0;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+        <div style="flex:1;">
+          <div class="check-name">${p.name} <span style="color:#aaa;font-size:11px">${p.pos} · ${p.age}a</span></div>
+          <div class="check-meta">${allowPromotion ? '' : `Destinazione: ${p.clubs}`}</div>
+          <div class="check-meta" style="margin-top:2px;color:#888">${p.note}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:6px;">
+        <button onclick="setLoanChoice('${p.id}', 'loan')" style="flex:1;background:${isLoaned ? '#16a34a' : 'transparent'};color:${isLoaned ? '#fff' : '#16a34a'};border:1px solid #16a34a;font-family:'DM Mono',monospace;font-size:10px;padding:8px 6px;cursor:pointer;letter-spacing:0.5px;text-transform:uppercase;">
+          ${isLoaned ? '✓ ' : ''}🟢 Prestito
+        </button>
+        ${allowPromotion ? `
+        <button onclick="setLoanChoice('${p.id}', 'promote')" style="flex:1;background:${isPromoted ? '#C8A800' : 'transparent'};color:${isPromoted ? '#0a0a0a' : '#C8A800'};border:1px solid #C8A800;font-family:'DM Mono',monospace;font-size:10px;padding:8px 6px;cursor:pointer;letter-spacing:0.5px;text-transform:uppercase;">
+          ${isPromoted ? '✓ ' : ''}🟡 Promozione
+        </button>` : ''}
+        ${(isLoaned || isPromoted) ? `<button onclick="setLoanChoice('${p.id}', 'clear')" style="background:transparent;color:#6b7280;border:1px solid #2a2a2a;font-family:'DM Mono',monospace;font-size:10px;padding:8px 10px;cursor:pointer;">×</button>` : ''}
+      </div>
+    </div>`;
+}
+
+function setLoanChoice(id, choice) {
+  if (choice === 'loan') {
+    selectedLoans.add(id);
+    selectedPromotions.delete(id);
+  } else if (choice === 'promote') {
+    selectedPromotions.add(id);
+    selectedLoans.delete(id);
+  } else {
+    selectedLoans.delete(id);
+    selectedPromotions.delete(id);
+  }
+  renderLoan();
+}
+
+function confirmLoan() {
+  STATE.loanedPlayers = [...selectedLoans];
+  STATE.promotedPlayers = [...selectedPromotions];
+  const msg = `${STATE.loanedPlayers.length} in prestito · ${STATE.promotedPlayers.length} promossi`;
+  showToast(msg);
+  closeStep('loan');
+}
+
+// ============ ACQUISTI ============
+const selectedSigns = new Set();
+
+let currentSignFilter = 'ALL';
+
+function setSignFilter(role, btn) {
+  currentSignFilter = role;
+  document.querySelectorAll('#sign-filters .scenario-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSignOptions();
+}
+
+function renderSign() {
+  selectedSigns.clear();
+  currentSignFilter = 'ALL';
+  document.getElementById('sign-budget-display').textContent = `€${STATE.budget}M`;
+  document.querySelectorAll('#sign-filters .scenario-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  renderSignOptions();
+}
+
+function renderSignOptions() {
+  document.getElementById('sign-budget-display').textContent = `€${STATE.budget}M`;
+  const filtered = currentSignFilter === 'ALL' ? SIGN_PLAYERS : SIGN_PLAYERS.filter(p => p.role === currentSignFilter);
+  const sorted = [...filtered].sort((a,b) => b.jtr - a.jtr);
+  document.getElementById('sign-options').innerHTML = sorted.map(p => {
+    const uclLocked = p.ucl && STATE.scenario !== 'UCL';
+    const isSelected = selectedSigns.has(p.id);
+    const isOrange = p.jtrClass === 'jtr-orange';
+    return `
+    <div class="option-card ${uclLocked ? 'disabled' : ''} ${isSelected ? 'selected' : ''}" id="sign-${p.id}" onclick="${uclLocked ? '' : `toggleSign('${p.id}', ${p.cost})`}" style="${isOrange ? 'border-color:rgba(234,88,12,0.3);' : ''}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+        <div class="option-name" style="font-size:13px;">${p.name}</div>
+        <span class="${p.jtrClass} jtr-badge">JTR ${p.jtr}</span>
+      </div>
+      <div class="option-sub" style="text-align:left;margin-bottom:4px;">${p.pos} · età ${p.age} ${p.flag ? '· ' + p.flag : ''}</div>
+      <div class="option-value" style="text-align:left;">${p.cost > 0 ? `€${p.cost}M` : '🆓 Parametro 0'}</div>
+      <div class="option-sub" style="margin-top:6px;text-align:left;font-size:9px;">${p.note}</div>
+      ${uclLocked ? '<div style="margin-top:6px;font-size:10px;color:#f87171;">🔒 Solo UCL</div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+function toggleSign(id, cost) {
+  const p = SIGN_PLAYERS.find(x => x.id === id);
+  const card = document.getElementById('sign-' + id);
+  if (selectedSigns.has(id)) {
+    selectedSigns.delete(id);
+    STATE.budget += cost;
+    card.classList.remove('selected');
+  } else {
+    if (STATE.budget < cost) { showToast('Budget insufficiente'); return; }
+    selectedSigns.add(id);
+    STATE.budget -= cost;
+    card.classList.add('selected');
+  }
+  document.getElementById('sign-budget-display').textContent = `€${STATE.budget}M`;
+}
+
+function confirmSign() {
+  STATE.signedPlayers = [...selectedSigns];
+  showToast(`${STATE.signedPlayers.length} giocatori acquistati`);
+  closeStep('sign');
+}
+
+// ============ FORMATION ============
+function getFullSquad() {
+  const signed = STATE.signedPlayers.map(id => {
+    const p = SIGN_PLAYERS.find(x => x.id === id);
+    return { id: p.id, name: p.name.split(' ').pop(), pos: p.pos, posGroup: SIGN_POS_MAP[id] || [] };
+  });
+  const promoted = STATE.promotedPlayers.map(id => {
+    const p = LOAN_PLAYERS.find(x => x.id === id);
+    return { id: p.id, name: p.name.split(' ').pop(), pos: p.pos + ' ⭐NG', posGroup: p.posGroup || [] };
+  });
+  const sold = STATE.soldPlayers;
+  const loaned = STATE.loanedPlayers;
+  const base = BASE_SQUAD.filter(p => !sold.includes(p.id) && !loaned.includes(p.id));
+  return [...base, ...signed, ...promoted];
+}
+
+// ============ FORMATION MODULES ============
+let selectedPosIndex = null;
+
+const FORMATIONS = {
+  '3-4-2-1': [
+    { idx: 0, role: 'GK',   cx: 150, cy: 385, label: 'GK' },
+    { idx: 1, role: 'DC',   cx: 65,  cy: 310, label: 'DCL' },
+    { idx: 2, role: 'DC',   cx: 150, cy: 310, label: 'DCC' },
+    { idx: 3, role: 'DC',   cx: 235, cy: 310, label: 'DCR' },
+    { idx: 4, role: 'WB',   cx: 30,  cy: 235, label: 'WBL' },
+    { idx: 5, role: 'MC',   cx: 95,  cy: 230, label: 'MCL' },
+    { idx: 6, role: 'MC',   cx: 205, cy: 230, label: 'MCR' },
+    { idx: 7, role: 'WB',   cx: 270, cy: 235, label: 'WBR' },
+    { idx: 8, role: 'AMC',  cx: 100, cy: 160, label: 'AMCL' },
+    { idx: 9, role: 'AMC',  cx: 200, cy: 160, label: 'AMCR' },
+    { idx: 10,role: 'ST',   cx: 150, cy: 80,  label: 'ST' },
+  ],
+  '4-3-3': [
+    { idx: 0, role: 'GK',   cx: 150, cy: 385, label: 'GK' },
+    { idx: 1, role: 'DC',   cx: 105, cy: 310, label: 'DCL' },
+    { idx: 2, role: 'DC',   cx: 195, cy: 310, label: 'DCR' },
+    { idx: 3, role: 'WB',   cx: 35,  cy: 305, label: 'DL' },
+    { idx: 4, role: 'WB',   cx: 265, cy: 305, label: 'DR' },
+    { idx: 5, role: 'MC',   cx: 95,  cy: 215, label: 'MCL' },
+    { idx: 6, role: 'MC',   cx: 150, cy: 230, label: 'MC' },
+    { idx: 7, role: 'MC',   cx: 205, cy: 215, label: 'MCR' },
+    { idx: 8, role: 'AMC',  cx: 55,  cy: 120, label: 'AL' },
+    { idx: 9, role: 'AMC',  cx: 245, cy: 120, label: 'AR' },
+    { idx: 10,role: 'ST',   cx: 150, cy: 85,  label: 'ST' },
+  ],
+  '4-2-3-1': [
+    { idx: 0, role: 'GK',   cx: 150, cy: 385, label: 'GK' },
+    { idx: 1, role: 'DC',   cx: 105, cy: 310, label: 'DCL' },
+    { idx: 2, role: 'DC',   cx: 195, cy: 310, label: 'DCR' },
+    { idx: 3, role: 'WB',   cx: 35,  cy: 305, label: 'DL' },
+    { idx: 4, role: 'WB',   cx: 265, cy: 305, label: 'DR' },
+    { idx: 5, role: 'MC',   cx: 115, cy: 235, label: 'MCL' },
+    { idx: 6, role: 'MC',   cx: 185, cy: 235, label: 'MCR' },
+    { idx: 7, role: 'AMC',  cx: 55,  cy: 160, label: 'AL' },
+    { idx: 8, role: 'AMC',  cx: 150, cy: 145, label: 'AMC' },
+    { idx: 9, role: 'AMC',  cx: 245, cy: 160, label: 'AR' },
+    { idx: 10,role: 'ST',   cx: 150, cy: 80,  label: 'ST' },
+  ],
+  '3-5-2': [
+    { idx: 0, role: 'GK',   cx: 150, cy: 385, label: 'GK' },
+    { idx: 1, role: 'DC',   cx: 65,  cy: 310, label: 'DCL' },
+    { idx: 2, role: 'DC',   cx: 150, cy: 310, label: 'DCC' },
+    { idx: 3, role: 'DC',   cx: 235, cy: 310, label: 'DCR' },
+    { idx: 4, role: 'WB',   cx: 30,  cy: 215, label: 'WBL' },
+    { idx: 5, role: 'MC',   cx: 95,  cy: 225, label: 'MCL' },
+    { idx: 6, role: 'MC',   cx: 150, cy: 235, label: 'MC' },
+    { idx: 7, role: 'MC',   cx: 205, cy: 225, label: 'MCR' },
+    { idx: 8, role: 'WB',   cx: 270, cy: 215, label: 'WBR' },
+    { idx: 9, role: 'ST',   cx: 110, cy: 110, label: 'STL' },
+    { idx: 10,role: 'ST',   cx: 190, cy: 110, label: 'STR' },
+  ],
+};
+
+// Role-to-position mapping per modulo (per filtrare giocatori validi su uno slot)
+const ROLE_TO_POSGROUP = {
+  '3-4-2-1': { 0:[0], 1:[1,2,3], 2:[1,2,3], 3:[1,2,3], 4:[4], 5:[5,6], 6:[5,6], 7:[7], 8:[8,9], 9:[8,9], 10:[10] },
+  '4-3-3':   { 0:[0], 1:[1,2,3], 2:[1,2,3], 3:[4], 4:[7], 5:[5,6], 6:[5,6], 7:[5,6,8,9], 8:[8,9], 9:[8,9], 10:[10] },
+  '4-2-3-1': { 0:[0], 1:[1,2,3], 2:[1,2,3], 3:[4], 4:[7], 5:[5,6], 6:[5,6], 7:[8,9], 8:[8,9], 9:[8,9], 10:[10] },
+  '3-5-2':   { 0:[0], 1:[1,2,3], 2:[1,2,3], 3:[1,2,3], 4:[4], 5:[5,6], 6:[5,6], 7:[5,6], 8:[7], 9:[10], 10:[10] },
+};
+
+function setModule(mod, btn) {
+  STATE.formationModule = mod;
+  STATE.formation = Array(11).fill(null);
+  document.querySelectorAll('#module-selector .scenario-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPitch();
+  renderFormationPool(getFullSquad());
+  document.getElementById('btn-confirm-formation').disabled = true;
+  document.getElementById('formation-result').innerHTML = '';
+}
+
+function renderPitch() {
+  const mod = STATE.formationModule;
+  const positions = FORMATIONS[mod];
+
+  let svg = `<svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto;">
+    <rect width="300" height="420" fill="#1a4a1a"/>
+    <rect x="0" y="0" width="300" height="42" fill="#1c4c1c" opacity="0.6"/>
+    <rect x="0" y="84" width="300" height="42" fill="#1c4c1c" opacity="0.6"/>
+    <rect x="0" y="168" width="300" height="42" fill="#1c4c1c" opacity="0.6"/>
+    <rect x="0" y="252" width="300" height="42" fill="#1c4c1c" opacity="0.6"/>
+    <rect x="0" y="336" width="300" height="42" fill="#1c4c1c" opacity="0.6"/>
+    <rect x="10" y="10" width="280" height="400" fill="none" stroke="#2d6a2d" stroke-width="2"/>
+    <line x1="10" y1="210" x2="290" y2="210" stroke="#2d6a2d" stroke-width="1.5"/>
+    <circle cx="150" cy="210" r="35" fill="none" stroke="#2d6a2d" stroke-width="1.5"/>
+    <rect x="75" y="10" width="150" height="55" fill="none" stroke="#2d6a2d" stroke-width="1.5"/>
+    <rect x="75" y="355" width="150" height="55" fill="none" stroke="#2d6a2d" stroke-width="1.5"/>
+    <rect x="110" y="10" width="80" height="20" fill="none" stroke="#2d6a2d" stroke-width="1.5"/>
+    <rect x="110" y="390" width="80" height="20" fill="none" stroke="#2d6a2d" stroke-width="1.5"/>`;
+
+  positions.forEach(p => {
+    const filled = STATE.formation[p.idx];
+    const fillColor = filled ? 'rgba(200,168,0,0.25)' : '#1f3a1f';
+    const strokeColor = filled ? '#C8A800' : '#4a7a4a';
+    const nameDisplay = filled ? filled.split(' ').pop().substring(0, 9) : '—';
+    svg += `<g style="cursor:pointer;" onclick="selectPosition(${p.idx})">
+      <circle cx="${p.cx}" cy="${p.cy}" r="18" fill="${fillColor}" stroke="${strokeColor}" stroke-width="1.5"/>
+      <text x="${p.cx}" y="${p.cy - 3}" text-anchor="middle" fill="#aaa" font-size="8" font-family="DM Mono,monospace">${p.label}</text>
+      <text x="${p.cx}" y="${p.cy + 8}" text-anchor="middle" fill="#ddd" font-size="7.5" font-family="DM Mono,monospace">${nameDisplay}</text>
+    </g>`;
+  });
+
+  svg += `<text x="150" y="420" text-anchor="middle" fill="#2d6a2d" font-size="9" font-family="DM Mono,monospace">${mod}</text>`;
+  svg += `</svg>`;
+
+  document.getElementById('pitch-wrap').innerHTML = svg;
+}
+
+function renderFormation() {
+  const squad = getFullSquad();
+  STATE.formation = STATE.formation || Array(11).fill(null);
+  renderPitch();
+  renderFormationPool(squad);
+  // Re-sync module selector active state
+  document.querySelectorAll('#module-selector .scenario-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === STATE.formationModule);
+  });
+}
+
+function renderFormationPool(squad) {
+  const placed = STATE.formation.filter(Boolean);
+  document.getElementById('formation-player-pool').innerHTML = squad.map(p => {
+    const isPlaced = placed.includes(p.name);
+    return `
+    <div class="player-pill ${isPlaced ? 'placed' : ''}" onclick="${isPlaced ? '' : `placePlayerFromPool('${p.id}')`}" id="pool-${p.id}">
+      <div class="player-pill-name">${p.name}</div>
+      <div class="player-pill-meta">${p.pos}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectPosition(idx) {
+  selectedPosIndex = idx;
+  const squad = getFullSquad();
+  const placed = STATE.formation.filter(Boolean);
+  const available = squad.filter(p => !placed.includes(p.name) || STATE.formation[idx] === p.name);
+  
+  document.getElementById('modal-player-list').innerHTML = available.map(p => `
+    <div onclick="assignPlayer('${p.id}', '${p.name}')" style="padding:12px;border-bottom:1px solid #2a2a2a;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'">
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;">${p.name}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6b7280;">${p.pos}</div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:#C8A800;">›</div>
+    </div>
+  `).join('');
+  document.getElementById('player-modal').style.display = 'block';
+}
+
+function assignPlayer(pid, name) {
+  // Clear previous player at this slot from formation
+  const prev = STATE.formation[selectedPosIndex];
+  STATE.formation[selectedPosIndex] = name;
+  closePlayerModal();
+  const squad = getFullSquad();
+  renderPitch();
+  renderFormationPool(squad);
+  const filled = STATE.formation.filter(Boolean).length;
+  document.getElementById('btn-confirm-formation').disabled = filled < 11;
+  if (filled === 11) {
+    document.getElementById('formation-result').innerHTML = `<div class="result-box success" style="margin:12px 0;"><div class="result-emoji">✅</div><div class="result-title" style="color:#4ade80">FORMAZIONE COMPLETA</div><div class="result-desc">Tutti gli 11 titolari schierati.</div></div>`;
+  }
+}
+
+function placePlayerFromPool(pid) {
+  // Find first empty slot
+  const idx = STATE.formation.findIndex(s => s === null);
+  if (idx === -1) { showToast('Tutti gli slot sono occupati'); return; }
+  selectedPosIndex = idx;
+  const squad = getFullSquad();
+  const p = squad.find(x => x.id === pid);
+  assignPlayer(pid, p.name);
+}
+
+function closePlayerModal() {
+  document.getElementById('player-modal').style.display = 'none';
+}
+
+function confirmFormation() {
+  const filled = STATE.formation.filter(Boolean).length;
+  if (filled < 11) { showToast('Completa tutti gli 11 slot'); return; }
+  STATE.formationDone = true;
+  showToast('Formazione salvata!');
+  closeStep('formation');
+}
+
+// ============ SUMMARY ============
+function showSummary() {
+  if (!STATE.dsScore) computeDsScore();
+  const score = STATE.dsScore;
+  let verdictText = '';
+
+  if (score >= 85) verdictText = '⭐ Mercato da DS dell\'Anno';
+  else if (score >= 70) verdictText = '🟢 DS Competente — UCL ritorno realistico';
+  else if (score >= 55) verdictText = '🟡 DS nella norma — stagione incerta';
+  else if (score >= 40) verdictText = '🟠 DS sotto aspettative — progetto a rischio';
+  else verdictText = '🔴 Stagione disastrosa — esonero inevitabile';
+  STATE.verdictText = verdictText;
+
+  const soldi = STATE.soldPlayers.map(id => SELL_PLAYERS.find(x => x.id === id)?.name).filter(Boolean).join(', ') || 'Nessuno';
+  const acq = STATE.signedPlayers.map(id => SIGN_PLAYERS.find(x => x.id === id)?.name).filter(Boolean).join(', ') || 'Nessuno';
+  const prestiti = STATE.loanedPlayers.map(id => LOAN_PLAYERS.find(x => x.id === id)?.name).filter(Boolean).join(', ') || 'Nessuno';
+  const promossi = STATE.promotedPlayers.map(id => LOAN_PLAYERS.find(x => x.id === id)?.name).filter(Boolean).join(', ') || 'Nessuno';
+
+  const summaryHTML = `
+    <div class="final-score-box">
+      <div class="final-score-label">Punteggio DS · JuveMetrics Rating</div>
+      <div class="final-score-num">${score}</div>
+      <div class="final-score-verdict">${verdictText}</div>
+      <div class="final-score-sub">Serie A · UEL · Coppa Italia · Budget residuo: €${STATE.budget}M</div>
+    </div>
+
+    ${STATE.seasonSimulated && STATE.seasonResult ? renderSeasonResult() : ''}
+
+    <div class="summary-section">
+      <div class="summary-header">💰 Budget & Sponsor</div>
+      <div class="summary-row"><span class="label">Competizioni</span><span class="value gold">Serie A · UEL · Coppa Italia</span></div>
+      <div class="summary-row"><span class="label">Sponsor</span><span class="value ${STATE.sponsorValue > 0 ? 'pos' : 'neg'}">${STATE.sponsorName || 'Nessuno'} ${STATE.sponsorValue > 0 ? `(+€${STATE.sponsorValue}M)` : ''}</span></div>
+      <div class="summary-row"><span class="label">Budget residuo</span><span class="value gold">€${STATE.budget}M</span></div>
+    </div>
+
+    <div class="summary-section">
+      <div class="summary-header">💸 Cessioni · ${STATE.soldPlayers.length}</div>
+      <div class="summary-row"><span class="label">Ceduti</span><span class="value" style="font-size:11px;text-align:right;max-width:60%;">${soldi}</span></div>
+      ${!STATE.soldPlayers.includes('dl') ? '<div class="summary-row"><span class="label">⚠️ Douglas Luiz</span><span class="value neg">Non ceduto — FER a rischio</span></div>' : '<div class="summary-row"><span class="label">✓ Douglas Luiz</span><span class="value pos">Ceduto — FER ottimizzato</span></div>'}
+    </div>
+
+    <div class="summary-section">
+      <div class="summary-header">🤝 Prestiti · ${STATE.loanedPlayers.length}</div>
+      <div class="summary-row"><span class="label">In prestito</span><span class="value" style="font-size:11px;text-align:right;max-width:60%;">${prestiti}</span></div>
+    </div>
+
+    ${STATE.promotedPlayers.length > 0 ? `
+    <div class="summary-section">
+      <div class="summary-header">⭐ Promossi NextGen · ${STATE.promotedPlayers.length}</div>
+      <div class="summary-row"><span class="label">Prima squadra</span><span class="value" style="font-size:11px;text-align:right;max-width:60%;">${promossi}</span></div>
+    </div>` : ''}
+
+    <div class="summary-section">
+      <div class="summary-header">✍️ Acquisti · ${STATE.signedPlayers.length}</div>
+      <div class="summary-row"><span class="label">Acquistati</span><span class="value" style="font-size:11px;text-align:right;max-width:60%;">${acq}</span></div>
+    </div>
+
+    <div class="summary-section">
+      <div class="summary-header">⚽ Formazione — ${STATE.formationModule}</div>
+      ${STATE.formation.map((player, idx) => {
+        const pos = FORMATIONS[STATE.formationModule][idx];
+        return `<div class="summary-row"><span class="label">${pos.label}</span><span class="value">${player || '—'}</span></div>`;
+      }).join('')}
+    </div>
+
+    ${STATE.seasonSimulated ? `
+    <button class="btn-primary" onclick="showShareGraphic()" style="margin-top:16px;font-size:13px;">
+      📲 Condividi la tua stagione →
+    </button>` : ''}
+
+    <button class="btn-secondary" onclick="showScreen('dashboard'); renderDashboard();" style="margin-top:8px;">← Torna alla Dashboard</button>
+
+    <div style="margin-top:12px;font-family:'DM Mono',monospace;font-size:10px;color:#444;text-align:center;padding-bottom:8px;">
+      @JuMetrics · Data-driven. Zero opinions. · Estate 2026
+    </div>
+
+    <button class="btn-secondary" onclick="location.reload()" style="margin-top:8px;">↺ Ricomincia</button>
+  `;
+
+  document.getElementById('summary-body').innerHTML = summaryHTML;
+  showScreen('summary');
+}
+
+// ============ SIMULAZIONE STAGIONE 2026/27 ============
+function simulateAndShowSummary() {
+  // First compute the DS score so simulateSeason has it
+  computeDsScore();
+  simulateSeason();
+}
+
+function computeDsScore() {
+  let score = 0;
+  const budgetScore = Math.min(20, Math.max(0, (180 - Math.abs(STATE.budget - 20)) / 8));
+  score += budgetScore;
+  if (STATE.sponsorDone && STATE.sponsorValue > 0) score += 18;
+  if (STATE.soldPlayers.includes('dl')) score += 12; else score -= 8;
+  if (STATE.soldPlayers.includes('arthur')) score += 8;
+  if (STATE.soldPlayers.includes('vlahovic')) score += 6;
+  if (STATE.soldPlayers.includes('kostic')) score += 4;
+  const topSigns = ['zaire','kolo','goretzka','gila','pieper','sesko','aitnouri','stiller','muharemovic','gyokeres','reijnders','vitinha','dejong','barella','kvara','ekitike','dembele','saka','mthuram','lautaro'];
+  const signScore = STATE.signedPlayers.filter(id => topSigns.includes(id)).length * 6;
+  score += Math.min(24, signScore);
+  const hasDC = STATE.signedPlayers.some(id => SIGN_PLAYERS.find(p => p.id === id)?.role === 'DC');
+  const hasST = STATE.signedPlayers.some(id => SIGN_PLAYERS.find(p => p.id === id)?.role === 'ST');
+  if (hasDC) score += 8;
+  if (hasST) score += 8;
+  if (STATE.formationDone) score += 10;
+  STATE.dsScore = Math.max(0, Math.min(100, Math.round(score)));
+}
+
+function simulateSeason() {
+  // Modello: punteggio DS → fascia di rendimento → simulazione Monte Carlo semplificata
+  const teams = [
+    { name: 'Inter',     base: 81, var: 6, ucl: true,  rosterStrength: 90 },
+    { name: 'Napoli',    base: 78, var: 7, ucl: true,  rosterStrength: 87 },
+    { name: 'Milan',     base: 74, var: 7, ucl: true,  rosterStrength: 84 },
+    { name: 'Atalanta',  base: 71, var: 8, ucl: true,  rosterStrength: 82 },
+    { name: 'Roma',      base: 68, var: 7, ucl: false, rosterStrength: 78 },
+    { name: 'Lazio',     base: 65, var: 7, ucl: false, rosterStrength: 76 },
+    { name: 'Fiorentina',base: 60, var: 6, ucl: false, rosterStrength: 73 },
+    { name: 'Bologna',   base: 58, var: 6, ucl: false, rosterStrength: 71 },
+    { name: 'Torino',    base: 52, var: 5, ucl: false, rosterStrength: 65 },
+    { name: 'Como',      base: 50, var: 6, ucl: false, rosterStrength: 64 },
+    { name: 'Udinese',   base: 48, var: 5, ucl: false, rosterStrength: 62 },
+    { name: 'Genoa',     base: 45, var: 5, ucl: false, rosterStrength: 60 },
+    { name: 'Cagliari',  base: 42, var: 5, ucl: false, rosterStrength: 58 },
+    { name: 'Sassuolo',  base: 41, var: 5, ucl: false, rosterStrength: 57 },
+    { name: 'Lecce',     base: 38, var: 4, ucl: false, rosterStrength: 55 },
+    { name: 'Parma',     base: 36, var: 5, ucl: false, rosterStrength: 54 },
+    { name: 'Empoli',    base: 34, var: 4, ucl: false, rosterStrength: 52 },
+    // Promosse 26/27 (al posto di Monza, Venezia, Frosinone retrocesse)
+    { name: 'Palermo',   base: 32, var: 5, ucl: false, rosterStrength: 50 },
+    { name: 'Sampdoria', base: 30, var: 5, ucl: false, rosterStrength: 48 },
+    { name: 'Spezia',    base: 28, var: 4, ucl: false, rosterStrength: 47 },
+  ];
+
+  // Juve performance basata su punteggio DS (scala 0-100 → punti attesi 45-78)
+  const dsScore = STATE.dsScore;
+  const juveBase = 45 + (dsScore / 100) * 33; // da 45 a 78 punti
+  const juveVar = 8;
+  const juvePts = Math.round(juveBase + (Math.random() - 0.5) * juveVar * 2);
+
+  // Simula punti per tutte le squadre
+  const results = teams.map(t => ({
+    name: t.name,
+    pts: Math.round(t.base + (Math.random() - 0.5) * t.var * 2),
+    rosterStrength: t.rosterStrength,
+  }));
+  results.push({ name: 'Juventus', pts: juvePts, isJuve: true, rosterStrength: 80 });
+
+  // Ordina classifica
+  results.sort((a, b) => b.pts - a.pts);
+
+  // Trova posizione Juve
+  const juvePos = results.findIndex(r => r.isJuve) + 1;
+  const juvePoints = results.find(r => r.isJuve).pts;
+
+  // Determina destino europeo
+  let destino = '';
+  let competizione = '';
+  let emoji = '';
+  if (juvePos === 1) { destino = 'SCUDETTO'; competizione = 'UEFA Champions League'; emoji = '🏆'; }
+  else if (juvePos >= 2 && juvePos <= 4) { destino = 'UCL'; competizione = 'UEFA Champions League'; emoji = '🏆'; }
+  else if (juvePos === 5) { destino = 'UEL'; competizione = 'UEFA Europa League'; emoji = '🥈'; }
+  else if (juvePos === 6) { destino = 'UECL'; competizione = 'UEFA Conference League'; emoji = '🥉'; }
+  else if (juvePos === 7) { destino = 'UECL playoff'; competizione = 'UECL Playoff'; emoji = '🎯'; }
+  else { destino = 'NESSUNA EUROPA'; competizione = 'Nessuna competizione europea'; emoji = '❌'; }
+
+  // Simula UEL — performance UEL basata su roster + DS score
+  const uelPaths = ['Eliminata Group Stage', 'Eliminata Sedicesimi', 'Eliminata Ottavi', 'Eliminata Quarti', 'Eliminata Semifinale', 'Finalista', 'VINCITRICE UEL'];
+  const uelIdx = Math.min(6, Math.max(0, Math.floor((dsScore / 100) * 6 + (Math.random() - 0.3) * 2)));
+  const uelResult = uelPaths[uelIdx];
+  const uelEmoji = uelIdx === 6 ? '🏆' : uelIdx === 5 ? '🥈' : uelIdx >= 3 ? '⚽' : '❌';
+
+  // Simula Coppa Italia
+  const coppaPaths = ['Eliminata Ottavi', 'Eliminata Quarti', 'Eliminata Semifinale', 'Finalista', 'VINCITRICE COPPA ITALIA'];
+  const coppaIdx = Math.min(4, Math.max(0, Math.floor((dsScore / 100) * 4 + (Math.random() - 0.3) * 2)));
+  const coppaResult = coppaPaths[coppaIdx];
+  const coppaEmoji = coppaIdx === 4 ? '🏆' : coppaIdx === 3 ? '🥈' : coppaIdx >= 2 ? '⚽' : '❌';
+
+  STATE.seasonSimulated = true;
+  STATE.seasonResult = {
+    classifica: results.slice(0, 8),
+    juvePos: juvePos,
+    juvePts: juvePoints,
+    destino: destino,
+    competizione: competizione,
+    emoji: emoji,
+    uelResult: uelResult,
+    uelEmoji: uelEmoji,
+    coppaResult: coppaResult,
+    coppaEmoji: coppaEmoji,
+  };
+  showSummary();
+}
+
+function renderSeasonResult() {
+  const r = STATE.seasonResult;
+  return `
+    <div class="summary-section" style="border-color:#C8A800;">
+      <div class="summary-header" style="background:#1a1a0a;">📅 Stagione 2026/27 — Risultati Simulati</div>
+      <div style="padding:18px 16px;text-align:center;background:#0d0d0d;border-bottom:1px solid #2a2a2a;">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Posizione finale Serie A</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:54px;color:#C8A800;line-height:1;">${r.juvePos}°</div>
+        <div style="font-family:'DM Mono',monospace;font-size:13px;color:#f0efe9;margin-top:4px;">${r.juvePts} punti</div>
+        <div style="margin-top:14px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:1px;">${r.emoji} ${r.destino}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:#6b7280;margin-top:2px;">${r.competizione} 2027/28</div>
+      </div>
+      <div style="padding:14px 16px;border-bottom:1px solid #2a2a2a;background:#0d0d0d;">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6b7280;text-transform:uppercase;margin-bottom:8px;">🔵 Europa League 26/27</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;">${r.uelEmoji} ${r.uelResult}</div>
+      </div>
+      <div style="padding:14px 16px;border-bottom:1px solid #2a2a2a;background:#0d0d0d;">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6b7280;text-transform:uppercase;margin-bottom:8px;">🇮🇹 Coppa Italia 26/27</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;">${r.coppaEmoji} ${r.coppaResult}</div>
+      </div>
+      <div style="padding:14px 16px;">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6b7280;text-transform:uppercase;margin-bottom:8px;">🏆 Top 8 Serie A finale</div>
+        ${r.classifica.map((t,i) => `
+          <div style="display:flex;justify-content:space-between;padding:5px 0;font-family:'DM Mono',monospace;font-size:12px;${t.isJuve ? 'color:#C8A800;font-weight:600;' : 'color:#aaa;'}">
+            <span>${i+1}. ${t.name}${t.isJuve ? ' ⚪⚫' : ''}</span>
+            <span>${t.pts} pts</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ============ GRAFICA CONDIVISIBILE ============
+function showShareGraphic() {
+  const r = STATE.seasonResult;
+  const acqNames = STATE.signedPlayers.map(id => SIGN_PLAYERS.find(x => x.id === id)?.name.split(' ').pop()).filter(Boolean);
+  const cesNames = STATE.soldPlayers.map(id => SELL_PLAYERS.find(x => x.id === id)?.name.split(' ').pop()).filter(Boolean);
+
+  const modal = document.createElement('div');
+  modal.id = 'share-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:9999;overflow-y:auto;padding:20px;';
+  modal.innerHTML = `
+    <div style="max-width:420px;margin:0 auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0 16px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:#f0efe9;">📲 Condividi</div>
+        <button onclick="closeShareModal()" style="background:none;border:1px solid #333;color:#f0efe9;width:34px;height:34px;cursor:pointer;font-size:18px;">×</button>
+      </div>
+
+      <!-- GRAFICA RIEPILOGO -->
+      <div id="share-graphic" style="background:#0a0a0a;border:1px solid #C8A800;font-family:'DM Sans',sans-serif;">
+        <!-- TOP BAR -->
+        <div style="background:#111;border-bottom:3px solid #C8A800;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="background:#C8A800;color:#0a0a0a;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:13px;padding:2px 6px;">JM</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;color:#f0efe9;letter-spacing:1px;">Juve<span style="color:#C8A800;">Metrics</span></div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:#6b7280;letter-spacing:1px;text-transform:uppercase;">Stagione 26/27</div>
+        </div>
+
+        <!-- HEADER -->
+        <div style="padding:18px 16px 12px;text-align:center;border-bottom:1px solid #2a2a2a;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">DS ${STATE.dsName}</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:#f0efe9;letter-spacing:0.5px;">La mia Stagione</div>
+        </div>
+
+        <!-- SCORE + DESTINO -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #2a2a2a;">
+          <div style="padding:16px 12px;text-align:center;border-right:1px solid #2a2a2a;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:#6b7280;text-transform:uppercase;margin-bottom:4px;">Rating DS</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;color:#C8A800;line-height:1;">${STATE.dsScore}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:#aaa;margin-top:4px;">/100</div>
+          </div>
+          <div style="padding:16px 12px;text-align:center;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:#6b7280;text-transform:uppercase;margin-bottom:4px;">Posizione</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;color:#f0efe9;line-height:1;">${r.juvePos}°</div>
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:#aaa;margin-top:4px;">${r.juvePts} pts</div>
+          </div>
+        </div>
+
+        <!-- DESTINO EUROPEO -->
+        <div style="padding:14px 16px;text-align:center;border-bottom:1px solid #2a2a2a;background:#0d0d0d;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;color:#C8A800;letter-spacing:1px;">${r.emoji} ${r.destino}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:#6b7280;margin-top:2px;">${r.competizione}</div>
+        </div>
+
+        <!-- UEL + COPPA RESULTS -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #2a2a2a;">
+          <div style="padding:10px 12px;text-align:center;border-right:1px solid #2a2a2a;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:#6b7280;text-transform:uppercase;margin-bottom:2px;">🔵 UEL</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;color:#f0efe9;line-height:1.2;">${r.uelEmoji} ${r.uelResult}</div>
+          </div>
+          <div style="padding:10px 12px;text-align:center;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:#6b7280;text-transform:uppercase;margin-bottom:2px;">🇮🇹 Coppa</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;color:#f0efe9;line-height:1.2;">${r.coppaEmoji} ${r.coppaResult}</div>
+          </div>
+        </div>
+
+        <!-- MERCATO STATS -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #2a2a2a;">
+          <div style="padding:12px 8px;text-align:center;border-right:1px solid #2a2a2a;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:#16a34a;">+${STATE.signedPlayers.length}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:8px;color:#6b7280;text-transform:uppercase;">Acquisti</div>
+          </div>
+          <div style="padding:12px 8px;text-align:center;border-right:1px solid #2a2a2a;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:#dc2626;">−${STATE.soldPlayers.length}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:8px;color:#6b7280;text-transform:uppercase;">Cessioni</div>
+          </div>
+          <div style="padding:12px 8px;text-align:center;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:#C8A800;">€${STATE.budget}M</div>
+            <div style="font-family:'DM Mono',monospace;font-size:8px;color:#6b7280;text-transform:uppercase;">Budget res.</div>
+          </div>
+        </div>
+
+        <!-- ACQUISTI KEY -->
+        <div style="padding:10px 14px;border-bottom:1px solid #2a2a2a;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:#C8A800;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">✍️ Acquisti</div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:#f0efe9;line-height:1.5;">${acqNames.slice(0,8).join(' · ') || 'Nessuno'}${acqNames.length > 8 ? ` +${acqNames.length-8}` : ''}</div>
+        </div>
+
+        <!-- CESSIONI KEY -->
+        <div style="padding:10px 14px;border-bottom:1px solid #2a2a2a;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:#C8A800;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">💸 Cessioni</div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:#f0efe9;line-height:1.5;">${cesNames.slice(0,8).join(' · ') || 'Nessuno'}${cesNames.length > 8 ? ` +${cesNames.length-8}` : ''}</div>
+        </div>
+
+        <!-- FORMAZIONE -->
+        <div style="padding:12px 14px;border-bottom:1px solid #2a2a2a;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:#C8A800;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">⚽ Formazione Tipo · ${STATE.formationModule}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:#f0efe9;line-height:1.6;text-align:center;">
+            ${renderFormationGraphicLines()}
+          </div>
+        </div>
+
+        <!-- BOTTOM BAR -->
+        <div style="background:#111;border-top:3px solid #C8A800;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:#C8A800;">@JuMetrics</div>
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:#6b7280;">Data-driven. Zero opinions.</div>
+        </div>
+      </div>
+
+      <!-- ACTIONS -->
+      <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button onclick="downloadGraphic()" style="background:#C8A800;color:#0a0a0a;border:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:14px;cursor:pointer;">⬇️ Scarica PNG</button>
+        <button onclick="shareTextSummary()" style="background:transparent;color:#C8A800;border:1px solid #C8A800;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:14px;cursor:pointer;">📋 Copia testo</button>
+      </div>
+      <button onclick="closeShareModal()" style="width:100%;background:transparent;color:#6b7280;border:1px solid #2a2a2a;font-family:'DM Mono',monospace;font-size:11px;padding:12px;cursor:pointer;margin-top:8px;">Chiudi</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function closeShareModal() {
+  const m = document.getElementById('share-modal');
+  if (m) m.remove();
+}
+
+// Render formation lines for share graphic — ordered from top (attack) to bottom (GK)
+function renderFormationGraphicLines() {
+  const positions = FORMATIONS[STATE.formationModule];
+  // Group positions by Y coordinate (small tolerance for same line)
+  const lines = {};
+  positions.forEach((pos, idx) => {
+    const key = Math.round(pos.cy / 30) * 30; // bucket by 30px
+    if (!lines[key]) lines[key] = [];
+    lines[key].push({ pos, idx, x: pos.cx });
+  });
+  // Sort lines by Y ascending (top=attack first), then sort each line by X
+  const sortedKeys = Object.keys(lines).map(Number).sort((a, b) => a - b);
+  return sortedKeys.map(k => {
+    const line = lines[k].sort((a, b) => a.x - b.x);
+    return line.map(item => {
+      const player = STATE.formation[item.idx];
+      return player ? player.split(' ').pop() : '—';
+    }).join(' · ');
+  }).join('<br>');
+}
+
+function downloadGraphic() {
+  // Usa html2canvas-like via SVG foreignObject fallback → screenshot manuale tramite suggerimento
+  showToast('💡 Tieni premuto il grafico e seleziona "Salva immagine" — su iOS/Android funziona dal browser');
+}
+
+function shareTextSummary() {
+  const r = STATE.seasonResult;
+  const acqNames = STATE.signedPlayers.map(id => SIGN_PLAYERS.find(x => x.id === id)?.name).filter(Boolean);
+  const cesNames = STATE.soldPlayers.map(id => SELL_PLAYERS.find(x => x.id === id)?.name).filter(Boolean);
+
+  const text = `⚪⚫ JuveMetrics Simulator — La mia stagione 26/27
+
+👔 DS ${STATE.dsName}
+📊 Rating: ${STATE.dsScore}/100
+🏆 ${r.juvePos}° posto · ${r.juvePts} pts
+${r.emoji} ${r.destino}
+🔵 UEL: ${r.uelResult}
+🇮🇹 Coppa Italia: ${r.coppaResult}
+
+⚽ Modulo: ${STATE.formationModule}
+✍️ Acquisti (${STATE.signedPlayers.length}): ${acqNames.join(', ') || 'Nessuno'}
+💸 Cessioni (${STATE.soldPlayers.length}): ${cesNames.join(', ') || 'Nessuno'}
+💰 Budget residuo: €${STATE.budget}M
+
+@JuMetrics · Data-driven. Zero opinions.`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('✅ Testo copiato — incollalo sui social');
+  }).catch(() => {
+    showToast('Copia manualmente il testo');
+  });
+}
+
+// ============ UTILS ============
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// Init slider
+document.getElementById('budget-slider').addEventListener('input', function() {
+  updateBudget(this.value);
+});
+updateBudget(100);
+</script>
+</body>
+</html>
