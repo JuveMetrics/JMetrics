@@ -92,8 +92,8 @@
   .nav-tab.t-red.active { color: #ef4444; border-bottom-color: #ef4444; }
 
   /* ── PAGES ── */
-  .page { display: none; padding: 28px; max-width: 1500px; margin: 0 auto; }
-  .page.active { display: block; }
+  .page { display: none !important; padding: 28px; max-width: 1500px; margin: 0 auto; visibility: hidden; height: 0; overflow: hidden; }
+  .page.active { display: block !important; visibility: visible; height: auto; overflow: visible; }
 
   /* ── SECTION ── */
   .section { margin-bottom: 40px; }
@@ -605,6 +605,124 @@
     </div>
   </div>
 
+  <!-- ATTACCANTI TIER 2 + ALTRI PROFILI VALUTATI -->
+  <div class="section">
+    <div class="section-hdr">
+      <h2 class="section-title">⚡ ATTACCANTI — SHORTLIST COMPLETA</h2>
+      <span class="section-sub">Tier 2 e profili valutati · inclusi tutti i nomi esaminati nel processo scouting JM</span>
+    </div>
+    <div class="cards-grid">
+
+      <div class="card c-yellow">
+        <div class="card-top">
+          <div><div class="card-name">P. Mateta</div><div class="card-club">Crystal Palace → centravanti fisico · contratto 2027</div></div>
+          <div class="jtr-badge"><div class="jtr-score y">71</div><div class="jtr-label">JTR</div></div>
+        </div>
+        <div class="tags"><span class="tag t-p1">TIER 1 CF</span><span class="tag">27 anni · Francia</span><span class="tag">Fisico / profondità</span></div>
+        <div class="card-note">
+          PL 2024/25: 16G in 35 presenze. Centravanti fisico, lavoro spalle alla porta, runs in behind. Profilo compatibile con il sistema — autonomia offensiva, non dipendente dal regista. <span class="hl">Alternative diretta a Sørloth: stesso profilo, stessa fascia d'età.</span> Contratto 2027 — Palace può cedere a ~€25-30M. JTR 71 — leggermente sotto Sørloth per impatto europeo.
+        </div>
+        <div class="card-foot"><span class="cost">~€25-30M</span><div class="feas"><div class="dot d-mid"></div>Compatibile budget UEL</div></div>
+        <div class="status-row"><span class="status-pill s-monitor"><span class="status-dot"></span>SHORTLIST TIER 1 — ALTERNATIVA SØRLOTH</span></div>
+      </div>
+
+      <div class="card c-yellow">
+        <div class="card-top">
+          <div><div class="card-name">Gonzalo García</div><div class="card-club">Valencia / Real Madrid B → profilo emergente</div></div>
+          <div class="jtr-badge"><div class="jtr-score y">68</div><div class="jtr-label">JTR</div></div>
+        </div>
+        <div class="tags"><span class="tag t-p1">TIER 1 CF</span><span class="tag">21 anni · Spagna</span><span class="tag">Prospetto</span></div>
+        <div class="card-note">
+          Centravanti classe 2004, già nel radar della Juve. Profilo tecnico, agile, buona progressione nel dribbling. Giovane — alta rivendita potenziale. <span class="hl">Alternativa low-cost con upside: se il budget è compresso, è il profilo con miglior TRS della shortlist.</span> Rischio: livello di provenienza da verificare vs Serie A.
+        </div>
+        <div class="card-foot"><span class="cost">€5-10M stimato</span><div class="feas"><div class="dot d-hi"></div>Budget compatibile UEL</div></div>
+        <div class="status-row"><span class="status-pill s-monitor"><span class="status-dot"></span>SHORTLIST TIER 1 — PROFILO PROSPETTO</span></div>
+      </div>
+
+      <div class="card c-yellow">
+        <div class="card-top">
+          <div><div class="card-name">J. Zirkzee</div><div class="card-club">Manchester United → prestito o cessione · contratto 2029</div></div>
+          <div class="jtr-badge"><div class="jtr-score y">66</div><div class="jtr-label">JTR</div></div>
+        </div>
+        <div class="tags"><span class="tag t-p1">TIER 2 CF</span><span class="tag">24 anni · Olanda</span><span class="tag">Tecnico / mezzapunta</span></div>
+        <div class="card-note">
+          Man Utd: stagione difficile dopo l'arrivo. Più trequartista-falso nueve che centravanti classico. Tecnica elevata, associazione, ma <span class="rd">non va in profondità — mancanza dei runs in behind che servono al sistema.</span> Prestito possibile. JTR 66 penalizzato da fit tattico parziale.
+        </div>
+        <div class="card-foot"><span class="cost">Prestito o €30-35M</span><div class="feas"><div class="dot d-mid"></div>MU aperto a prestito</div></div>
+        <div class="status-row"><span class="status-pill s-monitor"><span class="status-dot"></span>SHORTLIST TIER 2 — FIT TATTICO PARZIALE</span></div>
+      </div>
+
+      <div class="card c-yellow">
+        <div class="card-top">
+          <div><div class="card-name">G. Scamacca</div><div class="card-club">Atalanta → rientro da infortunio · contratto 2028</div></div>
+          <div class="jtr-badge"><div class="jtr-score y">65</div><div class="jtr-label">JTR</div></div>
+        </div>
+        <div class="tags"><span class="tag t-p1">TIER 2 CF</span><span class="tag">26 anni · Italia</span><span class="tag t-out">⚠️ Infortunio lungo</span></div>
+        <div class="card-note">
+          Centravanti fisico italiano, profilo compatibile col sistema. <span class="rd">Fuori per lungo infortunio (ACL) 2024/25 — stato fisico da monitorare nel ritiro Atalanta.</span> Se rientra al 100%, profilo interessante. Atalanta difficilmente cede senza offerta importante (~€40M). JTR 65 abbassato da rischio fisico e costo.
+        </div>
+        <div class="card-foot"><span class="cost">~€35-40M</span><div class="feas"><div class="dot d-lo"></div>Costo + rischio fisico</div></div>
+        <div class="status-row"><span class="status-pill s-monitor"><span class="status-dot"></span>SHORTLIST TIER 2 — RISCHIO FISICO</span></div>
+      </div>
+
+      <div class="card c-yellow">
+        <div class="card-top">
+          <div><div class="card-name">S. Castro</div><div class="card-club">Bologna → Serie A · contratto 2028</div></div>
+          <div class="jtr-badge"><div class="jtr-score y">64</div><div class="jtr-label">JTR</div></div>
+        </div>
+        <div class="tags"><span class="tag t-p1">TIER 2 CF</span><span class="tag">20 anni · Argentina</span><span class="tag">Prospetto Serie A</span></div>
+        <div class="card-note">
+          Centravanti argentino già affermato in Serie A a 20 anni. Tecnica, associazione, agile. <span class="rd">Profilo simile a Zirkzee — più seconda punta che centravanti puro.</span> Bologna difficilmente cede sotto €30M. Alta rivendita potenziale come TRS. JTR 64 per fit tattico parziale (non il centravanti con runs in behind cercato).
+        </div>
+        <div class="card-foot"><span class="cost">~€25-30M</span><div class="feas"><div class="dot d-mid"></div>Bologna può cedere</div></div>
+        <div class="status-row"><span class="status-pill s-monitor"><span class="status-dot"></span>SHORTLIST TIER 2 — PROFILO DA MONITORARE</span></div>
+      </div>
+
+      <div class="card c-yellow">
+        <div class="card-top">
+          <div><div class="card-name">M. Pellegrino</div><div class="card-club">Deportivo Alavés → La Liga · contratto 2027</div></div>
+          <div class="jtr-badge"><div class="jtr-score y">63</div><div class="jtr-label">JTR</div></div>
+        </div>
+        <div class="tags"><span class="tag t-p1">TIER 2 CF</span><span class="tag">22 anni · Argentina</span><span class="tag">Salto di lega</span></div>
+        <div class="card-note">
+          Centravanti argentino emergente in Liga. Fisico, profondità, buon contributo aereo. <span class="hl">Costo accessibile (~€15M) — il miglior rapporto TRS della shortlist Tier 2.</span> <span class="rd">Salto Alavés→Serie A da verificare.</span> Profilo che può inserirsi bene nel sistema come alternativa low-cost a Sørloth/Mateta.
+        </div>
+        <div class="card-foot"><span class="cost">~€12-18M</span><div class="feas"><div class="dot d-mid"></div>Costo compatibile UEL</div></div>
+        <div class="status-row"><span class="status-pill s-monitor"><span class="status-dot"></span>SHORTLIST TIER 2 — OPZIONE ECONOMICA</span></div>
+      </div>
+
+      <div class="card c-yellow">
+        <div class="card-top">
+          <div><div class="card-name">R. Panichelli</div><div class="card-club">Ternana / Juve B → prospetto interno · contratto JFC</div></div>
+          <div class="jtr-badge"><div class="jtr-score o">55</div><div class="jtr-label">JTR</div></div>
+        </div>
+        <div class="tags"><span class="tag t-p1">TIER 2 CF</span><span class="tag">20 anni · Italia</span><span class="tag">Prospetto interno</span></div>
+        <div class="card-note">
+          Centravanti interno Next Gen. Valutazione da fare sul campo — profilo da promozione interna o cessione in prestito per accumulare minutaggio. <span class="rd">Non pronto per Serie A come prima opzione.</span> Utile come terzo portiere del sistema o per allungare la lista.
+        </div>
+        <div class="card-foot"><span class="cost">Prospetto interno</span><div class="feas"><div class="dot d-lo"></div>Non pronto Serie A</div></div>
+        <div class="status-row"><span class="status-pill s-monitor"><span class="status-dot"></span>PROSPETTO — PRESTITO O PROMOZIONE GRADUALE</span></div>
+      </div>
+
+      <div class="card c-out" style="background:#0a0f12;border-color:#1e3a5f">
+        <div class="card-top">
+          <div>
+            <div class="out-badge" style="color:#60a5fa;border-color:#1e3a5f">CONFERMATO — GIÀ IN ROSA</div>
+            <div class="card-name">Jonathan David</div>
+            <div class="card-club">Juventus FC → già firmato, in rosa 2026/27</div>
+          </div>
+          <div class="jtr-badge"><div class="jtr-score y">—</div><div class="jtr-label">IN ROSA</div></div>
+        </div>
+        <div class="tags"><span class="tag t-upd">✅ GIÀ FIRMATO</span><span class="tag">25 anni · Canada</span><span class="tag">27G/4A 2024/25</span></div>
+        <div class="card-note">
+          Jonathan David è già in rosa Juve 2026/27. Firmato come free agent da Lille. <strong>Nota JPI:</strong> JPI aggregato in partite vs top-6 Serie A 2025/26: ~4.0/10 — pattern big match confermato per 4+ volte consecutive. <span class="rd">Dipendenza da Locatelli in forma: senza il regista, il suo impatto crolla.</span> Non risolve il gap strutturale P1 — per questo si cerca Sørloth/Mateta come centravanti autonomo affianco o in alternativa.
+        </div>
+        <div class="status-row"><span class="status-pill s-accordo"><span class="status-dot"></span>IN ROSA — FIRMATO FREE AGENT</span></div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- CENTROCAMPO -->
   <div class="section">
     <div class="section-hdr">
@@ -633,16 +751,18 @@
         <div class="flag">💡 JTR 79 = top del radar centrocampo. Profilo generazionale. Fattibilità bassa estate 2026 ma da seguire con attenzione.</div>
       </div>
 
-      <div class="card c-green">
+      <div class="card c-out" style="background:#0a0f12;border-color:#374151;opacity:0.6">
         <div class="card-top">
-          <div><div class="card-name">Ederson</div><div class="card-club">Atalanta → richiesta esplicita Spalletti</div></div>
-          <div class="jtr-badge"><div class="jtr-score g">78</div><div class="jtr-label">JTR</div></div>
+          <div>
+            <div class="out-badge" style="color:#9ca3af;border-color:#374151">CHIUSA — HA FIRMATO MAN UTD</div>
+            <div class="card-name" style="text-decoration:line-through;color:#6b7280">Ederson</div>
+            <div class="card-club">Atalanta → Manchester United ✓</div>
+          </div>
+          <div class="jtr-badge"><div class="jtr-score r">—</div><div class="jtr-label">CHIUSA</div></div>
         </div>
-        <div class="tags"><span class="tag t-p3">P3 CENTROCAMPO</span><span class="tag">27 anni · Brasile</span><span class="tag">Box-to-box</span></div>
-        <div class="card-note">Richiesta esplicita Spalletti (Tuttosport). Contratto 2027, vuole andare. Atalanta chiede €40M fissi. G31: Spalletti lo ha marcato ossessivamente — interesse già manifesto in campo. Atletico Madrid in vantaggio.</div>
-        <div class="card-foot"><span class="cost">€40M</span><div class="feas"><div class="dot d-mid"></div>Atletico in vantaggio</div></div>
-        <div class="status-row"><span class="status-pill s-sondaggio"><span class="status-dot"></span>SONDAGGIO ENTOURAGE</span></div>
-        <div class="flag">⚠️ Finestra stretta. Juve deve offrire €40M cash senza trattare per battere Atletico.</div>
+        <div class="tags"><span class="tag t-out">❌ OPERAZIONE CHIUSA</span><span class="tag">27 anni · Brasile</span></div>
+        <div class="card-note">Ederson ha firmato con il Manchester United. Operazione chiusa definitivamente. Juve deve individuare alternativa al profilo box-to-box con pressing trigger.</div>
+        <div class="status-row"><span class="status-pill s-persa"><span class="status-dot"></span>CHIUSA — FIRMATO MAN UTD</span></div>
       </div>
 
       <div class="card c-green">
@@ -687,6 +807,22 @@
         <div class="card-note">Box-to-box sinistro con visione. Valore €26M. Contratto 2029. Super League: 1G+2A in 1.114 min. Interesse Arsenal, Man Utd, Milan. <span class="rd">Ostacolo: stesso proprietario Olympiacos-Nottm Forest (Marinakis)</span> — Forest ha precedenza strutturale.</div>
         <div class="card-foot"><span class="cost">~€26M</span><div class="feas"><div class="dot d-lo"></div>Ostacolo Marinakis</div></div>
         <div class="status-row"><span class="status-pill s-monitor"><span class="status-dot"></span>MONITORATO</span></div>
+      </div>
+
+      <!-- BOUADDI -->
+      <div class="card c-yellow">
+        <div class="card-top">
+          <div><div class="card-name">Y. Bouaddi</div><div class="card-club">LOSC Lille → Mediano / Mezzala difensiva</div></div>
+          <div class="jtr-badge"><div class="jtr-score o">—</div><div class="jtr-label">JTR</div></div>
+        </div>
+        <div class="tags"><span class="tag t-p3">MEDIANO / MEZZALA DIV.</span><span class="tag t-new">📡 SCOUTING</span><span class="tag">18 anni · Francia</span></div>
+        <div class="card-note">
+          Mediano/mezzala difensiva classe 2007 (non trequartista — label corretta confermata). LOSC Lille: minutaggio crescente in Ligue 1. Fonte: @juventibus (Momblano).<br><br>
+          <span class="rd">Valore mercato €54M · contratto fino 2029 → operazione non perseguibile nel contesto UEL e vincolo FER.</span> Agente Gestifute (Mendes) — trattative lunghe e costose. PSG e top club europei in concorrenza. <span class="hl">Inserito per completezza shortlist scouting — da rivalutare in contesto UCL futuro.</span>
+        </div>
+        <div class="card-foot"><span class="cost">€54M+ — non perseguibile ora</span><div class="feas"><div class="dot d-lo"></div>Budget UEL incompatibile</div></div>
+        <div class="status-row"><span class="status-pill s-monitor"><span class="status-dot"></span>SCOUTING — NON PERSEGUIBILE BUDGET UEL</span></div>
+        <div class="flag">⚠️ JTR da calcolare — dati radar da fetchare. Operazione incompatibile col contesto finanziario attuale.</div>
       </div>
 
     </div>
@@ -843,21 +979,48 @@
       </div>
 
       <!-- BRAHIM DIAZ -->
-      <div class="card c-yellow">
+      <div class="card c-green">
         <div class="card-top">
-          <div><div class="card-name">Brahim Díaz</div><div class="card-club">Real Madrid → Ala/Trequartista · contratto 2027</div></div>
-          <div class="jtr-badge"><div class="jtr-score o">58</div><div class="jtr-label">JTR</div></div>
+          <div><div class="card-name">Brahim Díaz</div><div class="card-club">Real Madrid → Trequartista · target attivo</div></div>
+          <div class="jtr-badge"><div class="jtr-score y">68</div><div class="jtr-label">JTR</div></div>
         </div>
-        <div class="tags"><span class="tag t-p1">ALA/TREQUARTISTA</span><span class="tag t-new">📡 NUOVO</span><span class="tag">26 anni · Marocco/Spagna</span><span class="tag">€35-40M</span></div>
+        <div class="tags"><span class="tag t-p1">🔥 TREQUARTISTA</span><span class="tag t-new">🟢 TARGET ATTIVO</span><span class="tag">26 anni · Marocco/Spagna</span><span class="tag">€35-40M</span></div>
         <div class="card-note">
-          <strong>Fonte: Tuttosport.</strong> Ala destra/trequartista, 1,70m, ambidestro. Radar La Liga 2025/26 (493 min): Passing% 89.0 ✅, xA 0.40 ✅, Assists 0.37 ✅, Open Play Shots Created 3.3 ✅. Creatore più che finalizzatore (NPxG 0.16 basso). <span class="rd">Fit tattico limitato: Juve ha già Yildiz, Conceição, Boga in quel ruolo. Contratto Real 2027 → costo €35-40M non giustificato per ruolo non prioritario.</span>
+          <strong>Target attivo per la trequarti.</strong> Ala destra/trequartista, 1,70m, ambidestro. Radar La Liga 2025/26 (493 min): Passing% 89.0 ✅, xA 0.40 ✅, Assists 0.37 ✅, Open Play Shots Created 3.3 ✅. Creatore più che finalizzatore (NPxG 0.16 — profilo da mezzapunta, non centravanti).<br><br>
+          Copre il ruolo di trequartista/seconda punta alle spalle della punta: adatto al 4-2-3-1 come AM centro o ala nel 3-4-2-1. Contratto Real Madrid 2027 → clausola o trattativa diretta. JTR 68 aggiornato: TRS risale con ruolo ora prioritario.
         </div>
-        <div class="card-foot"><span class="cost">€35-40M</span><div class="feas"><div class="dot d-lo"></div>Ruolo non prioritario — costo elevato</div></div>
-        <div class="status-row"><span class="status-pill s-monitor"><span class="status-dot"></span>MONITORATO — BASSA PRIORITÀ</span></div>
+        <div class="card-foot"><span class="cost">€35-40M</span><div class="feas"><div class="dot d-mid"></div>Real Madrid — trattativa da avviare</div></div>
+        <div class="status-row"><span class="status-pill s-trattativa"><span class="status-dot"></span>TARGET ATTIVO — TRATTATIVA DA AVVIARE</span></div>
       </div>
 
     </div>
   </div>
+
+  <!-- TERZINI / WING-BACK -->
+  <div class="section">
+    <div class="section-hdr">
+      <h2 class="section-title">🔁 TERZINI / WING-BACK</h2>
+      <span class="section-sub">Gap P3: wing-back esplosivo in transizione · Cross% Box Entries 9.4% critico 2025/26</span>
+    </div>
+    <div class="cards-grid">
+
+      <!-- RUGGERI -->
+      <div class="card c-yellow">
+        <div class="card-top">
+          <div><div class="card-name">O. Ruggeri</div><div class="card-club">Athletic Club → rumor da Spagna · giu 2026</div></div>
+          <div class="jtr-badge"><div class="jtr-score y">—</div><div class="jtr-label">JTR</div></div>
+        </div>
+        <div class="tags"><span class="tag t-p2">TERZINO/WB SIN.</span><span class="tag t-new">⚡ NEW ENTRY</span><span class="tag">24 anni · Argentina</span></div>
+        <div class="card-note">
+          <strong>Aggiornamento 09/06: rumor da Spagna (fonte: Tuttosport).</strong> Terzino sinistro titolare all'Athletic Club, 24 anni. Profilo moderno — propositivo, cross e progressione. Fascia sinistra candidato alternativo a Grimaldo.<br><br>
+          <span class="hl">JTR da calcolare — fetch Best11/Mclachapp necessario per TFS. Stima preliminare in corso.</span> Età e potenziale rivendita alzano TRS rispetto a Grimaldo (30 anni). Da monitorare nelle prossime settimane con conferma fonte italiana.
+        </div>
+        <div class="card-foot"><span class="cost">Da definire — contratto Athletic Club</span><div class="feas"><div class="dot d-mid"></div>Profilo giovane interessante</div></div>
+        <div class="status-row"><span class="status-pill s-sondaggio"><span class="status-dot"></span>RUMOR — JTR DA CALCOLARE</span></div>
+        <div class="flag">○ JTR non ancora calcolato — dati radar da fetchare. Stima preliminare prevista prossima settimana.</div>
+      </div>
+
+      <div class="card c-yellow">
         <div class="card-top">
           <div><div class="card-name">A. Grimaldo</div><div class="card-club">Bayer Leverkusen → opzione post-Mondiale</div></div>
           <div class="jtr-badge"><div class="jtr-score y">70</div><div class="jtr-label">JTR</div></div>
@@ -1050,113 +1213,77 @@
 
 <!-- ══ PAGE: BUDGET ══════════════════════════════════════════════════ -->
 <div class="page" id="page-budget">
-  <div class="sc-tabs">
-    <button class="sc-tab active" onclick="showSc('a',this)">Scenario A — UCL conquistata</button>
-    <button class="sc-tab" onclick="showSc('b',this)">Scenario B — Senza UCL</button>
+  <div class="section">
+    <div class="section-hdr">
+      <h2 class="section-title">💰 BUDGET ESTATE 2026 — SCENARIO UEL</h2>
+      <span class="section-sub">Competizione 2026/27: UEFA Europa League · Scenario UCL rimosso — non qualificati</span>
+    </div>
   </div>
 
-  <div id="sc-a">
-    <div class="budget-grid">
-      <div class="budget-panel">
-        <div class="budget-panel-title">💚 ENTRATE STIMATE — SCENARIO A</div>
-        <div class="budget-row-cat">CHAMPIONS LEAGUE 2026/27</div>
-        <div class="budget-row"><span class="budget-row-label">Accesso League Phase</span><span class="bv-green">+€18.6M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Bonus classifica (stima top 8)</span><span class="bv-green">+€8.0M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Diritti audiovisivi UCL (stima)</span><span class="bv-green">+€25.0M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Coefficient / market pool bonus</span><span class="bv-green">+€10.0M</span></div>
-        <div class="budget-row-cat">CESSIONI PIANIFICATE</div>
-        <div class="budget-row"><span class="budget-row-label">Cambiaso → Barcellona</span><span class="bv-green">+€37M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Kelly → Premier League</span><span class="bv-green">+€27M</span></div>
-        <div class="budget-row"><span class="budget-row-label">David → cessione</span><span class="bv-green">+€15M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Koopmeiners → cessione</span><span class="bv-green">+€25M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Zhegrova → cessione</span><span class="bv-green">+€10M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Perin → cessione libera</span><span class="bv-green">+€3M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Bremer (se clausola attivata)</span><span class="bv-green">+€58M</span></div>
-        <div class="budget-total">
-          <span class="budget-total-label">TOTALE ENTRATE</span>
-          <span class="budget-total-val" style="color:var(--green)">€236.6M</span>
-        </div>
-      </div>
-
-      <div class="budget-panel">
-        <div class="budget-panel-title">🔴 ACQUISTI PIANIFICATI — SCENARIO A</div>
-        <div class="budget-row-cat">TARGET CONFERMATI</div>
-        <div class="budget-row"><span class="budget-row-label">Kolo Muani — riscatto</span><span class="bv-red">−€35M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Ederson — Atalanta</span><span class="bv-red">−€40M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Norton-Cuffy — Genoa</span><span class="bv-red">−€18M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Guerreiro — ingaggio annuo</span><span class="bv-red">−€2M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Tzolakis (se DG parte)</span><span class="bv-red">−€10M</span></div>
-        <div class="budget-row-cat">VINCOLO FER UEFA</div>
-        <div class="budget-row"><span class="budget-row-label">Plusvalenza minima richiesta</span><span class="bv-red">€30M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Generata da Cambiaso+Kelly</span><span class="bv-green">€39-49M ✅</span></div>
-        <div class="budget-total">
-          <span class="budget-total-label">TOTALE ACQUISTI</span>
-          <span class="budget-total-val" style="color:var(--red)">−€105M</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="budget-panel" style="margin-top:0">
-      <div class="budget-panel-title">📊 SALDO NETTO — SCENARIO A</div>
-      <div class="budget-row"><span class="budget-row-label">Entrate totali</span><span class="bv-green">+€236.6M</span></div>
-      <div class="budget-row"><span class="budget-row-label">Acquisti totali</span><span class="bv-red">−€105M</span></div>
+  <div class="budget-grid">
+    <div class="budget-panel">
+      <div class="budget-panel-title">💚 ENTRATE STIMATE — UEL 2026/27</div>
+      <div class="budget-row-cat">EUROPA LEAGUE 2026/27</div>
+      <div class="budget-row"><span class="budget-row-label">Accesso League Phase UEL</span><span class="bv-green">+€4.3M</span></div>
+      <div class="budget-row"><span class="budget-row-label">Bonus risultati (stima)</span><span class="bv-green">+€5.0M</span></div>
+      <div class="budget-row"><span class="budget-row-label">Diritti audiovisivi UEL</span><span class="bv-green">+€8.0M</span></div>
+      <div class="budget-row-cat">SERIE A 2025/26</div>
+      <div class="budget-row"><span class="budget-row-label">Diritti TV Serie A base</span><span class="bv-green">+€34M</span></div>
+      <div class="budget-row-cat">CESSIONI PIANIFICATE</div>
+      <div class="budget-row"><span class="budget-row-label">Di Gregorio → (se Alisson firma)</span><span class="bv-green">+€35-40M</span></div>
+      <div class="budget-row"><span class="budget-row-label">Kelly → Premier League</span><span class="bv-green">+€27M</span></div>
+      <div class="budget-row"><span class="budget-row-label">Koopmeiners → cessione</span><span class="bv-green">+€25M</span></div>
+      <div class="budget-row"><span class="budget-row-label">Gatti → PL (4 club interessati)</span><span class="bv-green">+€20-25M</span></div>
+      <div class="budget-row"><span class="budget-row-label">Miretti → cessione</span><span class="bv-green">+€10-12M</span></div>
+      <div class="budget-row"><span class="budget-row-label">Perin → cessione libera</span><span class="bv-green">+€3M</span></div>
       <div class="budget-total">
-        <span class="budget-total-label">SALDO DISPONIBILE</span>
-        <span class="budget-total-val" style="color:var(--green)">+€131.6M</span>
+        <span class="budget-total-label">TOTALE ENTRATE (stima)</span>
+        <span class="budget-total-val" style="color:var(--green)">~€172-179M</span>
       </div>
-      <div style="margin-top:16px">
-        <div class="prog-wrap">
-          <div class="prog-label"><span>Copertura budget acquisti</span><span class="gold">225%</span></div>
-          <div class="prog-bar"><div class="prog-fill pf-g" style="width:100%"></div></div>
-        </div>
-        <div class="prog-wrap">
-          <div class="prog-label"><span>FER compliance (plusvalenze)</span><span class="gold">163%</span></div>
-          <div class="prog-bar"><div class="prog-fill pf-g" style="width:100%"></div></div>
-        </div>
+    </div>
+
+    <div class="budget-panel">
+      <div class="budget-panel-title">🔴 ACQUISTI PIANIFICATI — SCENARIO UEL</div>
+      <div class="budget-row-cat">TARGET PRIORITARI</div>
+      <div class="budget-row"><span class="budget-row-label">Sørloth — Atlético (accordo giocatore)</span><span class="bv-red">−€25-30M</span></div>
+      <div class="budget-row"><span class="budget-row-label">Alisson — Liverpool (accordo in corso)</span><span class="bv-red">−€20-25M</span></div>
+      <div class="budget-row"><span class="budget-row-label">DC builder (Gila / Pieper)</span><span class="bv-red">−€20-30M</span></div>
+      <div class="budget-row"><span class="budget-row-label">Brahim Díaz — Real Madrid</span><span class="bv-red">−€35-40M</span></div>
+      <div class="budget-row-cat">TARGET SECONDARI</div>
+      <div class="budget-row"><span class="budget-row-label">Terzino sinistro (Ruggeri / Grimaldo)</span><span class="bv-red">−€15-20M</span></div>
+      <div class="budget-row"><span class="budget-row-label">Tzolakis n.2 portiere</span><span class="bv-red">−€8-12M</span></div>
+      <div class="budget-row-cat">VINCOLO FER UEFA</div>
+      <div class="budget-row"><span class="budget-row-label">Plusvalenza minima richiesta</span><span class="bv-red">€30M</span></div>
+      <div class="budget-row"><span class="budget-row-label">Generata da DG+Kelly</span><span class="bv-green">€59-67M ✅</span></div>
+      <div class="budget-total">
+        <span class="budget-total-label">TOTALE ACQUISTI</span>
+        <span class="budget-total-val" style="color:var(--red)">−€123-157M</span>
       </div>
     </div>
   </div>
 
-  <div id="sc-b" style="display:none">
-    <div class="budget-grid">
-      <div class="budget-panel">
-        <div class="budget-panel-title">💚 ENTRATE — SCENARIO B (No UCL)</div>
-        <div class="budget-row-cat">SERIE A (SENZA UCL)</div>
-        <div class="budget-row"><span class="budget-row-label">Diritti TV Serie A base</span><span class="bv-green">+€34M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Perdita UCL vs Scenario A</span><span class="bv-red">−€61.6M</span></div>
-        <div class="budget-row-cat">CESSIONI FER-OBBLIGATE</div>
-        <div class="budget-row"><span class="budget-row-label">Kelly → PL</span><span class="bv-green">+€27M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Miretti → Lazio</span><span class="bv-green">+€11M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Gatti → cessione</span><span class="bv-green">+€16M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Yildiz — solo extrema ratio</span><span style="color:var(--red);font-family:'Geist Mono',monospace;font-size:11px">€90M se deficit grave</span></div>
-        <div class="budget-total">
-          <span class="budget-total-label">TOTALE ENTRATE</span>
-          <span class="budget-total-val" style="color:var(--yellow)">~€88M</span>
-        </div>
+  <div class="budget-panel" style="margin-top:0">
+    <div class="budget-panel-title">📊 SALDO NETTO — SCENARIO UEL</div>
+    <div class="budget-row"><span class="budget-row-label">Entrate totali stimate</span><span class="bv-green">+€172-179M</span></div>
+    <div class="budget-row"><span class="budget-row-label">Acquisti totali stimati</span><span class="bv-red">−€123-157M</span></div>
+    <div class="budget-row" style="margin-top:8px"><span class="budget-row-label" style="color:#f87171">⚠️ Perdita UEL vs UCL</span><span style="color:#f87171;font-family:'Geist Mono',monospace;font-size:11px">−€44M rispetto a scenario UCL</span></div>
+    <div class="budget-total">
+      <span class="budget-total-label">MARGINE DISPONIBILE</span>
+      <span class="budget-total-val" style="color:var(--yellow)">+€22-56M</span>
+    </div>
+    <div style="margin-top:16px">
+      <div class="prog-wrap">
+        <div class="prog-label"><span>FER compliance (plusvalenze)</span><span class="gold">~200%</span></div>
+        <div class="prog-bar"><div class="prog-fill pf-g" style="width:100%"></div></div>
       </div>
-      <div class="budget-panel">
-        <div class="budget-panel-title">🔴 ACQUISTI — SCENARIO B</div>
-        <div class="budget-row"><span class="budget-row-label">Kolo Muani — priorità assoluta</span><span class="bv-red">−€35M</span></div>
-        <div class="budget-row"><span class="budget-row-label">Guerreiro — svincolato</span><span class="bv-red">−€2M (ingaggio)</span></div>
-        <div class="budget-row"><span class="budget-row-label">Max 1 altro acquisto</span><span class="bv-red">−€25-30M</span></div>
-        <div class="budget-total">
-          <span class="budget-total-label">TOTALE ACQUISTI</span>
-          <span class="budget-total-val" style="color:var(--red)">−€62-67M</span>
-        </div>
+      <div class="prog-wrap">
+        <div class="prog-label"><span>Margine operativo</span><span style="color:var(--yellow)">MEDIO</span></div>
+        <div class="prog-bar"><div class="prog-fill pf-y" style="width:55%"></div></div>
       </div>
     </div>
-    <div class="budget-panel" style="border-color:#7f1d1d">
-      <div class="budget-panel-title" style="color:#f87171">⚠️ SALDO — SCENARIO B</div>
-      <div class="budget-row"><span class="budget-row-label">Entrate</span><span class="bv-yellow">~€88M</span></div>
-      <div class="budget-row"><span class="budget-row-label">Acquisti</span><span class="bv-red">−€67M</span></div>
-      <div class="budget-total" style="border-color:#7f1d1d">
-        <span class="budget-total-label">MARGINE</span>
-        <span class="budget-total-val" style="color:var(--yellow)">~€21M</span>
-      </div>
-      <div class="prog-wrap" style="margin-top:16px">
-        <div class="prog-label"><span>Margine operativo</span><span style="color:var(--red)">CRITICO</span></div>
-        <div class="prog-bar"><div class="prog-fill pf-r" style="width:24%"></div></div>
-      </div>
+    <div style="margin-top:16px;padding:12px;background:rgba(239,68,68,0.08);border:1px solid #7f1d1d;border-radius:6px">
+      <div class="mono" style="font-size:10px;color:#f87171;letter-spacing:1px;margin-bottom:6px">NOTA UEL — IMPATTO BUDGET</div>
+      <div style="font-size:12px;color:#cccccc">La mancata qualificazione UCL riduce le entrate europee di ~€44M rispetto allo scenario precedente. Bernardo Silva e Zaïre-Emery diventano operazioni incompatibili col budget. Priorità: completare la rosa con 4-5 innesti mirati senza compromettere la solidità FER.</div>
     </div>
   </div>
 </div>
@@ -1183,7 +1310,7 @@
       <div class="budget-panel" style="padding:16px">
         <div class="budget-row-cat" style="margin-top:0">IN SCADENZA GIU-26</div>
         <div style="font-family:'Big Shoulders Display',sans-serif;font-size:32px;font-weight:900;color:var(--red)">4</div>
-        <div class="mono" style="font-size:10px;color:var(--dim);margin-top:4px">Vlahovic · McKennie · Kostic · Pinsoglio</div>
+        <div class="mono" style="font-size:10px;color:var(--dim);margin-top:4px">Vlahovic ✓ · Kostic ✓ (non rinnovato) · McKennie ✓ (rinnovato) · Pinsoglio</div>
       </div>
       <div class="budget-panel" style="padding:16px">
         <div class="budget-row-cat" style="margin-top:0">PLUSVALENZE H1</div>
@@ -1252,9 +1379,9 @@
         <text x="150" y="402" font-family="Geist Mono" font-size="6.5" fill="#aaa" text-anchor="middle">GK</text>
 
         <!-- DIFESA: RB=destra schermo cx alto, LB=sinistra schermo cx basso -->
-        <circle cx="245" cy="330" r="19" fill="#0f1a2e" stroke="#3b82f6" stroke-width="1.5"/>
-        <text x="245" y="326" font-family="Instrument Sans" font-size="7" font-weight="700" fill="white" text-anchor="middle">N-CUFFY</text>
-        <text x="245" y="336" font-family="Geist Mono" font-size="6.5" fill="#aaa" text-anchor="middle">RB</text>
+        <circle cx="245" cy="330" r="19" fill="#0f1a2e" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <text x="245" y="326" font-family="Instrument Sans" font-size="7" font-weight="700" fill="#60a5fa" text-anchor="middle">? WB DX</text>
+        <text x="245" y="336" font-family="Geist Mono" font-size="6.5" fill="#60a5fa" text-anchor="middle">TARGET</text>
 
         <circle cx="183" cy="318" r="19" fill="#0f1a2e" stroke="#e8e8e8" stroke-width="1.5"/>
         <text x="183" y="314" font-family="Instrument Sans" font-size="7.5" font-weight="700" fill="white" text-anchor="middle">BREMER</text>
@@ -1264,36 +1391,36 @@
         <text x="117" y="314" font-family="Instrument Sans" font-size="7.5" font-weight="700" fill="white" text-anchor="middle">KALULU</text>
         <text x="117" y="325" font-family="Geist Mono" font-size="6.5" fill="#aaa" text-anchor="middle">CB</text>
 
-        <circle cx="55" cy="330" r="19" fill="#0f1a2e" stroke="#f97316" stroke-width="1.5"/>
-        <text x="55" y="326" font-family="Instrument Sans" font-size="7" font-weight="700" fill="white" text-anchor="middle">UDOGIE</text>
-        <text x="55" y="336" font-family="Geist Mono" font-size="6.5" fill="#aaa" text-anchor="middle">LB</text>
+        <circle cx="55" cy="330" r="19" fill="#0f1a2e" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <text x="55" y="326" font-family="Instrument Sans" font-size="7" font-weight="700" fill="#60a5fa" text-anchor="middle">? WB SX</text>
+        <text x="55" y="336" font-family="Geist Mono" font-size="6.5" fill="#60a5fa" text-anchor="middle">TARGET</text>
 
         <!-- MEDIANI -->
         <circle cx="108" cy="255" r="19" fill="#0f1a2e" stroke="#e8e8e8" stroke-width="1.5"/>
         <text x="108" y="251" font-family="Instrument Sans" font-size="7" font-weight="700" fill="white" text-anchor="middle">LOCATE.</text>
         <text x="108" y="261" font-family="Geist Mono" font-size="6.5" fill="#aaa" text-anchor="middle">CM</text>
 
-        <circle cx="192" cy="255" r="19" fill="#0f1a2e" stroke="#3b82f6" stroke-width="1.5"/>
-        <text x="192" y="251" font-family="Instrument Sans" font-size="7" font-weight="700" fill="white" text-anchor="middle">EDERSON</text>
+        <circle cx="192" cy="255" r="19" fill="#0f1a2e" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <text x="192" y="251" font-family="Instrument Sans" font-size="7" font-weight="700" fill="#60a5fa" text-anchor="middle">? CM</text>
         <text x="192" y="261" font-family="Geist Mono" font-size="6.5" fill="#60a5fa" text-anchor="middle">TARGET</text>
 
-        <!-- TREQUARTI: Conceicao RM=destra cx alto, B.Silva AM=centro, Yildiz LM=sinistra cx basso -->
+        <!-- TREQUARTI -->
         <circle cx="242" cy="178" r="19" fill="#0f1a2e" stroke="#e8e8e8" stroke-width="1.5"/>
         <text x="242" y="174" font-family="Instrument Sans" font-size="7" font-weight="700" fill="white" text-anchor="middle">CONCE.</text>
         <text x="242" y="184" font-family="Geist Mono" font-size="6.5" fill="#aaa" text-anchor="middle">RM</text>
 
-        <circle cx="150" cy="172" r="19" fill="#0f1a2e" stroke="#3b82f6" stroke-width="2"/>
-        <text x="150" y="168" font-family="Instrument Sans" font-size="7" font-weight="700" fill="white" text-anchor="middle">B.SILVA</text>
-        <text x="150" y="179" font-family="Geist Mono" font-size="6.5" fill="#60a5fa" text-anchor="middle">AM·TGT</text>
+        <circle cx="150" cy="172" r="19" fill="#0f1a2e" stroke="#3b82f6" stroke-width="2" stroke-dasharray="4,2"/>
+        <text x="150" y="168" font-family="Instrument Sans" font-size="7" font-weight="700" fill="#60a5fa" text-anchor="middle">? AM</text>
+        <text x="150" y="179" font-family="Geist Mono" font-size="6.5" fill="#60a5fa" text-anchor="middle">TARGET</text>
 
         <circle cx="58" cy="178" r="19" fill="#0f1a2e" stroke="#F5C518" stroke-width="2"/>
         <text x="58" y="174" font-family="Instrument Sans" font-size="7.5" font-weight="700" fill="#F5C518" text-anchor="middle">YILDIZ</text>
         <text x="58" y="184" font-family="Geist Mono" font-size="6.5" fill="#F5C518" text-anchor="middle">LM ★</text>
 
         <!-- PUNTA -->
-        <circle cx="150" cy="108" r="19" fill="#0f1a2e" stroke="#3b82f6" stroke-width="1.5"/>
-        <text x="150" y="104" font-family="Instrument Sans" font-size="6.5" font-weight="700" fill="white" text-anchor="middle">K.MUANI</text>
-        <text x="150" y="114" font-family="Geist Mono" font-size="6.5" fill="#60a5fa" text-anchor="middle">CF·TGT</text>      </svg>
+        <circle cx="150" cy="108" r="19" fill="#0f1a2e" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <text x="150" y="104" font-family="Instrument Sans" font-size="7" font-weight="700" fill="#60a5fa" text-anchor="middle">? CF</text>
+        <text x="150" y="114" font-family="Geist Mono" font-size="6.5" fill="#60a5fa" text-anchor="middle">TARGET</text>      </svg>
 
       <div class="pitch-legend">
         <div class="leg-item"><div class="leg-dot" style="background:#e8e8e8;border:1px solid #555"></div>Confermato</div>
@@ -1307,22 +1434,22 @@
       <div class="formation-box" style="margin-bottom:16px">
         <div class="formation-box-title">UNDICI TITOLARE — 4-2-3-1 PROIETTATO 26/27</div>
         <div class="fs-player"><div class="fs-num">1</div><div class="fs-info"><div class="fs-name">Di Gregorio</div><div class="fs-role">GK · Contratto 2029 · GSAx positivo</div></div><span class="fb fb-doubt">IN DISCUSSIONE</span></div>
-        <div class="fs-player"><div class="fs-num">2</div><div class="fs-info"><div class="fs-name">Norton-Cuffy</div><div class="fs-role">RB · Target Genoa €15-20M</div></div><span class="fb fb-in">TARGET</span></div>
+        <div class="fs-player"><div class="fs-num">2</div><div class="fs-info"><div class="fs-name">? WB destro</div><div class="fs-role">WB dx · da mercato → vedi pagina Target</div></div><span class="fb fb-in">DA ACQUISIRE</span></div>
         <div class="fs-player"><div class="fs-num">3</div><div class="fs-info"><div class="fs-name">Bremer</div><div class="fs-role">CB · Clausola €58M attiva ago 2026</div></div><span class="fb fb-doubt">CLAUSOLA</span></div>
         <div class="fs-player"><div class="fs-num">4</div><div class="fs-info"><div class="fs-name">Kalulu</div><div class="fs-role">CB · Confermato 2029</div></div><span class="fb fb-conf">CONFERMATO</span></div>
-        <div class="fs-player"><div class="fs-num">5</div><div class="fs-info"><div class="fs-name">Udogie / Guerreiro</div><div class="fs-role">LB · Udogie target €25M · Guerreiro ponte €0</div></div><span class="fb fb-in">TRANSIZIONE</span></div>
+        <div class="fs-player"><div class="fs-num">5</div><div class="fs-info"><div class="fs-name">? WB sinistro</div><div class="fs-role">WB sx · da mercato o transizione interna → vedi pagina Target</div></div><span class="fb fb-in">DA ACQUISIRE</span></div>
         <div class="fs-player"><div class="fs-num">6</div><div class="fs-info"><div class="fs-name">Locatelli</div><div class="fs-role">CM · Rinnovo in corso fino 2030</div></div><span class="fb fb-conf">CONFERMATO</span></div>
-        <div class="fs-player"><div class="fs-num">7</div><div class="fs-info"><div class="fs-name">Ederson (target)</div><div class="fs-role">CM · Thuram titolare ad interim</div></div><span class="fb fb-in">TARGET P3</span></div>
+        <div class="fs-player"><div class="fs-num">7</div><div class="fs-info"><div class="fs-name">? CM box-to-box</div><div class="fs-role">CM · pressing trigger · da mercato → vedi pagina Target</div></div><span class="fb fb-in">DA ACQUISIRE</span></div>
         <div class="fs-player"><div class="fs-num">8</div><div class="fs-info"><div class="fs-name">Conceição</div><div class="fs-role">RM destra · Confermato 2030</div></div><span class="fb fb-conf">CONFERMATO</span></div>
         <div class="fs-player"><div class="fs-num">9</div><div class="fs-info"><div class="fs-name">Yildiz</div><div class="fs-role">LM sinistra · Blindato 2030 ★</div></div><span class="fb fb-conf">BLINDATO</span></div>
-        <div class="fs-player"><div class="fs-num">10</div><div class="fs-info"><div class="fs-name">B. Silva (target)</div><div class="fs-role">AM centro trequartista · Zhegrova/Boga in uscita</div></div><span class="fb fb-in">TARGET</span></div>
-        <div class="fs-player"><div class="fs-num">11</div><div class="fs-info"><div class="fs-name">Kolo Muani (target)</div><div class="fs-role">CF · David in uscita</div></div><span class="fb fb-in">TARGET P1</span></div>
+        <div class="fs-player"><div class="fs-num">10</div><div class="fs-info"><div class="fs-name">? AM trequartista</div><div class="fs-role">AM centro · da mercato (UCL-dipendente) → vedi pagina Target</div></div><span class="fb fb-in">DA ACQUISIRE</span></div>
+        <div class="fs-player"><div class="fs-num">11</div><div class="fs-info"><div class="fs-name">? CF profondità</div><div class="fs-role">CF · autonomia offensiva · priorità 1 → vedi pagina Target</div></div><span class="fb fb-in">DA ACQUISIRE P1</span></div>
       </div>
 
       <div class="formation-box">
         <div class="formation-box-title">PANCHINA E SOSTITUTI CHIAVE</div>
         <div class="bench-grid">
-          <div class="bench-card"><div class="bench-name">Thuram</div><div class="bench-role">CM · vice-Ederson</div><div class="bench-st bs-ok">✓ Confermato</div></div>
+          <div class="bench-card"><div class="bench-name">Thuram</div><div class="bench-role">CM · vice-CM da definire</div><div class="bench-st bs-ok">✓ Confermato</div></div>
           <div class="bench-card"><div class="bench-name">Openda</div><div class="bench-role">CF · riscattato</div><div class="bench-st bs-mbe">⚡ Da gestire</div></div>
           <div class="bench-card"><div class="bench-name">Boga</div><div class="bench-role">LW · sub impact</div><div class="bench-st bs-mbe">? Riscatto</div></div>
           <div class="bench-card"><div class="bench-name">Cabal</div><div class="bench-role">LB · rientro</div><div class="bench-st bs-ok">✓ Confermato</div></div>
@@ -1814,24 +1941,53 @@
       <div class="card c-out">
         <div class="card-top">
           <div>
-            <div class="out-badge" style="color:#ef4444;border-color:#ef4444">USCITA CONFERMATA — PRIMO USCENTE SPALLETTI</div>
+            <div class="out-badge" style="color:#ef4444;border-color:#ef4444">USCITA CONFERMATA — NON RINNOVATO</div>
             <div class="card-name">F. Kostic</div>
-            <div class="card-club">WB/Ala sinistra · contratto scaduto giugno 2026</div>
+            <div class="card-club">WB/Ala sinistra · Contratto scaduto 30/06/2026 · Non rinnovato</div>
           </div>
           <div class="jtr-badge"><div class="jtr-score r">—</div><div class="jtr-label">USCITA</div></div>
         </div>
-        <div class="tags"><span class="tag t-out">🔴 USCITA CONFERMATA</span><span class="tag">33 anni · Serbia</span><span class="tag">Svincolato</span></div>
+        <div class="tags"><span class="tag t-out">🔴 SVINCOLATO</span><span class="tag">33 anni · Serbia</span><span class="tag">Nessun rinnovo</span></div>
         <div class="card-note">
-          <strong>Primo uscente confermato dall'era Spalletti.</strong> 3G/1A in 452 min (limitato), profilo non compatibile con il sistema wing-back esplosivo richiesto. Contratto scaduto = zero impatto FER. Risparmio ingaggio (~€5M/anno lordo).
+          <strong>Non rinnovato — lascia a parametro zero.</strong> 3G/1A in 452 min, profilo non compatibile con il wing-back esplosivo richiesto dal sistema Spalletti. <span class="hl">Impatto bilancio ottimale: VR residuo €2.188k (Nota 10 31/12/2025) → scade a zero a giugno 2026, nessuna minusvalenza. Risparmio ingaggio stimato ~€5M/anno lordo.</span>
         </div>
-        <div class="pv-row"><span class="pv-k">VR residuo</span><span class="pv-v g">€0 — contratto scaduto</span></div>
-        <div class="pv-row"><span class="pv-k">Impatto FER</span><span class="pv-v g">✅ Neutro</span></div>
-        <div class="pv-row"><span class="pv-k">Risparmio ingaggio</span><span class="pv-v g">+€5M/anno lordo stimato</span></div>
+        <div class="pv-row"><span class="pv-k">Costo storico (Nota 10 · 31/12/2025)</span><span class="pv-v mono">€16.055k</span></div>
+        <div class="pv-row"><span class="pv-k">Fondo ammortamento</span><span class="pv-v mono">€13.867k</span></div>
+        <div class="pv-row"><span class="pv-k">VR residuo 31/12/2025</span><span class="pv-v g">€2.188k → €0 a giu-26</span></div>
+        <div class="pv-row"><span class="pv-k">Plusvalenza su cessione</span><span class="pv-v g">N/A — svincolato</span></div>
+        <div class="pv-row"><span class="pv-k">Impatto FER</span><span class="pv-v g">✅ Neutro — VR quasi azzerato</span></div>
+        <div class="pv-row"><span class="pv-k">Risparmio ingaggio</span><span class="pv-v g">~+€5M/anno lordo stimato</span></div>
         <div class="card-foot" style="margin-top:12px">
-          <span class="cost" style="background:rgba(239,68,68,0.1);border:1px solid #ef4444;color:#ef4444">SVINCOLATO — CONFERMATO</span>
-          <div class="feas"><div class="dot d-hi"></div>Primo uscente era Spalletti</div>
+          <span class="cost" style="background:rgba(239,68,68,0.1);border:1px solid #ef4444;color:#ef4444">SVINCOLATO — NESSUN IMPATTO BILANCIO</span>
+          <div class="feas"><div class="dot d-hi"></div>Uscita a costo zero</div>
         </div>
-        <div class="status-row"><span class="status-pill s-persa"><span class="status-dot"></span>USCITA CONFERMATA — CONTRATTO SCADUTO</span></div>
+        <div class="status-row"><span class="status-pill s-persa"><span class="status-dot"></span>USCITA CONFERMATA — CONTRATTO SCADUTO / NON RINNOVATO</span></div>
+      </div>
+
+      <div class="card" style="background:#0a0f0a;border-color:#1a3a1a">
+        <div class="card-top">
+          <div>
+            <div class="out-badge" style="color:#22c55e;border-color:#166534">CONFERMATO IN ROSA — RINNOVO CONTRATTO</div>
+            <div class="card-name">W. McKennie</div>
+            <div class="card-club">Mezzala box-to-box · Rinnovo contratto firmato</div>
+          </div>
+          <div class="jtr-badge"><div class="jtr-score g">—</div><div class="jtr-label">ROSA</div></div>
+        </div>
+        <div class="tags"><span class="tag" style="background:rgba(34,197,94,0.15);color:#22c55e;border-color:#166534">✅ CONFERMATO</span><span class="tag">27 anni · USA</span><span class="tag">4G/4A 2025/26</span></div>
+        <div class="card-note">
+          <strong>Contratto rinnovato — confermato nella rosa 2026/27.</strong> 4G/4A in 2.050 min, mezzala box-to-box con il profilo più completo in rosa (BU% 47.9% — bilanciato costruzione/finalizzazione). <span class="hl">Il rinnovo azzera il VR residuo da bilancio (€2.640k al 31/12/2025): il nuovo contratto viene capitalizzato come nuovo diritto pluriennale. Impatto bilancio: ammortamento nuovo diritto vs risparmio sulla ricerca sostituto.</span>
+        </div>
+        <div class="pv-row"><span class="pv-k">Costo storico (Nota 10 · 31/12/2025)</span><span class="pv-v mono">€27.032k</span></div>
+        <div class="pv-row"><span class="pv-k">Fondo ammortamento</span><span class="pv-v mono">€24.392k</span></div>
+        <div class="pv-row"><span class="pv-k">VR residuo 31/12/2025</span><span class="pv-v y">€2.640k → azzerato con rinnovo</span></div>
+        <div class="pv-row"><span class="pv-k">Nuovo VR post-rinnovo</span><span class="pv-v">Da capitalizzare (oneri rinnovo)</span></div>
+        <div class="pv-row"><span class="pv-k">Impatto FER</span><span class="pv-v g">✅ Neutro — nessuna cessione</span></div>
+        <div class="pv-row"><span class="pv-k">Impact/90 stagionale</span><span class="pv-v g">0.45 · xGBU90 0.31 · BU% 47.9%</span></div>
+        <div class="card-foot" style="margin-top:12px">
+          <span class="cost" style="background:rgba(34,197,94,0.1);border:1px solid #22c55e;color:#22c55e">CONFERMATO — CARDINE CENTROCAMPO</span>
+          <div class="feas"><div class="dot d-hi"></div>Rinnovo firmato</div>
+        </div>
+        <div class="status-row"><span class="status-pill" style="background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid #166534"><span class="status-dot" style="background:#22c55e"></span>ROSA 2026/27 — RINNOVO CONTRATTO CONFERMATO</span></div>
       </div>
         <div class="card-top">
           <div>
@@ -1843,7 +1999,7 @@
         </div>
         <div class="tags"><span class="tag t-out">🔴 IN USCITA</span><span class="tag">27 anni · Brasile</span><span class="tag">VR ~€25.7M</span></div>
         <div class="card-note">
-          Aston Villa non esercita opzione acquisto (€25M + €3M bonus). Douglas Luiz rientra alla Juve ma <span class="rd">non rientra nei piani di Spalletti.</span> La Juve lavorerà per trovare una nuova soluzione di cessione/prestito. <strong>Rischio bilancio: VR residuo ~€25.7M — senza cessione adeguata = minusvalenza potenziale fino a −€25M.</strong>
+          <strong>Aggiornamento 09/06: Douglas Luiz riceverà una seconda chance almeno nel ritiro precampionato.</strong> Aston Villa non ha esercitato l'opzione d'acquisto (€25M + €3M bonus). Rientra alla Juve in estate. Spalletti valuterà personalmente il giocatore nel ritiro. <span class="hl">Scenario aperto: se il ritiro è positivo, può restare come opzione di centrocampo. Se confermata inadeguatezza al sistema, si cercherà cessione/prestito.</span> <strong>Rischio bilancio invariato: VR residuo ~€25.7M — cessione sotto valore = minusvalenza fino a −€25M.</strong>
         </div>
         <div class="pv-row"><span class="pv-k">VR giu-26 stimato</span><span class="pv-v">~€25.7M</span></div>
         <div class="pv-row"><span class="pv-k">Rischio minusvalenza</span><span class="pv-v r">fino a −€25M</span></div>
@@ -1852,7 +2008,7 @@
           <span class="cost" style="background:rgba(239,68,68,0.1);border:1px solid #ef4444;color:#ef4444">DA CEDERE — URGENZA BILANCIO</span>
           <div class="feas"><div class="dot d-lo"></div>Scenario complesso</div>
         </div>
-        <div class="status-row"><span class="status-pill s-persa"><span class="status-dot"></span>RIENTRA — NUOVA SOLUZIONE DA TROVARE</span></div>
+        <div class="status-row"><span class="status-pill s-persa"><span class="status-dot"></span>SECONDA CHANCE IN RITIRO — VALUTAZIONE LUGLIO</span></div>
       </div>
 
       <div class="card c-out">
@@ -1964,10 +2120,12 @@
             <tr><td class="b-name">Di Gregorio</td><td class="mono">~€11.1M</td><td class="mono">€35-40M</td><td style="color:var(--green);font-family:'Geist Mono',monospace">+€24-29M</td><td><span class="ws-ok">✅ FER</span></td><td class="b-role">Solo con sostituto elite firmato</td></tr>
             <tr><td class="b-name">Gatti</td><td class="mono">~€3.6M</td><td class="mono">€20-25M</td><td style="color:var(--green);font-family:'Geist Mono',monospace">+€16-21M</td><td><span class="ws-ok">✅ FER</span></td><td class="b-role">Interesse 4 club PL — Juve chiede €20-25M</td></tr>
             <tr><td class="b-name">Miretti</td><td class="mono">~€0.3M</td><td class="mono">€10-12M</td><td style="color:var(--green);font-family:'Geist Mono',monospace">+€9-11M</td><td><span class="ws-ok">✅ FER</span></td><td class="b-role">Plusvalenza quasi totale</td></tr>
-            <tr><td class="b-name">Thuram</td><td class="mono">~€12.5M</td><td class="mono">€20-25M</td><td style="color:var(--yellow);font-family:'Geist Mono',monospace">+€7-12M</td><td><span class="ws-ok">✅ FER</span></td><td class="b-role">Se arriva Ederson/Kessié</td></tr>
+            <tr><td class="b-name">Thuram</td><td class="mono">~€12.5M</td><td class="mono">€20-25M</td><td style="color:var(--yellow);font-family:'Geist Mono',monospace">+€7-12M</td><td><span class="ws-ok">✅ FER</span></td><td class="b-role">Se arriva alternativa Ederson/Kessié</td></tr>
             <tr><td class="b-name">Perin</td><td class="mono">~€0.3M</td><td class="mono">€3-5M</td><td style="color:var(--yellow);font-family:'Geist Mono',monospace">+€2-4M</td><td><span class="ws-neg">⚡ Marginale</span></td><td class="b-role">Cessione libera</td></tr>
+            <tr><td class="b-name">Kostic</td><td class="mono">€2.188k → €0</td><td class="mono">N/A — svincolato</td><td style="color:var(--green);font-family:'Geist Mono',monospace">+€0 (VR azzerato)</td><td><span class="ws-ok">✅ Neutro</span></td><td class="b-role">Non rinnovato · svincolato giu-26 · risparmio ~€5M/anno ingaggio · Nota 10 confermata</td></tr>
+            <tr><td class="b-name">McKennie</td><td class="mono">€2.640k → azzerato</td><td class="mono">N/A — rinnovato</td><td style="color:var(--yellow);font-family:'Geist Mono',monospace">N/A — rosa</td><td><span class="ws-ok">✅ Neutro</span></td><td class="b-role">Rinnovo confermato · VR residuo €2.640k (Nota 10) si azzera · nuovo diritto da capitalizzare</td></tr>
             <tr><td class="b-name">Koopmeiners</td><td class="mono">~€32.6M</td><td class="mono">€25-30M</td><td style="color:var(--red);font-family:'Geist Mono',monospace">−€2-7M</td><td><span class="ws-exp">❌ Minusvalenza</span></td><td class="b-role">Solo per liberare ingaggio</td></tr>
-            <tr><td class="b-name">Douglas Luiz</td><td class="mono">~€25.7M</td><td class="mono">Da trovare soluzione</td><td style="color:var(--red);font-family:'Geist Mono',monospace">−€25M rischio</td><td><span class="ws-exp">❌ RISCHIO</span></td><td class="b-role">Rientra da Villa (opzione non esercitata) — fuori piani Spalletti</td></tr>
+            <tr><td class="b-name">Douglas Luiz</td><td class="mono">~€25.7M</td><td class="mono">Da trovare soluzione</td><td style="color:var(--red);font-family:'Geist Mono',monospace">−€25M rischio</td><td><span class="ws-exp">❌ RISCHIO</span></td><td class="b-role">Seconda chance in ritiro — esito valutazione luglio 2026</td></tr>
           </tbody>
         </table>
       </div>
@@ -1982,7 +2140,7 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-l">
-    <strong>JuveMetrics</strong> · @JuMetrics · Transfer Observatory Estate 2026 · v4.6 · Aggiornamento 09/06/2026<br>
+    <strong>JuveMetrics</strong> · @JuMetrics · Transfer Observatory Estate 2026 · v4.7 · Aggiornamento 09/06/2026<br>
     JTR = TFS × 0.60 + TRS × 0.40 · 🟢 ≥75 · 🟡 60-74 · 🟠 45-59 · 🔴 &lt;45<br>
     Fonte: Bilancio JFC 31/12/2025 (Nota 10) · Understat · Sofascore · Transfermarkt · DiMarzio · @_Morik92_
   </div>
